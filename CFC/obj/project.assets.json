@@ -12119,11 +12119,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\CFC\\CFC.csproj",
+      "projectUniqueName": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\CFC.csproj",
       "projectName": "CFC",
-      "projectPath": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\CFC\\CFC.csproj",
+      "projectPath": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\CFC.csproj",
       "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\CFC\\obj\\",
+      "outputPath": "C:\\Users\\Asus\\Documents\\Projekty\\CFC\\CFC\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
