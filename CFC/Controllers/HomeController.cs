@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CFC.Models;
+using System.Security.Claims;
 
 namespace CFC.Controllers
 {
@@ -17,7 +18,9 @@ namespace CFC.Controllers
 
         public IActionResult About()
         {
+            var user = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             ViewData["Message"] = "Your application description page.";
+            ViewData["User"] = user;
 
             return View();
         }
