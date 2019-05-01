@@ -1,0 +1,15 @@
+<mat-card class="login-form-container">
+  <h3>{{ 'login' | translate }}</h3>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Email" value="">
+    </mat-form-field>
+  
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="{{ 'password' | translate }}" type="password">
+    </mat-form-field>
+    
+  <button mat-raised-button color="primary" class="login-button">{{ 'login' | translate }}</button>
+  </form>
+
+</mat-card>

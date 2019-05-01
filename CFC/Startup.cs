@@ -1,8 +1,15 @@
+using CFC.Data;
+using CFC.Data.Entities;
+using CFC.Data.Managers;
+using CFC.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +34,29 @@ namespace CFC
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+              .AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
+
+
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
+
+            //services.AddIdentityServer().AddDeveloperSigningCredential()
+            //   // this adds the operational data from DB (codes, tokens, consents)
+            //   .AddOperationalStore(options =>
+            //   {
+            //       options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration.GetConnectionString("Default"));
+            //       // this enables automatic token cleanup. this is optional.
+            //       options.EnableTokenCleanup = true;
+            //       options.TokenCleanupInterval = 30; // interval in seconds
+            //   })
+            //   .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            //   .AddInMemoryApiResources(Config.GetApiResources())
+            //   .AddInMemoryClients(Config.GetClients())
+            //   .AddAspNetIdentity<ApplicationUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +76,8 @@ namespace CFC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
+           // app.UseIdentityServer();
 
             app.UseMvc(routes =>
             {

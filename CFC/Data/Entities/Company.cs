@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Entities
 {
-    public class Company
+    public class Company : IEntity
     {
         public Company()
         {

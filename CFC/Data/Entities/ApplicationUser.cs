@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser 
     {
         public ApplicationUser()
         {

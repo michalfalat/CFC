@@ -1,5 +1,58 @@
 <body>
-  <app-nav-menu></app-nav-menu>
+  <mat-toolbar color="primary">
+    <!-- <button mat-button routerLink="/categories" color="">
+      <mat-icon class="">school</mat-icon>
+      <span> {{ 'categories' | translate }}</span>
+    </button> -->
+    <span class="spacer"></span>
+    <mat-form-field class="" *ngIf="this.currentRoute === '/categories'">
+      <mat-icon class="">search</mat-icon>
+      <input matInput [(ngModel)]="searchValue" (input)="onSearch($event.target.value)">
+    </mat-form-field>
+
+    <span class="spacer"></span>
+
+    <button mat-button [matMenuTriggerFor]="langSelector" matTooltip="{{ 'language' | translate }}">
+      <mat-icon class="">language</mat-icon> {{ selectedLanguage | uppercase }}
+
+    </button>
+    <mat-menu #langSelector="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+      <button mat-menu-item (click)="changeLanguage('sk')">
+        SK
+      </button>
+      <button mat-menu-item (click)="changeLanguage('cz')">
+        CZ
+      </button>
+      <button mat-menu-item (click)="changeLanguage('en')">
+        EN
+      </button>
+    </mat-menu>
+    <button mat-button routerLink="/about" color="">
+      <mat-icon class="">info</mat-icon>
+      <span> {{'about' | translate}}</span>
+    </button>
+
+    <button *ngIf="!isUserLoggedIn" mat-button routerLink="/login" color="">
+      <mat-icon class="">account_circle</mat-icon>
+      <span> {{'login' | translate}}</span>
+    </button>
+
+    <button *ngIf="isUserLoggedIn" mat-button [matMenuTriggerFor]="userDropdown">
+      <mat-icon class=""><img class="profile-image" src="{{user.image}}" /></mat-icon> {{ user != null ? user.email :
+      'Logged user'}}
+
+    </button>
+    <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+      <button mat-menu-item (click)="changeLanguage('sk')">
+        Profile
+      </button>
+      <button mat-menu-item (click)="logout()">
+        Logout
+      </button>
+    </mat-menu>
+
+
+  </mat-toolbar>
   <div class="container">
     <router-outlet></router-outlet>
   </div>
