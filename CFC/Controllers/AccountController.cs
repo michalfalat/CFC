@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CFC.Data.Entities;
@@ -9,6 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System;
 
 namespace CFC.Controllers
 {
@@ -17,20 +23,26 @@ namespace CFC.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         public IApplicationUserManager _applicationUserManager { get; set; }
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             ILoggerFactory loggerFactory,
-            IApplicationUserManager applicationUserManager)
+            IApplicationUserManager applicationUserManager,
+            IConfiguration configuration)
         {
             this._userManager = userManager;
+            this._roleManager = roleManager;
             this._signInManager = signInManager;
             this._logger = loggerFactory.CreateLogger<AccountController>();
             this._applicationUserManager = applicationUserManager;
+            this._configuration = configuration;
         }
 
         [HttpPost("[action]")]
@@ -40,7 +52,6 @@ namespace CFC.Controllers
             var currentUser = await this._userManager.FindByNameAsync("administrator");
             if(currentUser != null)
             {
-
                 return Ok(new { result = "OK", password = "Go ahead!" });
             }
             var user = new ApplicationUser()
@@ -50,35 +61,107 @@ namespace CFC.Controllers
                 EmailConfirmed = true,
                 Name = "administrator",
                 Surname = "administrator",
+                
 
             };
-            var pwd = "f@kePassw0rd";
+            var pwd = "f@kePassw0rd"; // TODO Generate dynamically
             var result = await this._userManager.CreateAsync(user, pwd);
-           if(result.Succeeded)
+            await this.GenerateRoles();
+            var roleResult = await this._userManager.AddToRoleAsync(user, "admin");
+            if (result.Succeeded && roleResult.Succeeded)
             {
                 return Ok(new { result = "OK", password = pwd });
             }
            else
             {
-                return Ok(new { result = "ERROR", errors = result.Errors });
+                return Ok(new { result = "ERROR", errors = result.Errors.Concat(roleResult.Errors).ToArray() });
             }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Login(LoginInputModel model, string button)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // validate username/password
-        //        var user = await _userManager.FindByNameAsync(model.Username);
-        //        if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-        //        {
-        //            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.Name));
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model, string button)
+        {
+            if (ModelState.IsValid)
+            {
 
-        //        }
-        //    }
-        //}
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                if(appUser == null)
+                {
+                    return StatusCode(403, new { message = "InvalidLogin" });
+                }
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, 
+                // set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(appUser.UserName,
+                    model.Password, model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    var token = await GenerateJwtToken(model.Email, appUser);
+                    var role = (await this._userManager.GetRolesAsync(appUser)).ToList().FirstOrDefault();
+                    _logger.LogInformation("User logged in.");
+                    return Ok(new { result = "OK", token = token, email = model.Email, role = role });
+                }
+                if (result.RequiresTwoFactor)
+                {
+                    return StatusCode(403, new { message = "2FA" });
+                }
+                if (result.IsLockedOut)
+                {
+                    return StatusCode(403, new { message = "Locked" });
+                }
+                else
+                {
+                    return StatusCode(403, new { message= "InvalidLogin"});
+                }
+            }
+            else
+            {
+                return StatusCode(403, new { message = "InvalidLogin" });
+            }
+        }
+
+        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtIssuer"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+        private async Task GenerateRoles()
+        {
+            string[] roleNames = { "admin", "owner"};
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await this._roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                    roleResult = await this._roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+        }
 
         //[HttpPost]
         //[Route("api/[controller]")]

@@ -32,14 +32,13 @@
       <span> {{'about' | translate}}</span>
     </button>
 
-    <button *ngIf="!isUserLoggedIn" mat-button routerLink="/login" color="">
+    <button *ngIf="!isUserLoggedIn()" mat-button routerLink="/login" color="">
       <mat-icon class="">account_circle</mat-icon>
       <span> {{'login' | translate}}</span>
     </button>
 
-    <button *ngIf="isUserLoggedIn" mat-button [matMenuTriggerFor]="userDropdown">
-      <mat-icon class=""><img class="profile-image" src="{{user.image}}" /></mat-icon> {{ user != null ? user.email :
-      'Logged user'}}
+    <button *ngIf="isUserLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
+      <mat-icon class="">account_circle</mat-icon> {{user() !== null ? user().email: ''}}
 
     </button>
     <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">

@@ -34,3 +34,16 @@
   body {
     background-color: #f1f1f1;
   }
+
+  .notification-info {
+    background-color: #57a3d6;
+  }
+
+  .notification-warning {
+    background-color: #e99516;
+    color: white;
+  }
+
+  .notification-warning  .mat-simple-snackbar-action  {
+    color: white
+  }
