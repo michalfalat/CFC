@@ -47,3 +47,7 @@
   .notification-warning  .mat-simple-snackbar-action  {
     color: white
   }
+
+  .error-label {
+    color:rgb(214, 68, 68);
+  }

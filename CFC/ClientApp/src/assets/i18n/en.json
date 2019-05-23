@@ -3,5 +3,16 @@
     "logout": "Logout",
     "password": "Password",
     "language": "Language",
-    "about": "About"
+    "about": "About",
+    "register_user": "Register user",
+    "register_new_user" : "Register new user",
+    "register": "Register",
+    "name": "Name",
+    "surname": "Surname",
+    "phone": "Phone",
+    "email": "Email",
+    "confirmation_email_sent": "Confirmation email was sent.",
+    "welcome_to_system": "Welcome to system CFC",
+    "create_password_text": "For first, create your password for this account.",
+    "existing_user_error": "User with this email already exists!"
 }

@@ -15,6 +15,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from './material.module';
 import { LoginComponent } from './login/login.component';
 import { DefaultUserComponent } from './default-user/default-user.component';
+import { RegisterComponent } from './register/register.component';
+import { UserVerifyComponent } from './user-verify/user-verify.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -30,6 +32,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     FetchDataComponent,
     LoginComponent,
     DefaultUserComponent,
+    RegisterComponent,
+    UserVerifyComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -41,6 +45,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'default-user-generator', component: DefaultUserComponent },
+      { path: 'register-user', component: RegisterComponent },
     ]),
     
     TranslateModule.forRoot({

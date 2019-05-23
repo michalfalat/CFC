@@ -21,6 +21,10 @@ export class AuthService {
     return this.user;
   }
 
+  public getRole() {
+    return this.user !== null ? this.user.role : null;
+  }
+
   public saveUser(user: UserLoginInfo) {
     localStorage.setItem('auth_user', JSON.stringify(user));
       this.user = new UserInfo();

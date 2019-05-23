@@ -1,0 +1,24 @@
+<mat-card class="login-form-container">
+  <h3>{{ 'register_new_user' | translate }}</h3>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="{{'name' | translate}}" value="" name="name" [(ngModel)]="user.name" required>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="{{'surname' | translate}}" value="" name="surname" [(ngModel)]="user.surname" required>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="{{'email' | translate}}" value="" name="email" [(ngModel)]="user.email" required>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="{{'phone' | translate}}" value="" name="email" [(ngModel)]="user.phone">
+    </mat-form-field>
+    <p *ngIf="existingUserError" class="error-label">{{'existing_user_error' | translate}}</p>
+  
+    
+  <button mat-raised-button color="primary" class="login-button" type="button" *ngIf="loadingAction">
+    <mat-progress-spinner mode="indeterminate" color="accent" style="margin: 0 auto; height: 5px !important;  "></mat-progress-spinner></button>
+  <button mat-raised-button color="primary" class="login-button" (click)="registerUser()" *ngIf="!loadingAction">{{ 'register' | translate }}</button>
+  </form>
+
+</mat-card>

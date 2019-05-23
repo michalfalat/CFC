@@ -10,5 +10,6 @@ namespace CFC.Data.Managers
     {
         void Create(ApplicationUser entity);
         Task<ApplicationUser> FindById(string id);
+        string GenerateRandomPassword();
     }
 }

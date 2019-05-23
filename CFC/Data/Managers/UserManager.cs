@@ -25,5 +25,23 @@ namespace CFC.Data.Managers
         {
             return this.Repository.ApplicationUserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
         }
+
+        public string GenerateRandomPassword()
+        {
+            Random r = new Random();
+            string chars = "abcdefghijklmnopqrstwvxyz";
+            string numbers = "0123456789";
+            string sChars = "!@#$%&*()*-+";
+            string finalPwd = "";
+            for (int i = 0; i < 5; i++)
+            {
+                finalPwd += chars[r.Next(chars.Length)];
+                finalPwd += chars[r.Next(chars.Length)].ToString().ToUpper();
+                finalPwd += numbers[r.Next(numbers.Length)];
+                finalPwd += sChars[r.Next(sChars.Length)];
+            }
+            //TODO shuffle
+            return finalPwd;
+        }
     }
 }

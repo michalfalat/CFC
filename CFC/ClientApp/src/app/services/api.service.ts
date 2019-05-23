@@ -10,11 +10,11 @@ import { LoginUser } from '../models/login-user';
 })
 export class ApiService {
 
-  registerUserUrl(){
+  private registerUserUrl(){
     return this.baseUrl + 'api/Account/Register'
   }
 
-  loginUserUrl(){
+  private loginUserUrl(){
     return this.baseUrl + 'api/Account/Login'
   }
 
@@ -25,7 +25,7 @@ export class ApiService {
    this.headers.append('Content-Type', 'application/json');
   }
 
-  registerUser(model: RegisterUser): Observable<RegisterUser> {
+  registerUser(model: RegisterUser): any {
     return this.http.post(this.registerUserUrl(), model, this.headers).pipe(
       catchError(error => {
         console.log(error);
