@@ -21,6 +21,11 @@ export class AuthService {
     return this.user;
   }
 
+  public getToken() {
+    const userData = JSON.parse(localStorage.getItem('auth_user'));
+    return userData !== null ? userData.token : null;
+  }
+
   public getRole() {
     return this.user !== null ? this.user.role : null;
   }

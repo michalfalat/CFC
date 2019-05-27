@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -17,6 +17,8 @@ import { LoginComponent } from './login/login.component';
 import { DefaultUserComponent } from './default-user/default-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserVerifyComponent } from './user-verify/user-verify.component';
+import { UserDetailComponent } from './user-detail/user-detail.component';
+import { AuthInterceptor } from './auth-interceptor/auth-interceptor.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -34,6 +36,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DefaultUserComponent,
     RegisterComponent,
     UserVerifyComponent,
+    UserDetailComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,6 +49,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'default-user-generator', component: DefaultUserComponent },
       { path: 'register-user', component: RegisterComponent },
+      { path: 'user', component: UserDetailComponent },
     ]),
     
     TranslateModule.forRoot({
@@ -58,7 +62,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     BrowserAnimationsModule,
     CustomMaterialModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

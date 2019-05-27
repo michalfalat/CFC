@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { LoginUser } from '../models/login-user';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,19 @@ export class ApiService {
     return this.baseUrl + 'api/Account/Login'
   }
 
+  private userInfoUrl(){
+    return this.baseUrl + 'api/Account/UserDetail'
+  }
+
+
   private headers;
 
-  constructor(private http: HttpClient,  @Inject('BASE_URL') private baseUrl: string) { 
+  constructor(private http: HttpClient,
+    private authService : AuthService,
+      @Inject('BASE_URL') private baseUrl: string) { 
    this.headers = new HttpHeaders()
    this.headers.append('Content-Type', 'application/json');
+  // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
   }
 
   registerUser(model: RegisterUser): any {
@@ -37,6 +46,15 @@ export class ApiService {
 
   loginUser(model: LoginUser): any {
     return this.http.post(this.loginUserUrl(), model, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+        //return this.handleError(error, () => this.registerUser(model)); 
+      }));
+  }
+
+  userDetail(): any {
+    return this.http.get(this.userInfoUrl(), this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
