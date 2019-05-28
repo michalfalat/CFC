@@ -8,7 +8,13 @@ export class AuthService {
   private user: UserInfo
 
   constructor() { 
-    this.user = null;
+    this.user = null;    
+    const userData = JSON.parse(localStorage.getItem('auth_user'));
+    if(userData !== null) {      
+      this.user = new UserInfo();
+      this.user.email = userData.email;
+      this.user.role = userData.role;
+    }
   }
 
   public isLoggedIn() {

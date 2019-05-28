@@ -1,3 +1,19 @@
-<p>
-  user-detail works!
-</p>
+<mat-card class="form-container">
+  <h3>{{ 'profile' | translate }}</h3>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Name" value="" name="name" [(ngModel)]="userDetail.name" disabled>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Surname" value="" name="surname" [(ngModel)]="userDetail.surname" disabled>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Email" value="" name="email" [(ngModel)]="userDetail.email" disabled>
+    </mat-form-field>
+  
+  
+<!--     
+  <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login' | translate }}</button> -->
+  </form>
+
+</mat-card>

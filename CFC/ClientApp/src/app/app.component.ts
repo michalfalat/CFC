@@ -20,6 +20,10 @@ export class AppComponent {
     
   }
 
+  public navigate(route) {
+    this.router.navigate([route]);
+  }
+
   public isUserLoggedIn(){
     return this.authService.isLoggedIn();
   }

@@ -42,7 +42,7 @@
 
     </button>
     <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
-      <button mat-menu-item (click)="changeLanguage('sk')">
+      <button mat-menu-item (click)="navigate('/user')">
         Profile
       </button>
       <button mat-menu-item (click)="logout()">
