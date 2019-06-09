@@ -14,3 +14,10 @@ export class UserLoginInfo {
     token: string;
     role: string;    
 }
+
+export class UserPasswordReset {
+    token: string;
+    email: string;
+    password1: string;
+    password2: string;
+}

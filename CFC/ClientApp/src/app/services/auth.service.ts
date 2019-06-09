@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
 import { UserInfo, UserLoginInfo } from '../models/login-user';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  private user: UserInfo
+export class AuthService {  
+  private userSubject: BehaviorSubject<UserInfo>;
+  public user: Observable<UserInfo>;
 
   constructor() { 
-    this.user = null;    
+    this.userSubject = new BehaviorSubject<UserInfo>(null); 
     const userData = JSON.parse(localStorage.getItem('auth_user'));
     if(userData !== null) {      
-      this.user = new UserInfo();
-      this.user.email = userData.email;
-      this.user.role = userData.role;
-    }
+      let user = new UserInfo();
+      user.email = userData.email;
+      user.role = userData.role;
+      this.userSubject.next(user);
+    } 
+    this.user = this.userSubject.asObservable();
   }
 
   public isLoggedIn() {
-    // const userData = localStorage.getItem('auth_user');
-    // console.log(userData);
-    return this.user !== null ? true : false;
+    return this.getUser() !== null ? true : false;
   }
 
   public getUser() {   
-    return this.user;
+    return this.userSubject.value;
   }
 
   public getToken() {
@@ -33,19 +35,21 @@ export class AuthService {
   }
 
   public getRole() {
-    return this.user !== null ? this.user.role : null;
+
+    return this.getUser() !== null ? this.getUser().role : null;
   }
 
-  public saveUser(user: UserLoginInfo) {
-    localStorage.setItem('auth_user', JSON.stringify(user));
-      this.user = new UserInfo();
-      this.user.email = user.email;
-      this.user.role = user.role;
+  public saveUser(userLoginInfo: UserLoginInfo) {
+    localStorage.setItem('auth_user', JSON.stringify(userLoginInfo));
+      let user = new UserInfo();
+      user.email = user.email;
+      user.role = user.role;
+      this.userSubject.next(user);
   }
   
 
   public logoutUser() {
-    this.user = null;
+    this.userSubject.next(null);
     localStorage.removeItem('auth_user');
   }
 

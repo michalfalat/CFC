@@ -14,5 +14,12 @@
     "confirmation_email_sent": "Confirmation email was sent.",
     "welcome_to_system": "Welcome to system CFC",
     "create_password_text": "For first, create your password for this account.",
-    "existing_user_error": "User with this email already exists!"
+    "existing_user_error": "User with this email already exists!",
+    "error-login-label": "Invalid login. Check your credentials.",
+    "reset-password": "Password reset",
+    "reset-password-label": "Please, enter your email and your new password.",
+    "reset": "Reset",
+    "new-password": "New password",
+    "new-password-repeat": "Repeat new password"
+
 }

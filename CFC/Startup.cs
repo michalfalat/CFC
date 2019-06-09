@@ -48,6 +48,7 @@ namespace CFC
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddSingleton(Configuration);
 
             //services.AddIdentityServer().AddDeveloperSigningCredential()
             //   // this adds the operational data from DB (codes, tokens, consents)

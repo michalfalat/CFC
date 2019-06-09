@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   public user: LoginUser;
+  public errorLogin: boolean = false;
 
   constructor(private apiService: ApiService,
      private notification: NotifyService,
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
 
   login(){
     console.log(this.user);
+    this.errorLogin = false;
     this.apiService.loginUser(this.user).subscribe(res => {
       console.log(res)
       var loginUser = new UserLoginInfo();
@@ -39,7 +41,8 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/user']);
 
     }, err => {
-      this.notification.warning("something went wrong");
+      //this.notification.warning("something went wrong");
+      this.errorLogin = true;
       console.log(err);
     })
   }
