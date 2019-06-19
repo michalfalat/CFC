@@ -23,6 +23,10 @@ export class ApiService {
     return this.baseUrl + 'api/Account/UserDetail'
   }
 
+  private requestPasswordResetEmailUrl() {
+    return this.baseUrl + 'api/Account/RequestNewPassword'
+  }
+
 
   private headers;
 
@@ -60,6 +64,17 @@ export class ApiService {
         return throwError(error);
         //return this.handleError(error, () => this.registerUser(model)); 
       }));
+  }
 
+  requestEmailForPasswordReset(email: string) : any {
+    const data = {
+      emailAddress: email
+    }
+    return this.http.post(this.requestPasswordResetEmailUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+        //return this.handleError(error, () => this.registerUser(model)); 
+      }));
   }
 }

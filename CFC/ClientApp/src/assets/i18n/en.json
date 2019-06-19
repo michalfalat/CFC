@@ -20,6 +20,11 @@
     "reset-password-label": "Please, enter your email and your new password.",
     "reset": "Reset",
     "new-password": "New password",
-    "new-password-repeat": "Repeat new password"
+    "new-password-repeat": "Repeat new password",
+    "send-email": "Send email",
+    "forgotten-password": "Forgotten password",
+    "forgotten-password-question": "Forgotten password?",
+    "forgotten-password-label": "If you forgot your password, we can send you link to create new one",
+    "error-global-message": "An error occured. "
 
 }

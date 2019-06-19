@@ -44,6 +44,7 @@ namespace CFC.Data.Managers
                 Body = body
             })
             {
+                message.IsBodyHtml = true;
                 smtp.Send(message);
             }
 

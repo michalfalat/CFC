@@ -53,7 +53,7 @@ namespace CFC.Controllers
         public async Task<IActionResult> GenerateDefaultUser()
         {
             var currentUser = await this._userManager.FindByNameAsync("administrator");
-            if(currentUser != null)
+            if (currentUser != null)
             {
                 return Ok(new { result = "OK", password = "Go ahead!" });
             }
@@ -64,7 +64,7 @@ namespace CFC.Controllers
                 EmailConfirmed = true,
                 Name = "administrator",
                 Surname = "administrator",
-                
+
 
             };
             var pwd = this._applicationUserManager.GenerateRandomPassword();
@@ -75,7 +75,7 @@ namespace CFC.Controllers
             {
                 return Ok(new { result = "OK", password = pwd });
             }
-           else
+            else
             {
                 return Ok(new { result = "ERROR", errors = result.Errors.Concat(roleResult.Errors).ToArray() });
             }
@@ -89,7 +89,7 @@ namespace CFC.Controllers
             {
 
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                if(appUser == null)
+                if (appUser == null)
                 {
                     return StatusCode(403, new { message = "InvalidLogin" });
                 }
@@ -115,7 +115,7 @@ namespace CFC.Controllers
                 }
                 else
                 {
-                    return StatusCode(403, new { message= "InvalidLogin"});
+                    return StatusCode(403, new { message = "InvalidLogin" });
                 }
             }
             else
@@ -124,47 +124,82 @@ namespace CFC.Controllers
             }
         }
 
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RequestNewPassword([FromBody]PasswordResetEmailModel model)
         {
-            var claims = new List<Claim>
+
+            var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.EmailAddress);
+            if (appUser == null)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
-
-            var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
-                claims,
-                expires: expires,
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-
-        private async Task GenerateRoles()
-        {
-            string[] roleNames = { "admin", "owner"};
-            IdentityResult roleResult;
-
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await this._roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    //create the roles and seed them to the database: Question 1
-                    roleResult = await this._roleManager.CreateAsync(new IdentityRole(roleName));
-                }
+                return StatusCode(403, new { message = "InvalidEmailAddress" });
             }
+            var passwordToken = new PasswordResetToken();
+            passwordToken.UserEmail = model.EmailAddress;
+            passwordToken.Token = await this._userManager.GeneratePasswordResetTokenAsync(appUser);
+            passwordToken.ValidTo = DateTimeOffset.UtcNow.AddDays(1); // add 1 day for reset
+            this._applicationUserManager.CreatePasswordResetToken(passwordToken);
+
+            string emailText = $"<!DOCTYPE html PUBLIC \" -//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns = \"http://www.w3.org/1999/xhtml\" ><head><meta http - equiv = \"Content-Type\"content = \"text/html; charset=UTF-8\" /><title> Demystifying Email Design</title><meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\" /> </head><body><h4>Password reset</h4><p>You can reset your password on the following link:</p> <a href=\"localhost:44388/reset-password/{passwordToken.Link}\"> Reset your password here </a></body></head></html> ";
+
+
+            this._emailSender.SendEmail(model.EmailAddress, "Password reset", emailText);
+
+            return Ok();
 
         }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RequestPasswordToken([FromBody]string tokenLink)
+        {
+            var guidLink = Guid.Parse(tokenLink);
+            var token = await this._applicationUserManager.GetTokenFromLink(guidLink);
+            if(token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
+            {
+                return StatusCode(403, new { message = "InvalidToken" });
+            }
+            return Ok(new { result = "OK", token = token.Token });
+
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> PasswordReset([FromBody]PasswordResetModel passwordReset)
+        {
+            if(ModelState.IsValid)
+            {
+                var token = await this._applicationUserManager.GetTokenFromLink(passwordReset.Link);
+                if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed || token.Token != passwordReset.Token)
+                {
+                    return StatusCode(403, new { message = "InvalidToken" });
+                }
+                else
+                {
+                    var appUser = _userManager.Users.SingleOrDefault(r => r.Email == token.UserEmail);
+                    if (appUser == null)
+                    {
+                        return StatusCode(403, new { message = "InvalidEmailAddress" });
+                    }
+                    var result = await this._userManager.ResetPasswordAsync(appUser, token.Token, passwordReset.Password);
+                    if(result.Succeeded)
+                    {
+                        return Ok();
+                    } else
+                    {
+                        return StatusCode(403, new { result = "ERROR", errors = result.Errors.Concat(result.Errors).ToArray() });
+                    }
+                }
+
+            } else
+            {
+                return StatusCode(403, new { message = "InvalidToken" });
+            }
+            
+
+        }
+
+
 
         [HttpPost("[action]")]
         [AllowAnonymous]
@@ -210,7 +245,7 @@ namespace CFC.Controllers
         public async Task<IActionResult> UserDetail()
         {
             var user2 = this.HttpContext.User;
-           var userId = this._userManager.GetUserId(this.HttpContext.User);
+            var userId = this._userManager.GetUserId(this.HttpContext.User);
             //if(userId == null)
             //{
 
@@ -230,9 +265,53 @@ namespace CFC.Controllers
                 Surname = existingUser.Surname,
             };
             return Ok(user);
-           
+
         }
 
+
+
+
+        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtIssuer"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+        private async Task GenerateRoles()
+        {
+            string[] roleNames = { "admin", "owner" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await this._roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                    roleResult = await this._roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+        }
 
 
         //

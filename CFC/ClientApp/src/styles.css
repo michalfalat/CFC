@@ -60,3 +60,13 @@
   .centered {
     text-align: center;
   }
+
+  a {
+    color: #bba220;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    color: #927e17;
+    text-decoration: underline;
+  }

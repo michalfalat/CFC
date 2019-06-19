@@ -11,5 +11,9 @@ namespace CFC.Data.Managers
         void Create(ApplicationUser entity);
         Task<ApplicationUser> FindById(string id);
         string GenerateRandomPassword();
+
+        Task<PasswordResetToken> GetTokenFromLink(Guid link);
+
+        void CreatePasswordResetToken(PasswordResetToken token);
     }
 }

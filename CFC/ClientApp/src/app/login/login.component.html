@@ -9,7 +9,9 @@
       <input matInput placeholder="{{ 'password' | translate }}" name="password" type="password" [(ngModel)]="user.password">
     </mat-form-field>
     <p *ngIf="errorLogin" class="error-label centered">{{ 'error-login-label' | translate }}</p>
-    
+    <p>
+    <a routerLink="/forgotten-password" >{{ 'forgotten-password-question' | translate}}</a>
+  </p>
   <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login' | translate }}</button>
   </form>
 

@@ -43,5 +43,16 @@ namespace CFC.Data.Managers
             //TODO shuffle
             return finalPwd;
         }
+
+        public Task<PasswordResetToken> GetTokenFromLink(Guid link)
+        {
+            return this.Repository.PasswordResetTokenRepository.FindByCondition(u => u.Link == link).FirstOrDefaultAsync();
+        }
+
+        public void CreatePasswordResetToken(PasswordResetToken entity)
+        {
+            this.Repository.PasswordResetTokenRepository.Create(entity);
+            this.Repository.Save();
+        }
     }
 }

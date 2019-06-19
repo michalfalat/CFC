@@ -20,6 +20,7 @@ import { UserVerifyComponent } from './user-verify/user-verify.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthInterceptor } from './auth-interceptor/auth-interceptor.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -39,6 +40,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     UserVerifyComponent,
     UserDetailComponent,
     PasswordResetComponent,
+    ForgottenPasswordComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -53,6 +55,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       { path: 'register-user', component: RegisterComponent },
       { path: 'user', component: UserDetailComponent },
       { path: 'reset-password/:token', component: PasswordResetComponent },
+      { path: 'forgotten-password', component: ForgottenPasswordComponent },
     ]),
     
     TranslateModule.forRoot({

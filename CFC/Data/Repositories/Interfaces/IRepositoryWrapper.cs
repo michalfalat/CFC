@@ -11,6 +11,8 @@ namespace CFC.Data.Repositories
 
         IApplicationUserRepository ApplicationUserRepository { get; }
 
+        IPasswordResetTokenRepository PasswordResetTokenRepository { get; }
+
         void Save();
     }
 }
