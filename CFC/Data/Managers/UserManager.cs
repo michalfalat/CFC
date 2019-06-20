@@ -54,5 +54,12 @@ namespace CFC.Data.Managers
             this.Repository.PasswordResetTokenRepository.Create(entity);
             this.Repository.Save();
         }
+
+        public async Task MarkPasswordResetTokenAsUsed(int id)
+        {
+            var token = await this.Repository.PasswordResetTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
+            token.IsUsed = true;
+            this.Repository.PasswordResetTokenRepository.Update(token);
+        }
     }
 }

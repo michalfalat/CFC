@@ -140,10 +140,15 @@ namespace CFC.Controllers
             passwordToken.ValidTo = DateTimeOffset.UtcNow.AddDays(1); // add 1 day for reset
             this._applicationUserManager.CreatePasswordResetToken(passwordToken);
 
-            string emailText = $"<!DOCTYPE html PUBLIC \" -//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns = \"http://www.w3.org/1999/xhtml\" ><head><meta http - equiv = \"Content-Type\"content = \"text/html; charset=UTF-8\" /><title> Demystifying Email Design</title><meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\" /> </head><body><h4>Password reset</h4><p>You can reset your password on the following link:</p> <a href=\"localhost:44388/reset-password/{passwordToken.Link}\"> Reset your password here </a></body></head></html> ";
+            var template = this._emailSender.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
+            template = template.Replace("{headerText}", "Password reset")
+                                .Replace("{mainText}", "Reset your password on following link:")
+                                .Replace("{buttonLink}", $"https://localhost:44388/reset-password/{passwordToken.Link}")
+                                .Replace("{buttonText}", "Reset password");
 
 
-            this._emailSender.SendEmail(model.EmailAddress, "Password reset", emailText);
+
+            this._emailSender.SendEmail(model.EmailAddress, "Password reset", template);
 
             return Ok();
 
@@ -184,6 +189,7 @@ namespace CFC.Controllers
                     var result = await this._userManager.ResetPasswordAsync(appUser, token.Token, passwordReset.Password);
                     if(result.Succeeded)
                     {
+                        await this._applicationUserManager.MarkPasswordResetTokenAsUsed(token.Id);
                         return Ok();
                     } else
                     {

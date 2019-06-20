@@ -15,5 +15,7 @@ namespace CFC.Data.Managers
         Task<PasswordResetToken> GetTokenFromLink(Guid link);
 
         void CreatePasswordResetToken(PasswordResetToken token);
+
+        Task MarkPasswordResetTokenAsUsed(int id);
     }
 }

@@ -5,17 +5,26 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace CFC.Data.Managers
 {
     public class EmailSender : IEmailSender
     {
-
-        readonly IConfiguration _configuration;
-        public EmailSender(IConfiguration configuration)
+        private IHostingEnvironment _hostingEnvironment;
+        private IConfiguration _configuration;
+        public EmailSender(IConfiguration configuration, IHostingEnvironment environment)
         {
             _configuration = configuration;
+            _hostingEnvironment = environment;
         }
+
+        public string GetEmailTemplate(string path)
+        {
+            return this.ReadFile(path);
+        }
+
         public int SendEmail(string to, string subject, string body)
         {
             //TODO
@@ -49,6 +58,16 @@ namespace CFC.Data.Managers
             }
 
             return 1;
+        }
+
+        private string ReadFile(string path)
+        {
+            var fullPath = Path.Combine(_hostingEnvironment.WebRootPath, path);
+            if (System.IO.File.Exists(fullPath))
+            {
+                return System.IO.File.ReadAllText(fullPath);
+            }
+            return "";
         }
     }
 }
