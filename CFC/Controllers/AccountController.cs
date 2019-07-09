@@ -156,9 +156,13 @@ namespace CFC.Controllers
 
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> RequestPasswordToken([FromBody]string tokenLink)
+        public async Task<IActionResult> RequestPasswordToken([FromBody]TokenLinkModel tokenLink)
         {
-            var guidLink = Guid.Parse(tokenLink);
+            if(!ModelState.IsValid)
+            {
+                return StatusCode(404, new { message = "InvalidToken" });
+            }
+            var guidLink = Guid.Parse(tokenLink.Token);
             var token = await this._applicationUserManager.GetTokenFromLink(guidLink);
             if(token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
             {

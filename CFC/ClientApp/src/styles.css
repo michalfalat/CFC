@@ -41,7 +41,11 @@
   }
 
   .notification-info {
-    background-color: #57a3d6;
+    background-color: #2a9e51;
+  }
+
+  .notification-info  .mat-simple-snackbar-action  {
+    color: white
   }
 
   .notification-warning {
@@ -52,6 +56,16 @@
   .notification-warning  .mat-simple-snackbar-action  {
     color: white
   }
+
+  .notification-error {
+    background-color: #dd4646;
+    color: white;
+  }
+
+  .notification-error  .mat-simple-snackbar-action  {
+    color: white
+  }
+
 
   .error-label {
     color:rgb(214, 68, 68);

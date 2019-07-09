@@ -32,13 +32,13 @@
       <span> {{'about' | translate}}</span>
     </button>
 
-    <button *ngIf="!isUserLoggedIn()" mat-button routerLink="/login" color="">
+    <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login" color="">
       <mat-icon class="">account_circle</mat-icon>
       <span> {{'login' | translate}}</span>
     </button>
 
-    <button *ngIf="isUserLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
-      <mat-icon class="">account_circle</mat-icon> {{user() !== null ? user().email: ''}}
+    <button *ngIf="authService.isLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
+      <mat-icon class="">account_circle</mat-icon> {{  userData.email }}
 
     </button>
     <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">

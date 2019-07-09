@@ -2,7 +2,7 @@
 using CFC.Data.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -60,6 +60,7 @@ namespace CFC.Data.Managers
             var token = await this.Repository.PasswordResetTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
             token.IsUsed = true;
             this.Repository.PasswordResetTokenRepository.Update(token);
+            this.Repository.Save();
         }
     }
 }

@@ -23,4 +23,12 @@ export class NotifyService {
       panelClass: ['notification-warning']
     });
   }
+
+  error(message: string, action: string = "OK", duration = 10000) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+      verticalPosition: "top",
+      panelClass: ['notification-error']
+    });
+  }
 }

@@ -21,3 +21,9 @@ export class UserPasswordReset {
     password1: string;
     password2: string;
 }
+
+export class PasswordResetModel {
+    token: string;
+    link: string;
+    password: string;
+}

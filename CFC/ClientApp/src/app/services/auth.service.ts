@@ -41,10 +41,10 @@ export class AuthService {
 
   public saveUser(userLoginInfo: UserLoginInfo) {
     localStorage.setItem('auth_user', JSON.stringify(userLoginInfo));
-      let user = new UserInfo();
-      user.email = user.email;
-      user.role = user.role;
-      this.userSubject.next(user);
+    let user = new UserInfo();
+    user.email = userLoginInfo.email;
+    user.role = userLoginInfo.role;
+    this.userSubject.next(user);
   }
   
 

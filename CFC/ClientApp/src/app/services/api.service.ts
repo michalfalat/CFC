@@ -3,7 +3,7 @@ import { RegisterUser } from '../models/register-user';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { LoginUser } from '../models/login-user';
+import { LoginUser, UserPasswordReset, PasswordResetModel } from '../models/login-user';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -27,6 +27,14 @@ export class ApiService {
     return this.baseUrl + 'api/Account/RequestNewPassword'
   }
 
+  private requestPasswordTokenUrl() {
+    return this.baseUrl + 'api/Account/RequestPasswordToken'
+  }
+  private changePasswordUrl() {
+    return this.baseUrl + 'api/Account/PasswordReset'
+  }
+
+
 
   private headers;
 
@@ -43,7 +51,7 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));   
+        //return this.handleError(error, () => this.registerUser(model));
       }));
 
   }
@@ -77,4 +85,25 @@ export class ApiService {
         //return this.handleError(error, () => this.registerUser(model)); 
       }));
   }
+
+  requestPasswordToken(token: string) : any {
+    const data = {
+      token: token
+    }
+    return this.http.post(this.requestPasswordTokenUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+        //return this.handleError(error, () => this.registerUser(model)); 
+      }));
+  }
+
+  changePassword(data: PasswordResetModel): any {
+    return this.http.post(this.changePasswordUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
 }

@@ -25,6 +25,7 @@
     "forgotten-password": "Forgotten password",
     "forgotten-password-question": "Forgotten password?",
     "forgotten-password-label": "If you forgot your password, we can send you link to create new one",
-    "error-global-message": "An error occured. "
+    "error-global-message": "An error occured. ",
+    "error-password-match": "Password don't match"
 
 }
