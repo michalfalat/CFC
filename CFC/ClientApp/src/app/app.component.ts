@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 import { UserInfo } from './models/login-user';
+import { DarkThemeService } from './services/dark-theme.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,9 @@ export class AppComponent {
   private userData: UserInfo = null;
   
   title = 'app';
-  constructor(private translate: TranslateService, public authService: AuthService, private router: Router) {
+  constructor(private translate: TranslateService, 
+    public authService: AuthService, public darkThemeService: DarkThemeService,
+    private router: Router) {
     translate.addLangs(['en', 'sk']);
     translate.setDefaultLang('en');
     
@@ -40,5 +43,15 @@ export class AppComponent {
     this.authService.logoutUser();
     this.router.navigate(['/login']);
 
+  }
+
+  public changeDarkTheme(event) {
+    event.preventDefault();
+    const enable = this.darkThemeService.darkModeEnabled == false;
+    this.darkThemeService.enableDarkMode(enable);
+  }
+
+  public getYear() {
+    return new Date().getFullYear();
   }
 }

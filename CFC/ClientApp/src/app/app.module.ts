@@ -21,6 +21,7 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthInterceptor } from './auth-interceptor/auth-interceptor.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component';
+import { CookieService } from 'ngx-cookie-service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -70,6 +71,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,8 @@
-<body>
+<body [ngClass]="{'dark-theme': darkThemeService.darkModeEnabled }">
+  <div class="mainSection">
   <mat-toolbar color="primary">
     <button mat-button routerLink="/register-user" color="">
-      <mat-icon class="">account</mat-icon>
+      <mat-icon class="">supervised_user_circle</mat-icon>
       <span> {{ 'register_user' | translate }}</span>
     </button>
     <span class="spacer"></span>
@@ -43,16 +44,37 @@
     </button>
     <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
       <button mat-menu-item (click)="navigate('/user')">
-        Profile
+        {{'profile' | translate}}
       </button>
       <button mat-menu-item (click)="logout()">
-        Logout
+        {{'logout' | translate}}
       </button>
     </mat-menu>
 
 
   </mat-toolbar>
-  <div class="container">
+  <div class="container ">
     <router-outlet></router-outlet>
-  </div>
+  </div> 
+</div> 
+
+<footer>
+    <div>
+      <mat-toolbar class="footer">
+           &copy; Michal Falát {{ getYear()}}
+            <span class="spacer"></span>
+        
+            <mat-slide-toggle
+            class=""
+            color="accent"
+            [checked]="darkThemeService.darkModeEnabled === true"
+            (click)="changeDarkTheme($event)"
+            >
+            {{'dark-theme' | translate}}
+        </mat-slide-toggle>
+        
+        
+          </mat-toolbar>
+    </div>
+  </footer>
 </body>
