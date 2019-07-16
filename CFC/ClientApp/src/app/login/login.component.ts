@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginUser, UserInfo, UserLoginInfo } from '../models/login-user';
+import { LoginUser, UserInfo, UserLoginInfo } from '../models/user-models';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { AuthService } from '../services/auth.service';
@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   public user: LoginUser;
   public errorLogin: boolean = false;
+  public loadingData = false;
 
   constructor(private apiService: ApiService,
      private notification: NotifyService,
@@ -31,8 +32,10 @@ export class LoginComponent implements OnInit {
   login(){
     console.log(this.user);
     this.errorLogin = false;
+    this.loadingData = true;
     this.apiService.loginUser(this.user).subscribe(res => {
       console.log(res)
+      this.loadingData = false;
       var loginUser = new UserLoginInfo();
       loginUser.email = res.email;
       loginUser.token = res.token;
@@ -43,6 +46,7 @@ export class LoginComponent implements OnInit {
     }, err => {
       //this.notification.warning("something went wrong");
       this.errorLogin = true;
+      this.loadingData = false;
       console.log(err);
     })
   }

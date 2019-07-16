@@ -1,4 +1,5 @@
-<mat-card class="login-form-container">
+<mat-card class="login-form-container">  
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
   <h3>{{ 'login' | translate }}</h3>
   <form class="form">
     <mat-form-field class="full-width">

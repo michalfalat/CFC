@@ -14,6 +14,8 @@
     min-width: 150px;
     max-width: 500px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .full-width {
@@ -28,6 +30,12 @@
   .form-container {
     max-width: 450px;
     margin: 50px auto;
+  }
+
+  .form-container.bigger-width {
+    max-width: 700px;
+    margin: 50px auto;
+
   }
 
   .login-button {
@@ -99,3 +107,14 @@
     color: #927e17;
     text-decoration: underline;
   }
+
+  .mat-tab-header-pagination.mat-tab-header-pagination-disabled {
+    display: none !important;
+}
+
+.showOnHover { 
+  visibility: hidden !important;
+ }
+.enableHover:hover .showOnHover { 
+  visibility: visible !important;
+}

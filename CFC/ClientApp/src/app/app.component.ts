@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
-import { UserInfo } from './models/login-user';
+import { UserInfo } from './models/user-models';
 import { DarkThemeService } from './services/dark-theme.service';
+import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -15,18 +16,13 @@ export class AppComponent {
   private userData: UserInfo = null;
   
   title = 'app';
-  constructor(private translate: TranslateService, 
+  constructor(private languageService: LanguageService, 
     public authService: AuthService, public darkThemeService: DarkThemeService,
     private router: Router) {
-    translate.addLangs(['en', 'sk']);
-    translate.setDefaultLang('en');
-    
-    const browserLang = translate.getBrowserLang();
-    translate.use(browserLang.match(/en|sk/) ? browserLang : 'en');
-    this.userData = this.authService.getUser();
-    this.authService.user.subscribe((user) => {
-      this.userData = user;
-    })
+      this.userData = this.authService.getUser();
+      this.authService.user.subscribe((user) => {
+        this.userData = user;
+      })
     
   }
 
@@ -35,8 +31,7 @@ export class AppComponent {
   }
   
   public changeLanguage(lang) {
-    this.translate.use(lang);
-    console.log(lang);
+    this.languageService.changeLanguage(lang);
   }
 
   public logout(){

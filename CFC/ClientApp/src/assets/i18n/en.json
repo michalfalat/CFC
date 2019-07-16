@@ -13,6 +13,7 @@
     "phone": "Phone",
     "email": "Email",
     "dark-theme": "Dark theme",
+    "edit": "Edit",
     "confirmation_email_sent": "Confirmation email was sent.",
     "welcome_to_system": "Welcome to system CFC",
     "create_password_text": "For first, create your password for this account.",
@@ -25,9 +26,17 @@
     "new-password-repeat": "Repeat new password",
     "send-email": "Send email",
     "forgotten-password": "Forgotten password",
+    "password-requirements": "Password must contain 8-20 characters: 1 number, 1 letter, 1 capital letter, 1 special character",
     "forgotten-password-question": "Forgotten password?",
     "forgotten-password-label": "If you forgot your password, we can send you link to create new one",
     "error-global-message": "An error occured. ",
-    "error-password-match": "Password don't match"
+    "error-password-match": "Password don't match",
+    "basic-data": "Basic data",
+    "password-change": "Password change",
+    "other": "Other",
+    "old-password": "Old password",
+    "change-password": "Change password",
+    "password-changed": "Password was successfully changed",
+    "save-changes": "Save changes"
 
 }

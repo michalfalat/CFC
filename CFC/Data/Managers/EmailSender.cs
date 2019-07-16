@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using CFC.Data.Entities;
 
 namespace CFC.Data.Managers
 {
@@ -58,6 +59,16 @@ namespace CFC.Data.Managers
             }
 
             return 1;
+        }
+
+        public void SendPasswordResetToken(string to, PasswordResetToken token)
+        {
+            var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
+            template = template.Replace("{headerText}", "Password reset")
+                                .Replace("{mainText}", "Reset your password on following link:")
+                                .Replace("{buttonLink}", $"https://localhost:44388/reset-password/{token.Link}")
+                                .Replace("{buttonText}", "Reset password");
+            this.SendEmail(to, "Password reset", template);
         }
 
         private string ReadFile(string path)

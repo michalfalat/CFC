@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserPasswordReset, PasswordResetModel } from '../models/login-user';
+import { UserPasswordReset, PasswordResetModel } from '../models/user-models';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 
@@ -44,7 +44,7 @@ export class PasswordResetComponent implements OnInit {
     model.link = this.tokenLink;
     model.token = this.formData.token;
     model.password = this.formData.password1;
-    this.apiService.changePassword(model).subscribe((response) => {
+    this.apiService.changeResetPassword(model).subscribe((response) => {
       console.log(response);
       this.notifyService.info("password was changed");
       this.router.navigate(['/login']);

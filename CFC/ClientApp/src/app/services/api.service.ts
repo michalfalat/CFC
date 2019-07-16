@@ -1,9 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { RegisterUser } from '../models/register-user';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { LoginUser, UserPasswordReset, PasswordResetModel } from '../models/login-user';
+import { catchError, switchMap } from 'rxjs/operators';
+import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel } from '../models/user-models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -30,8 +29,13 @@ export class ApiService {
   private requestPasswordTokenUrl() {
     return this.baseUrl + 'api/Account/RequestPasswordToken'
   }
-  private changePasswordUrl() {
+
+  private changeResetPasswordUrl() {
     return this.baseUrl + 'api/Account/PasswordReset'
+  }
+
+  private changePasswordUrl() {
+    return this.baseUrl + 'api/Account/ChangePassword'
   }
 
 
@@ -98,8 +102,27 @@ export class ApiService {
       }));
   }
 
-  changePassword(data: PasswordResetModel): any {
+  changeResetPassword(data: PasswordResetModel): any {
+    return this.http.post(this.changeResetPasswordUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  changePassword(data: PasswordChangeModel): any {
+    const model = {
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword
+    };
     return this.http.post(this.changePasswordUrl(), data, this.headers).pipe(
+    //   switchMap(response, aaa => { 
+    //     if (response.bearerToken) {
+    //     } 
+    //     else {
+    //        return throwError('Valid token not returned');
+    //     }
+    //  }),
       catchError(error => {
         console.log(error);
         return throwError(error);

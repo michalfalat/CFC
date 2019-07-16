@@ -1,19 +1,53 @@
-<mat-card class="form-container">
-  <h3>{{ 'profile' | translate }}</h3>
-  <form class="form">
-    <mat-form-field class="full-width">
-      <input matInput placeholder="{{ 'name' | translate }}" value="" name="name" [(ngModel)]="userDetail.name" disabled>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="{{ 'surname' | translate }}" value="" name="surname" [(ngModel)]="userDetail.surname" disabled>
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Email" value="" name="email" [(ngModel)]="userDetail.email" disabled>
-    </mat-form-field>
+<mat-card class="form-container bigger-width">
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+
+    <h3>{{ 'profile' | translate }}</h3>  
+    <mat-tab-group mat-align-tabs="center" dynamicHeight >
+        <mat-tab label="{{ 'basic-data' | translate}}">
+            <br>  
+          <form class="form enableHover" #userDataForm="ngForm">
+            
+            <button mat-button (click)="enableEditMode()" class="showOnHover" style="float:right" matTooltip="{{ 'edit' | translate }}">
+              <mat-icon class="">edit</mat-icon>
+            </button>
+            <mat-form-field class="full-width">
+                <input matInput placeholder="Email" name="email" [(ngModel)]="userDetail.email" disabled>
+              </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="{{ 'name' | translate }}" name="name" [(ngModel)]="userDetail.name" [disabled]="editMode === false" required minlength="3">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="{{ 'surname' | translate }}" name="surname" [(ngModel)]="userDetail.surname" [disabled]="editMode === false" required minlength="3">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="{{ 'phone' | translate}}"  name="phone" [(ngModel)]="userDetail.phone" [disabled]="editMode === false" >
+            </mat-form-field>
+            <button mat-raised-button [disabled]="editMode === false || userDataForm.valid === false" color="primary" class="login-button" (click)="editUser()" type="submit">{{ 'save-changes' | translate }}</button>
+          </form> 
+        </mat-tab>
+        <mat-tab label="{{ 'password-change' | translate}}"> 
+          <br>  
+            <form class="form"  #passwordChangeFormRef="ngForm" (ngSubmit)="changePassword(passwordChangeFormRef)">
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="{{ 'old-password' | translate }}" value="" name="oldPassword" type="password" [(ngModel)]="passwordChangeForm.oldPassword" required>
+                </mat-form-field>
+              
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="{{ 'new-password' | translate }}" name="newPassword"  #newPassword="ngModel" type="password" [(ngModel)]="passwordChangeForm.newPassword" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+                  <mat-error *ngIf="newPassword.invalid">{{ 'password-requirements' | translate }}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="{{ 'new-password-repeat' | translate }}" name="newPassword2" type="password" [(ngModel)]="passwordChangeForm.newPassword2" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+                </mat-form-field>
+                <p *ngIf="errorLogin" class="error-label centered">{{ 'error-login-label' | translate }}</p>
+                <p *ngIf="errorPasswordMatch && passwordChangeForm.newPassword !== passwordChangeForm.newPassword2" class="error-label centered">{{ 'error-password-match' | translate }}</p>
+                
+              <button mat-raised-button color="primary" [disabled]="passwordChangeFormRef.valid === false" class="login-button" type="submit">{{ 'change-password' | translate }}</button>
+            </form>
+          
+        </mat-tab>
+        <mat-tab label="{{ 'other' | translate}}" disabled> </mat-tab>
+      </mat-tab-group>
   
-  
-<!--     
-  <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login' | translate }}</button> -->
-  </form>
 
 </mat-card>

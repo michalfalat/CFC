@@ -27,3 +27,23 @@ export class PasswordResetModel {
     link: string;
     password: string;
 }
+
+export class PasswordChangeModel {
+    oldPassword: string;
+    newPassword: string;
+    newPassword2: string;
+}
+
+export class RegisterUser {
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;    
+}
+
+export class UserDetail {
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;    
+}

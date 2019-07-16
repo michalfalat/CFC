@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System;
+using CFC.Data.Enums;
 
 namespace CFC.Controllers
 {
@@ -25,7 +26,7 @@ namespace CFC.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public IApplicationUserManager _applicationUserManager { get; set; }
+        private readonly IApplicationUserManager _applicationUserManager;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
@@ -139,17 +140,7 @@ namespace CFC.Controllers
             passwordToken.Token = await this._userManager.GeneratePasswordResetTokenAsync(appUser);
             passwordToken.ValidTo = DateTimeOffset.UtcNow.AddDays(1); // add 1 day for reset
             this._applicationUserManager.CreatePasswordResetToken(passwordToken);
-
-            var template = this._emailSender.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
-            template = template.Replace("{headerText}", "Password reset")
-                                .Replace("{mainText}", "Reset your password on following link:")
-                                .Replace("{buttonLink}", $"https://localhost:44388/reset-password/{passwordToken.Link}")
-                                .Replace("{buttonText}", "Reset password");
-
-
-
-            this._emailSender.SendEmail(model.EmailAddress, "Password reset", template);
-
+            this._emailSender.SendPasswordResetToken(model.EmailAddress, passwordToken);
             return Ok();
 
         }
@@ -158,13 +149,13 @@ namespace CFC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RequestPasswordToken([FromBody]TokenLinkModel tokenLink)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return StatusCode(404, new { message = "InvalidToken" });
             }
             var guidLink = Guid.Parse(tokenLink.Token);
             var token = await this._applicationUserManager.GetTokenFromLink(guidLink);
-            if(token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
+            if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
             {
                 return StatusCode(403, new { message = "InvalidToken" });
             }
@@ -176,7 +167,7 @@ namespace CFC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> PasswordReset([FromBody]PasswordResetModel passwordReset)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var token = await this._applicationUserManager.GetTokenFromLink(passwordReset.Link);
                 if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed || token.Token != passwordReset.Token)
@@ -191,21 +182,23 @@ namespace CFC.Controllers
                         return StatusCode(403, new { message = "InvalidEmailAddress" });
                     }
                     var result = await this._userManager.ResetPasswordAsync(appUser, token.Token, passwordReset.Password);
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         await this._applicationUserManager.MarkPasswordResetTokenAsUsed(token.Id);
                         return Ok();
-                    } else
+                    }
+                    else
                     {
                         return StatusCode(403, new { result = "ERROR", errors = result.Errors.Concat(result.Errors).ToArray() });
                     }
                 }
 
-            } else
+            }
+            else
             {
                 return StatusCode(403, new { message = "InvalidToken" });
             }
-            
+
 
         }
 
@@ -234,8 +227,6 @@ namespace CFC.Controllers
                 EmailConfirmed = false,
                 Name = model.Name,
                 Surname = model.Surname,
-
-
             };
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
@@ -256,10 +247,6 @@ namespace CFC.Controllers
         {
             var user2 = this.HttpContext.User;
             var userId = this._userManager.GetUserId(this.HttpContext.User);
-            //if(userId == null)
-            //{
-
-            //}
 
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
             if (existingUser == null)
@@ -278,6 +265,37 @@ namespace CFC.Controllers
 
         }
 
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangePassword([FromBody]PasswordChangeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+            }
+            var userId = this._userManager.GetUserId(this.HttpContext.User);
+            if (userId == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+
+            var result = await this._userManager.ChangePasswordAsync(existingUser, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok(new ResponseDTO());
+            }
+            else
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidPassword", result.Errors.ToArray().ToString()));
+            }
+
+        }
 
 
 
