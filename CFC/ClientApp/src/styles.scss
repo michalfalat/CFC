@@ -137,16 +137,8 @@ input:-webkit-autofill {
   visibility: visible !important;
 }
 
-// .sidenav-content {
-//   display: flex;
-//   height: 100%;
-//   align-items: center;
-//   justify-content: center;
 
-// }
-
-// .sidenav-sidebar {
-//   width: 500px;
-//   height: 300px;
-//   border: 1px solid rgba(0, 0, 0, 0.5);
-// }
+.sidebarLogo {  
+  max-width: 50px;
+  filter: opacity(0.75);
+}

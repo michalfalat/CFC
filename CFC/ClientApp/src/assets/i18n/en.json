@@ -43,6 +43,8 @@
     "back-to-homepage": "Back to homepage",
     "show-password": "Show password",
     "hide-password": "Hide password",
-    "password-reauired": "Password is required"
+    "password-reauired": "Password is required",
+    "hide-sidebar": "Hide sidebar",
+    "show-sidebar": "Show sidebar"
 
 }

@@ -43,5 +43,7 @@
     "back-to-homepage": "Domovská stránka",
     "show-password": "Zobraziť heslo",
     "hide-password": "Skryť heslo",
-    "password-reauired": "Heslo je povinné"
+    "password-reauired": "Heslo je povinné",
+    "hide-sidebar": "Skryť bočný panel",
+    "show-sidebar": "Zobraziť bočný panel"
 }

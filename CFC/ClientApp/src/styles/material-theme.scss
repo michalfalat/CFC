@@ -38,3 +38,8 @@ $theme: mat-light-theme($primary, $accent, $warn);
   -webkit-animation-name: autofillDark !important;
   -webkit-animation-fill-mode: both !important;
 }
+
+.dark-theme .sidebarLogo {  
+  max-width: 50px;
+  filter: invert(1);
+}
