@@ -12,7 +12,7 @@
 
   .form {
     min-width: 150px;
-    max-width: 500px;
+    // max-width: 500px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -50,6 +50,22 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+  }
+
+  @-webkit-keyframes autofill {
+    to {
+        // color: white;
+        background: transparent;
+
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill !important;
+    -webkit-animation-fill-mode: both !important;
+}
+  .flexLayout {
+    display: flex;
   }
 
   .mainSection { 

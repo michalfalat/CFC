@@ -37,6 +37,12 @@
     "old-password": "Old password",
     "change-password": "Change password",
     "password-changed": "Password was successfully changed",
-    "save-changes": "Save changes"
+    "save-changes": "Save changes",
+    "enter-valid-email": "Enter valid email address",
+    "email-sent": "Email with instructions for reseting password was sent!",
+    "back-to-homepage": "Back to homepage",
+    "show-password": "Show password",
+    "hide-password": "Hide password",
+    "password-reauired": "Password is required"
 
 }

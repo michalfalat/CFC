@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forgotten-password',
@@ -9,19 +10,24 @@ import { NotifyService } from '../services/notify.service';
 })
 export class ForgottenPasswordComponent implements OnInit {
   public email: string;
+  public loadingData= false;
+  public emailSent = false;
 
-  constructor(private apiService: ApiService, private notifyService: NotifyService) { }
+  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) { }
 
   ngOnInit() {
   }
 
   sendLink() {
+    this.loadingData = true;
     this.apiService.requestEmailForPasswordReset(this.email).subscribe( (response) => {
       console.log(response);
-      this.notifyService.info("Email was sent");
-    }, error => {
-      
-      this.notifyService.warning("An error");
+      // this.notifyService.info(this.translateService.instant("email-sent"));
+      this.loadingData = false;
+      this.emailSent = true;
+    }, error => {      
+      this.notifyService.warning(this.translateService.instant(error.error.errorLabel));
+      this.loadingData = false;
       console.log(error);
     })
 

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserPasswordReset, PasswordResetModel } from '../models/user-models';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-password-reset',
@@ -12,10 +13,12 @@ import { NotifyService } from '../services/notify.service';
 export class PasswordResetComponent implements OnInit {
 
   public errorPasswordMatch = false;
+  public loadingData = true;
   public formData: UserPasswordReset;
   private tokenLink: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, private notifyService: NotifyService) { 
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, 
+    private notifyService: NotifyService, private translateService: TranslateService) { 
     this.formData = new UserPasswordReset();
   }
 
@@ -25,13 +28,18 @@ export class PasswordResetComponent implements OnInit {
     this.apiService.requestPasswordToken(this.tokenLink).subscribe((response) => {
       console.log(response);
       this.formData.token = response.token;
+      this.loadingData = false;
 
     }, error => {
       this.notifyService.error("Invalid token");
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
       console.log(error);
+      this.loadingData = false;
     })
 
+  }
+  log(data) {
+    console.log(data);
   }
 
   reset() {
@@ -44,18 +52,19 @@ export class PasswordResetComponent implements OnInit {
     model.link = this.tokenLink;
     model.token = this.formData.token;
     model.password = this.formData.password1;
+    this.loadingData = true;
     this.apiService.changeResetPassword(model).subscribe((response) => {
       console.log(response);
-      this.notifyService.info("password was changed");
+      this.notifyService.info(this.translateService.instant("password-changed"));
       this.router.navigate(['/login']);
+      this.loadingData = false;
 
     }, error => {
-      this.notifyService.error("Invalid token");
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
       console.log(error);
+      this.loadingData = false;
     })
 
-    // TODO
-    // if()
   }
 
 }

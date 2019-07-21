@@ -1,19 +1,24 @@
 <mat-card class="login-form-container">  
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
   <h3>{{ 'login' | translate }}</h3>
-  <form class="form">
+  <form class="form" #formRef="ngForm">
     <mat-form-field class="full-width">
-      <input matInput placeholder="Email" value="" name="email" [(ngModel)]="user.email">
+      <input matInput placeholder="Email"  #emailRef="ngModel" name="email" [(ngModel)]="user.email" required autofocus type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+      <mat-error *ngIf="emailRef.invalid">{{ 'enter-valid-email' | translate }}</mat-error>
     </mat-form-field>
   
     <mat-form-field class="full-width">
-      <input matInput placeholder="{{ 'password' | translate }}" name="password" type="password" [(ngModel)]="user.password">
+      <input matInput placeholder="{{ 'password' | translate }}" name="password" #passwordRef="ngModel" #p1 type="password" [(ngModel)]="user.password" required>
+      <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button matTooltip="{{ (p1.type === 'password' ? 'show-password' : 'hide-password') | translate }}" (click)="p1.type === 'password' ? p1.type ='text' : p1.type='password'">
+          <mat-icon>{{ p1.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="passwordRef.invalid">{{ 'password-reauired' | translate }}</mat-error>
     </mat-form-field>
     <p *ngIf="errorLogin" class="error-label centered">{{ 'error-login-label' | translate }}</p>
     <p>
     <a routerLink="/forgotten-password" >{{ 'forgotten-password-question' | translate}}</a>
   </p>
-  <button mat-raised-button color="primary" class="login-button" (click)="login()">{{ 'login' | translate }}</button>
+  <button mat-raised-button color="primary" class="login-button" (click)="login()" [disabled]="loadingData || formRef.invalid">{{ 'login' | translate }}</button>
   </form>
 
 </mat-card>

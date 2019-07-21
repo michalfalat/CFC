@@ -3,6 +3,7 @@ import { ApiService } from '../services/api.service';
 import { UserDetail, PasswordChangeModel } from '../models/user-models';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-detail',

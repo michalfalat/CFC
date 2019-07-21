@@ -25,3 +25,16 @@ $theme: mat-light-theme($primary, $accent, $warn);
     background-color: #424242 !important;
     color: white;
 }
+
+@-webkit-keyframes autofillDark {
+  to {
+      color: white;
+      background: transparent;
+
+  }
+}
+
+.dark-theme input:-webkit-autofill {
+  -webkit-animation-name: autofillDark !important;
+  -webkit-animation-fill-mode: both !important;
+}

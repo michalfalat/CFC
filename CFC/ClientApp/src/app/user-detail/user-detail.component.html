@@ -6,10 +6,14 @@
         <mat-tab label="{{ 'basic-data' | translate}}">
             <br>  
           <form class="form enableHover" #userDataForm="ngForm">
-            
-            <button mat-button (click)="enableEditMode()" class="showOnHover" style="float:right" matTooltip="{{ 'edit' | translate }}">
-              <mat-icon class="">edit</mat-icon>
-            </button>
+            <div class="flexLayout">
+                <span class="spacer"></span>
+                <span>
+                    <button mat-button (click)="enableEditMode()" class="showOnHover" style="float:right" matTooltip="{{ 'edit' | translate }}">
+                        <mat-icon class="">edit</mat-icon>
+                      </button>
+                </span>
+              </div>    
             <mat-form-field class="full-width">
                 <input matInput placeholder="Email" name="email" [(ngModel)]="userDetail.email" disabled>
               </mat-form-field>
@@ -29,20 +33,31 @@
           <br>  
             <form class="form"  #passwordChangeFormRef="ngForm" (ngSubmit)="changePassword(passwordChangeFormRef)">
                 <mat-form-field class="full-width">
-                  <input matInput placeholder="{{ 'old-password' | translate }}" value="" name="oldPassword" type="password" [(ngModel)]="passwordChangeForm.oldPassword" required>
+                  <input matInput placeholder="{{ 'old-password' | translate }}" value="" #oldPasswordRef="ngModel" #oldP name="oldPassword" type="password" [(ngModel)]="passwordChangeForm.oldPassword" required>
+                  <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button matTooltip="{{ (oldP.type === 'password' ? 'show-password' : 'hide-password') | translate }}" (click)="oldP.type === 'password' ? oldP.type ='text' : oldP.type='password'">
+                      <mat-icon>{{ oldP.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="oldPasswordRef.invalid">{{ 'password-reauired' | translate }}</mat-error>
                 </mat-form-field>
               
                 <mat-form-field class="full-width">
-                  <input matInput placeholder="{{ 'new-password' | translate }}" name="newPassword"  #newPassword="ngModel" type="password" [(ngModel)]="passwordChangeForm.newPassword" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
-                  <mat-error *ngIf="newPassword.invalid">{{ 'password-requirements' | translate }}</mat-error>
+                  <input matInput placeholder="{{ 'new-password' | translate }}" name="newPassword"  #password1Ref="ngModel" #p1 type="password" [(ngModel)]="passwordChangeForm.newPassword" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+                  <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button matTooltip="{{ (p1.type === 'password' ? 'show-password' : 'hide-password') | translate }}" (click)="p1.type === 'password' ? p1.type ='text' : p1.type='password'">
+                      <mat-icon>{{ p1.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="password1Ref.invalid">{{ 'password-requirements' | translate }}</mat-error>
                 </mat-form-field>
                 <mat-form-field class="full-width">
-                  <input matInput placeholder="{{ 'new-password-repeat' | translate }}" name="newPassword2" type="password" [(ngModel)]="passwordChangeForm.newPassword2" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+                  <input matInput placeholder="{{ 'new-password-repeat' | translate }}" name="newPassword2" type="password" #password2Ref #p2 [(ngModel)]="passwordChangeForm.newPassword2" required minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+                  <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button matTooltip="{{ (p2.type === 'password' ? 'show-password' : 'hide-password') | translate }}" (click)="p2.type === 'password' ? p2.type ='text' : p2.type='password'">
+                      <mat-icon>{{ p2.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+                  </button>
+                  <mat-error *ngIf="password2Ref.invalid">{{ 'password-requirements' | translate }}</mat-error>
                 </mat-form-field>
                 <p *ngIf="errorLogin" class="error-label centered">{{ 'error-login-label' | translate }}</p>
                 <p *ngIf="errorPasswordMatch && passwordChangeForm.newPassword !== passwordChangeForm.newPassword2" class="error-label centered">{{ 'error-password-match' | translate }}</p>
                 
-              <button mat-raised-button color="primary" [disabled]="passwordChangeFormRef.valid === false" class="login-button" type="submit">{{ 'change-password' | translate }}</button>
+              <button mat-raised-button color="primary" [disabled]="passwordChangeFormRef.invalid" class="login-button" type="submit">{{ 'change-password' | translate }}</button>
             </form>
           
         </mat-tab>
