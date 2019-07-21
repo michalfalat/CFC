@@ -68,8 +68,10 @@ input:-webkit-autofill {
     display: flex;
   }
 
-  .mainSection { 
-    flex-grow: 1;
+  .mainSection {    
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
   }
 
   .footer {
@@ -134,3 +136,17 @@ input:-webkit-autofill {
 .enableHover:hover .showOnHover { 
   visibility: visible !important;
 }
+
+// .sidenav-content {
+//   display: flex;
+//   height: 100%;
+//   align-items: center;
+//   justify-content: center;
+
+// }
+
+// .sidenav-sidebar {
+//   width: 500px;
+//   height: 300px;
+//   border: 1px solid rgba(0, 0, 0, 0.5);
+// }

@@ -1,80 +1,85 @@
 <body [ngClass]="{'dark-theme': darkThemeService.darkModeEnabled }">
-  <div class="mainSection">
-  <mat-toolbar color="primary">
-    <button mat-button routerLink="/register-user" color="">
-      <mat-icon class="">supervised_user_circle</mat-icon>
-      <span> {{ 'register_user' | translate }}</span>
-    </button>
-    <span class="spacer"></span>
-    <mat-form-field class="" *ngIf="this.currentRoute === '/categories'">
-      <mat-icon class="">search</mat-icon>
-      <input matInput [(ngModel)]="searchValue" (input)="onSearch($event.target.value)">
-    </mat-form-field>
+  <mat-sidenav-container class="sidenav-sidebar" autosize fullscreen>
+    <mat-sidenav #sidenav mode="side" [(opened)]="openedSidebar" [fixedInViewport]="true">
+        <button mat-button routerLink="/register-user" color="">
+          <mat-icon class="">supervised_user_circle</mat-icon>
+          <span> {{ 'register_user' | translate }}</span>
+        </button>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <div class="mainSection">
+        <mat-toolbar color="primary">
+            <button mat-button (click)="toogleSidebar()" color="">
+              <mat-icon class="">menu</mat-icon>
+            </button>
+          <span class="spacer"></span>
+          <mat-form-field class="" *ngIf="this.currentRoute === '/categories'">
+            <mat-icon class="">search</mat-icon>
+            <input matInput [(ngModel)]="searchValue" (input)="onSearch($event.target.value)">
+          </mat-form-field>
 
-    <span class="spacer"></span>
+          <span class="spacer"></span>
 
-    <button mat-button [matMenuTriggerFor]="langSelector" matTooltip="{{ 'language' | translate }}">
-      <mat-icon class="">language</mat-icon> {{ selectedLanguage | uppercase }}
+          <button mat-button [matMenuTriggerFor]="langSelector" matTooltip="{{ 'language' | translate }}">
+            <mat-icon class="">language</mat-icon> {{ selectedLanguage | uppercase }}
 
-    </button>
-    <mat-menu #langSelector="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
-      <button mat-menu-item (click)="changeLanguage('sk')">
-        SK
-      </button>
-      <button mat-menu-item (click)="changeLanguage('cz')">
-        CZ
-      </button>
-      <button mat-menu-item (click)="changeLanguage('en')">
-        EN
-      </button>
-    </mat-menu>
-    <button mat-button routerLink="/about" color="">
-      <mat-icon class="">info</mat-icon>
-      <span> {{'about' | translate}}</span>
-    </button>
+          </button>
+          <mat-menu #langSelector="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+            <button mat-menu-item (click)="changeLanguage('sk')">
+              SK
+            </button>
+            <button mat-menu-item (click)="changeLanguage('cz')">
+              CZ
+            </button>
+            <button mat-menu-item (click)="changeLanguage('en')">
+              EN
+            </button>
+          </mat-menu>
+          <button mat-button routerLink="/about" color="">
+            <mat-icon class="">info</mat-icon>
+            <span> {{'about' | translate}}</span>
+          </button>
 
-    <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login" color="">
-      <mat-icon class="">account_circle</mat-icon>
-      <span> {{'login' | translate}}</span>
-    </button>
+          <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login" color="">
+            <mat-icon class="">account_circle</mat-icon>
+            <span> {{'login' | translate}}</span>
+          </button>
 
-    <button *ngIf="authService.isLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
-      <mat-icon class="">account_circle</mat-icon> {{  userData.email }}
+          <button *ngIf="authService.isLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
+            <mat-icon class="">account_circle</mat-icon> {{  userData.email }}
 
-    </button>
-    <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
-      <button mat-menu-item (click)="navigate('/user')">
-        {{'profile' | translate}}
-      </button>
-      <button mat-menu-item (click)="logout()">
-        {{'logout' | translate}}
-      </button>
-    </mat-menu>
+          </button>
+          <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+            <button mat-menu-item (click)="navigate('/user')">
+              {{'profile' | translate}}
+            </button>
+            <button mat-menu-item (click)="logout()">
+              {{'logout' | translate}}
+            </button>
+          </mat-menu>
 
 
-  </mat-toolbar>
-  <div class="container ">
-    <router-outlet></router-outlet>
-  </div> 
-</div> 
+        </mat-toolbar>
+        <div class="container ">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
 
-<footer>
-    <div>
-      <mat-toolbar class="footer">
-           &copy; Michal Falát {{ getYear()}}
+      <footer>
+        <div>
+          <mat-toolbar class="footer">
+            &copy; Michal Falát {{ getYear()}}
             <span class="spacer"></span>
-        
-            <mat-slide-toggle
-            class=""
-            color="accent"
-            [checked]="darkThemeService.darkModeEnabled === true"
-            (click)="changeDarkTheme($event)"
-            >
-            {{'dark-theme' | translate}}
-        </mat-slide-toggle>
-        
-        
+
+            <mat-slide-toggle class="" color="accent" [checked]="darkThemeService.darkModeEnabled === true"
+              (click)="changeDarkTheme($event)">
+              {{'dark-theme' | translate}}
+            </mat-slide-toggle>
+
+
           </mat-toolbar>
-    </div>
-  </footer>
+        </div>
+      </footer>
+  </mat-sidenav-content>
+  </mat-sidenav-container>
 </body>

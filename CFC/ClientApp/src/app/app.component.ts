@@ -14,6 +14,7 @@ import { LanguageService } from './services/language.service';
 export class AppComponent {
 
   private userData: UserInfo = null;
+  public openedSidebar = true;
   
   title = 'app';
   constructor(private languageService: LanguageService, 
@@ -44,6 +45,10 @@ export class AppComponent {
     event.preventDefault();
     const enable = this.darkThemeService.darkModeEnabled == false;
     this.darkThemeService.enableDarkMode(enable);
+  }
+
+  public toogleSidebar() {
+    this.openedSidebar = !this.openedSidebar;
   }
 
   public getYear() {
