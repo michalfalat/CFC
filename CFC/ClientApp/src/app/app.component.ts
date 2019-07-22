@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserInfo } from './models/user-models';
 import { DarkThemeService } from './services/dark-theme.service';
 import { LanguageService } from './services/language.service';
+import { AuthGuard } from 'src/guards/auth-guard.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent {
   title = 'app';
   constructor(private languageService: LanguageService, 
     public authService: AuthService, public darkThemeService: DarkThemeService,
-    private router: Router) {
+    private router: Router, public authGuardService: AuthGuard) {
       this.userData = this.authService.getUser();
       this.authService.user.subscribe((user) => {
         this.userData = user;

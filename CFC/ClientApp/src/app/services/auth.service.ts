@@ -39,6 +39,14 @@ export class AuthService {
     return this.getUser() !== null ? this.getUser().role : null;
   }
 
+  public isEnabledFor(role) {
+    if(this.getRole() == role) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public saveUser(userLoginInfo: UserLoginInfo) {
     localStorage.setItem('auth_user', JSON.stringify(userLoginInfo));
     let user = new UserInfo();

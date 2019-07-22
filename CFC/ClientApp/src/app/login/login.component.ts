@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       private router : Router) {
     this.user = new LoginUser();
     if(this.authService.isLoggedIn()){
-      this.router.navigate(['/user']);
+      this.router.navigate(['/dashboard']);
     }
    }
 
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       loginUser.token = res.token;
       loginUser.role = res.role;
       this.authService.saveUser(loginUser);
-      this.router.navigate(['/user']);
+      this.router.navigate(['/dashboard']);
 
     }, err => {
       //this.notification.warning("something went wrong");

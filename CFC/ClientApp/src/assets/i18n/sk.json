@@ -45,5 +45,8 @@
     "hide-password": "Skryť heslo",
     "password-reauired": "Heslo je povinné",
     "hide-sidebar": "Skryť bočný panel",
-    "show-sidebar": "Zobraziť bočný panel"
+    "show-sidebar": "Zobraziť bočný panel",
+    "dashboard": "Prehľad",
+    "users": "Používatelia",
+    "companies": "Zoznam spoločností"
 }

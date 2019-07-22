@@ -45,6 +45,9 @@
     "hide-password": "Hide password",
     "password-reauired": "Password is required",
     "hide-sidebar": "Hide sidebar",
-    "show-sidebar": "Show sidebar"
+    "show-sidebar": "Show sidebar",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "companies": "Companies"
 
 }
