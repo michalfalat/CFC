@@ -22,6 +22,10 @@ changeLanguage(lang) {
   this.translateService.use(lang);
   this.cookieService.set("language", lang);
 }
+
+getLanguage() {
+  return this.translateService.currentLang;
+}
 }
 
 

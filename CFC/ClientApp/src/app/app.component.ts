@@ -15,6 +15,7 @@ import { AuthGuard } from 'src/guards/auth-guard.service';
 export class AppComponent {
 
   private userData: UserInfo = null;
+  public selectedLanguage = "";
   public openedSidebar = true;
   
   title = 'app';
@@ -22,6 +23,7 @@ export class AppComponent {
     public authService: AuthService, public darkThemeService: DarkThemeService,
     private router: Router, public authGuardService: AuthGuard) {
       this.userData = this.authService.getUser();
+      this.selectedLanguage = this.languageService.getLanguage();
       this.authService.user.subscribe((user) => {
         this.userData = user;
       })
@@ -34,6 +36,7 @@ export class AppComponent {
   
   public changeLanguage(lang) {
     this.languageService.changeLanguage(lang);
+    this.selectedLanguage = this.languageService.getLanguage();
   }
 
   public logout(){

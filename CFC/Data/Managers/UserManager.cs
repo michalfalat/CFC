@@ -62,5 +62,12 @@ namespace CFC.Data.Managers
             this.Repository.PasswordResetTokenRepository.Update(token);
             this.Repository.Save();
         }
+
+        public void EditUser(ApplicationUser entity)
+        {
+            this.Repository.ApplicationUserRepository.Update(entity);
+            this.Repository.Save();
+
+        }
     }
 }

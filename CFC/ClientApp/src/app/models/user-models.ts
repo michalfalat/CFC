@@ -47,3 +47,12 @@ export class UserDetail {
     email: string;
     phone: string;    
 }
+
+
+export class EditUser {
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;    
+}
+

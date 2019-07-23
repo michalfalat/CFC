@@ -142,3 +142,34 @@ input:-webkit-autofill {
   max-width: 50px;
   filter: opacity(0.75);
 }
+
+.activeLink {
+background-color: #90909029;
+}
+
+.card-panel {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center; /* Vertical center alignment */
+  justify-content: center; /* Horizontal center alignment */
+}
+
+.card-panel .left {
+  width: 50%;
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+
+.card-panel .right {
+  width: 50%;
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.card-panel img {
+  max-height: 200px;
+}

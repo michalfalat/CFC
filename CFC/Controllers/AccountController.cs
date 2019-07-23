@@ -265,6 +265,28 @@ namespace CFC.Controllers
 
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditUser([FromBody]UserEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+            }
+
+            var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+            if (appUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+
+            appUser.Name = model.Name;
+            appUser.Surname = model.Surname;
+            appUser.PhoneNumber = model.Phone;
+            this._applicationUserManager.EditUser(appUser);           
+            return Ok();
+
+        }
+
 
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword([FromBody]PasswordChangeModel model)

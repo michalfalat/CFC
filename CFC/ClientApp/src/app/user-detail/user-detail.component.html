@@ -9,9 +9,9 @@
         <div class="flexLayout">
           <span class="spacer"></span>
           <span>
-            <button mat-button (click)="enableEditMode()" class="showOnHover" style="float:right"
-              matTooltip="{{ 'edit' | translate }}">
-              <mat-icon class="">edit</mat-icon>
+            <button mat-button (click)="toogleEditMode()" class="showOnHover"
+              matTooltip="{{ (editMode ? 'cancel' : 'edit') | translate }}">
+              <mat-icon class="">{{ editMode ? 'close' : 'edit' }}</mat-icon>
             </button>
           </span>
         </div>
@@ -70,7 +70,6 @@
           </button>
           <mat-error *ngIf="password2Ref.invalid">{{ 'password-requirements' | translate }}</mat-error>
         </mat-form-field>
-        <p *ngIf="errorLogin" class="error-label centered">{{ 'error-login-label' | translate }}</p>
         <p *ngIf="errorPasswordMatch && passwordChangeForm.newPassword !== passwordChangeForm.newPassword2"
           class="error-label centered">{{ 'error-password-match' | translate }}</p>
 

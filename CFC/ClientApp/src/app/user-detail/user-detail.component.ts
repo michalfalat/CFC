@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { UserDetail, PasswordChangeModel } from '../models/user-models';
+import { UserDetail, PasswordChangeModel, EditUser } from '../models/user-models';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgForm } from '@angular/forms';
@@ -23,14 +23,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.apiService.userDetail().subscribe(response => {
-      this.userDetail = response;
-      this.loadingData = false;
-
-    }, error => {
-      console.log("error");
-      this.loadingData = false;
-    })
+    this.getUser();
   }
 
   changePassword(form: NgForm) {
@@ -54,8 +47,41 @@ export class UserDetailComponent implements OnInit {
     
   }
 
-  enableEditMode() {
-    this.editMode = true;
+  getUser() {
+    this.apiService.userDetail().subscribe(response => {
+      this.userDetail = response;
+      this.loadingData = false;
+
+    }, error => {
+      console.log("error");
+      this.loadingData = false;
+    })
+  }
+
+  editUser() {
+    const user: EditUser = {
+      email: this.userDetail.email,
+      name: this.userDetail.name,
+      surname: this.userDetail.surname,
+      phone: this.userDetail.phone,
+    }
+    this.loadingData = true;
+    this.apiService.editUser(user).subscribe((response) => {
+      this.notifyService.info(this.translateService.instant("data-saved"));
+      this.loadingData = false;
+      this.editMode = false;
+      this.getUser();
+
+    }, error => {
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.loadingData = false;
+    })
+    
+
+  }
+
+  toogleEditMode() {
+    this.editMode =  !this.editMode;
   }
 
 }

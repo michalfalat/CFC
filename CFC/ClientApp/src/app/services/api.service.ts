@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
-import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel } from '../models/user-models';
+import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel, EditUser } from '../models/user-models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -36,6 +36,10 @@ export class ApiService {
 
   private changePasswordUrl() {
     return this.baseUrl + 'api/Account/ChangePassword'
+  }
+
+  private editUserUrl() {
+    return this.baseUrl + 'api/Account/EditUser'
   }
 
 
@@ -111,22 +115,20 @@ export class ApiService {
   }
 
   changePassword(data: PasswordChangeModel): any {
-    const model = {
-      oldPassword: data.oldPassword,
-      newPassword: data.newPassword
-    };
     return this.http.post(this.changePasswordUrl(), data, this.headers).pipe(
-    //   switchMap(response, aaa => { 
-    //     if (response.bearerToken) {
-    //     } 
-    //     else {
-    //        return throwError('Valid token not returned');
-    //     }
-    //  }),
       catchError(error => {
         console.log(error);
         return throwError(error);
       }));
+  }
+
+  editUser(data: EditUser) { 
+    return this.http.post(this.editUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+
   }
 
 }

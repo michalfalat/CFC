@@ -43,3 +43,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
   max-width: 50px;
   filter: invert(1);
 }
+
+.dark-theme .card-panel img {
+  filter: invert(1);
+}

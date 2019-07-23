@@ -48,5 +48,11 @@
     "show-sidebar": "Zobraziť bočný panel",
     "dashboard": "Prehľad",
     "users": "Používatelia",
-    "companies": "Zoznam spoločností"
+    "companies": "Zoznam spoločností",
+    "cancel": "Zrušiť",
+    "data-saved": "Údaje boli uložené",
+    "about-system": "Informácie o systéme",
+    "about-info1": "Tento systém je navrhnutý na jednoduchú správu financii vo firme. Vďaka systému teraz môžete spravovať svoje financie veľmi jednoducho.",
+    "about-info2": "Vkladajte svoje firemné príjmy a výdaje len vďaka pár klikom. Celý tok financií môžete pozerať v prehľadových grafoch a tabuľkách.",
+    "about-info3": " Každý používateľ si môže pozrieť svoj podiel v jednotlivých firmách. Taktiež môže vybrať svoj podiel z firmy bez ďalších špeciálnych krokov."
 }

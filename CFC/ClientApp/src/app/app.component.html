@@ -9,15 +9,15 @@
         <br>
         <div *ngIf="authService.isEnabledFor('Admin')">
           <!-- ADMIN ROUTES -->
-          <button mat-list-item routerLink="/admin/dashboard" color="">
+          <button mat-list-item routerLink="/admin/dashboard" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
           </button>
-          <button mat-list-item routerLink="/admin/users" color="">
+          <button mat-list-item routerLink="/admin/users" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>supervised_user_circle</mat-icon>
             <span> {{ 'users' | translate }}</span>
           </button>
-          <button mat-list-item routerLink="/admin/companies" color="">
+          <button mat-list-item routerLink="/admin/companies" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>dashboard</mat-icon>
             <span> {{ 'companies' | translate }}</span>
           </button>
@@ -25,13 +25,13 @@
         </div>
         <div *ngIf="authService.isEnabledFor('Owner')">
           <!-- OWNBR ROUTES -->
-          <button mat-list-item routerLink="/dashboard" color="">
+          <button mat-list-item routerLink="/dashboard" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
           </button>         
 
         </div>       
-        <button mat-list-item routerLink="/about" color="">
+        <button mat-list-item routerLink="/about" [routerLinkActive]="['activeLink']">
           <mat-icon matListIcon>info</mat-icon>
           <span> {{'about' | translate }}</span>
         </button>
@@ -47,13 +47,6 @@
             <mat-icon class="">menu</mat-icon>
           </button>
           <span class="spacer"></span>
-          <mat-form-field class="" *ngIf="this.currentRoute === '/categories'">
-            <mat-icon class="">search</mat-icon>
-            <input matInput [(ngModel)]="searchValue" (input)="onSearch($event.target.value)">
-          </mat-form-field>
-
-          <span class="spacer"></span>
-
           <button mat-button [matMenuTriggerFor]="langSelector" matTooltip="{{ 'language' | translate }}">
             <mat-icon class="">language</mat-icon> {{ selectedLanguage | uppercase }}
 
