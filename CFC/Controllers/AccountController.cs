@@ -16,6 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System;
 using CFC.Data.Enums;
+using AutoMapper;
 
 namespace CFC.Controllers
 {
@@ -30,6 +31,7 @@ namespace CFC.Controllers
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
+        private readonly IMapper _mapper;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -38,7 +40,7 @@ namespace CFC.Controllers
             ILoggerFactory loggerFactory,
             IApplicationUserManager applicationUserManager,
             IConfiguration configuration,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IMapper mapper)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
@@ -47,6 +49,7 @@ namespace CFC.Controllers
             this._applicationUserManager = applicationUserManager;
             this._configuration = configuration;
             this._emailSender = emailSender;
+            this._mapper = mapper;
         }
 
         [HttpPost("[action]")]
@@ -319,6 +322,42 @@ namespace CFC.Controllers
 
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var isAdmin = await this.IsAdmin();
+            if (!isAdmin)
+            { 
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+            }
+
+            var users = await this._applicationUserManager.GetUserList();
+            var userModels = this._mapper.Map<List<UserExtendedDetailModel>>(users);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: userModels));
+        }
+
+        //TODO make annotation
+        private async Task<bool> IsAdmin()
+        {
+            var userId = this._userManager.GetUserId(this.HttpContext.User);
+            if (userId == null)
+            {
+                return false;
+            }
+
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
+            if (existingUser == null)
+            {
+                return false;
+            }
+
+            var isAdmin = await this._userManager.IsInRoleAsync(existingUser, "Admin");
+            if (!isAdmin)
+            {
+                return false;
+            }
+            return true;
+        }
 
 
         private async Task<object> GenerateJwtToken(string email, IdentityUser user)

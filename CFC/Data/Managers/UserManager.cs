@@ -69,5 +69,10 @@ namespace CFC.Data.Managers
             this.Repository.Save();
 
         }
+
+        public Task<List<ApplicationUser>> GetUserList()
+        {
+            return this.Repository.ApplicationUserRepository.FindAll().ToListAsync();
+        }
     }
 }

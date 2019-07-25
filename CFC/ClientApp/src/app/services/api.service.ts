@@ -42,6 +42,10 @@ export class ApiService {
     return this.baseUrl + 'api/Account/EditUser'
   }
 
+  private getUserListUrl() {
+    return this.baseUrl + 'api/Account/GetUsers';
+  }
+
 
 
   private headers;
@@ -124,6 +128,14 @@ export class ApiService {
 
   editUser(data: EditUser) { 
     return this.http.post(this.editUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  getUserList() { 
+    return this.http.get(this.getUserListUrl(), this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);

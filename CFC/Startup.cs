@@ -1,6 +1,8 @@
+using AutoMapper;
 using CFC.Data;
 using CFC.Data.Entities;
 using CFC.Data.Managers;
+using CFC.Data.Profiles;
 using CFC.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -87,6 +89,14 @@ namespace CFC
                     };
                 });
 
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

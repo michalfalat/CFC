@@ -19,5 +19,7 @@ namespace CFC.Data.Managers
         Task MarkPasswordResetTokenAsUsed(int id);
 
         void EditUser(ApplicationUser entity);
+
+        Task<List<ApplicationUser>> GetUserList();
     }
 }
