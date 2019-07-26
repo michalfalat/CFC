@@ -86,12 +86,13 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           {
             path: 'users',
             component: UserListComponent,
-            pathMatch: 'full',
+            // pathMatch: 'full',
             children: [
               {
                 path: 'new',
                 component: RegisterComponent,
-                pathMatch: 'full',
+
+                // pathMatch: 'full',
               },
             ]
           },

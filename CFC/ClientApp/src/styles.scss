@@ -36,7 +36,13 @@
     max-width: 700px;
     margin: 50px auto;
 
-  }
+  } 
+
+  .form-container.big-width {
+    max-width: 1000px;
+    margin: 50px auto;
+
+  } 
 
   .login-button {
       width: 100%;
@@ -172,4 +178,7 @@ background-color: #90909029;
 }
 .card-panel img {
   max-height: 200px;
+}
+.basic-table {
+  width: 100%;
 }

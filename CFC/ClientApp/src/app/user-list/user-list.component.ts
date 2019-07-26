@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-user-list',
@@ -8,8 +9,11 @@ import { ApiService } from '../services/api.service';
 })
 export class UserListComponent implements OnInit {
   public loadingData = true;
+  public userList;
+  public displayedColumns: string[] = ['name', 'surname', 'email', 'emailConfirmed', 'phoneNumber', 'actions'];  
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.getUsers();
@@ -18,6 +22,10 @@ export class UserListComponent implements OnInit {
   getUsers() {
     this.apiService.getUserList().subscribe(response => {
       console.log(response);
+      this.userList = new MatTableDataSource(response.data);
+      this.userList.sort = this.sort;
+      console.log(this.userList);
+      this.ref.detectChanges();
       this.loadingData = false;
 
     }, error => {

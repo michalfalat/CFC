@@ -54,6 +54,12 @@
     "about-system": "About system",
     "about-info1": "This system is used for control your company financial state easily",
     "about-info2": "Create your company deposits and withdrawals  with simple clicks and control your financial flow  showed in  charts",
-    "about-info3": "Every user cen view his proportion in the company. User can also withdraw his money from company without any special steps"
+    "about-info3": "Every user cen view his proportion in the company. User can also withdraw his money from company without any special steps",
+    "user-list": "Users",
+    "emailConfirmed": "Confirmed email",
+    "block-user": "Block user",
+    "confirmed": "Confirmed",
+    "not-confirmed": "Not confirmed",
+    "actions": "Actions"
 
 }
