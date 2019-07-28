@@ -15,6 +15,8 @@ namespace CFC.Data.Entities
 
         public string Name { get; set; }
         public string Surname { get; set; }
+        public bool Blocked { get; set; }
+        public bool Obsolete { get; set; }
 
         public ICollection<ApplicationUserCompany> Companies { get; set; }
 

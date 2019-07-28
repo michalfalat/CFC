@@ -69,6 +69,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       { path: 'reset-password/:token', component: PasswordResetComponent },
       { path: 'forgotten-password', component: ForgottenPasswordComponent },
       { path: 'about', component: AboutComponent },
+      { path: 'verify/:token', component: UserVerifyComponent },
       {
         path: 'admin',
         canActivateChild: [AdminAuthGuard],         // <-- This guard will run before the router directs you to the route
@@ -86,15 +87,13 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           {
             path: 'users',
             component: UserListComponent,
-            // pathMatch: 'full',
-            children: [
-              {
-                path: 'new',
-                component: RegisterComponent,
-
-                // pathMatch: 'full',
-              },
-            ]
+            pathMatch: 'full',
+          
+          },
+          {
+            path: 'users/add',
+            component: RegisterComponent,
+            pathMatch: 'full'
           },
           {
             path: 'companies',

@@ -95,36 +95,45 @@ namespace CFC.Controllers
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                 if (appUser == null)
                 {
-                    return StatusCode(403, new { message = "InvalidLogin" });
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
                 }
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, 
-                // set lockoutOnFailure: true
+
+                if (appUser.Blocked)
+                {
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Blocked", ""));
+                }
+
+                if (appUser.Obsolete)
+                {
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Obsolete", ""));
+                }
+
+
                 var result = await _signInManager.PasswordSignInAsync(appUser.UserName,
                     model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     var token = await GenerateJwtToken(model.Email, appUser);
                     var role = (await this._userManager.GetRolesAsync(appUser)).ToList().FirstOrDefault();
-                    _logger.LogInformation("User logged in.");
-                    return Ok(new { result = "OK", token = token, email = model.Email, role = role });
+                    _logger.LogInformation($"User {appUser.Name} {appUser.Surname} [{role}] logged in.");
+                    return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { token = token, email = model.Email, role = role }));
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return StatusCode(403, new { message = "2FA" });
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "2FA", ""));
                 }
                 if (result.IsLockedOut)
                 {
-                    return StatusCode(403, new { message = "Locked" });
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Locked", ""));
                 }
                 else
                 {
-                    return StatusCode(403, new { message = "InvalidLogin" });
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidLogin", ""));
                 }
             }
             else
             {
-                return StatusCode(403, new { message = "InvalidLogin" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidLogin", ""));
             }
         }
 
@@ -230,13 +239,20 @@ namespace CFC.Controllers
                 EmailConfirmed = false,
                 Name = model.Name,
                 Surname = model.Surname,
+                Blocked = false,
+                Obsolete = false,
             };
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
             var roleResult = await this._userManager.AddToRoleAsync(user, "owner");
             if (result.Succeeded && roleResult.Succeeded)
             {
-                this._emailSender.SendEmail(user.Email, "CFC: Confirm account", "Welcome to CFC system. Please confirm your account by clicking here");
+                var token = new VerifyUserToken();
+                token.Email = user.Email;
+                token.Obsolete = false;
+                token.Token = Guid.NewGuid().ToString();
+                this._applicationUserManager.CreateVerifyUserToken(token);
+                this._emailSender.SendVerifyToken(user.Email, token);
                 return Ok(new { result = "OK" });
             }
             else
@@ -333,7 +349,105 @@ namespace CFC.Controllers
 
             var users = await this._applicationUserManager.GetUserList();
             var userModels = this._mapper.Map<List<UserExtendedDetailModel>>(users);
+            foreach (var user in users)
+            {
+                var role = (await this._userManager.GetRolesAsync(user)).ToList().FirstOrDefault();
+                userModels.FirstOrDefault(a => a.Email == user.Email).Role = role;
+            }
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: userModels));
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BlockUser([FromBody]BlockUserModel model)
+        {
+            var isAdmin = await this.IsAdmin();
+            if (!isAdmin)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+            }
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+            if (model.Block)
+            {
+                this._applicationUserManager.BlockUser(existingUser);
+            } else
+            {
+                this._applicationUserManager.UnblockUser(existingUser);
+
+            }
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RemoveUser([FromBody]RemoveUserModel model)
+        {
+            var isAdmin = await this.IsAdmin();
+            if (!isAdmin)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+            }
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+            if (model.Remove)
+            {
+                this._applicationUserManager.RemoveUser(existingUser);
+            }
+            else
+            {
+                this._applicationUserManager.UnremoveUser(existingUser);
+
+            }
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyUser([FromBody]VerifyUserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+            }
+            var token = await this._applicationUserManager.GetVerifyToken(model.Token);
+            if(token == null || token.Obsolete)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "NotFound", ""));
+            }
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+            this._applicationUserManager.VerifyUser(existingUser);
+            var resetToken = await this._userManager.GeneratePasswordResetTokenAsync(existingUser);
+            await this._userManager.ResetPasswordAsync(existingUser, resetToken, model.Password);
+            await this._applicationUserManager.MarkVerifyUserTokenAsUsed(token.Id);
+          
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpGet("[action]/{data}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetVerifyToken(string data)
+        {
+            var token = await this._applicationUserManager.GetVerifyToken(data);
+            if (token == null || token.Obsolete)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "NotFound", ""));
+            }
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+            }
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email}));
         }
 
         //TODO make annotation

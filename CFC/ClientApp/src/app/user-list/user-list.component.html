@@ -4,12 +4,20 @@
       <h3>{{ 'user-list' | translate }}</h3>
     </span>
     <span class="spacer"></span>
+    <span class="actionButtons">
     <span>
-      <button mat-raised-button routerLink="/admin/users/new" color="primary">
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
+      </span>
+    <span>
+      <button mat-raised-button routerLink="/admin/users/add" color="primary">
         <mat-icon matListIcon>supervised_user_circle</mat-icon>
         <span> {{ 'register_user' | translate }}</span>
       </button>
     </span>
+  </span>
   </div>
   <br>
   <div>

@@ -74,5 +74,54 @@ namespace CFC.Data.Managers
         {
             return this.Repository.ApplicationUserRepository.FindAll().ToListAsync();
         }
+
+        public void BlockUser(ApplicationUser entity)
+        {
+            entity.Blocked = true;
+            this.EditUser(entity);
+        }
+
+        public void UnblockUser(ApplicationUser entity)
+        {
+            entity.Blocked = false;
+            this.EditUser(entity);
+        }
+
+        public void UnremoveUser(ApplicationUser entity)
+        {
+            entity.Obsolete = false;
+            this.EditUser(entity);
+        }
+
+        public void RemoveUser(ApplicationUser entity)
+        {
+            entity.Obsolete = true;
+            this.EditUser(entity);
+        }
+
+        public void VerifyUser(ApplicationUser entity)
+        {
+            entity.EmailConfirmed = true;
+            this.EditUser(entity);
+        }
+
+        public void CreateVerifyUserToken(VerifyUserToken entity)
+        {
+            this.Repository.VerifyTokenRepository.Create(entity);
+            this.Repository.Save();
+        }
+
+        public Task<VerifyUserToken> GetVerifyToken(string id)
+        {
+            return this.Repository.VerifyTokenRepository.FindByCondition(u => u.Token == id).FirstOrDefaultAsync();
+        }
+
+        public async Task MarkVerifyUserTokenAsUsed(int id)
+        {
+            var token = await this.Repository.VerifyTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
+            token.Obsolete = true;
+            this.Repository.VerifyTokenRepository.Update(token);
+            this.Repository.Save();
+        }
     }
 }

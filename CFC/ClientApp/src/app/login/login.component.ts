@@ -37,9 +37,9 @@ export class LoginComponent implements OnInit {
       console.log(res)
       this.loadingData = false;
       var loginUser = new UserLoginInfo();
-      loginUser.email = res.email;
-      loginUser.token = res.token;
-      loginUser.role = res.role;
+      loginUser.email = res.data.email;
+      loginUser.token = res.data.token;
+      loginUser.role = res.data.role;
       this.authService.saveUser(loginUser);
       this.router.navigate(['/dashboard']);
 

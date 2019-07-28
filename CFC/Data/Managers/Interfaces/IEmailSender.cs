@@ -13,6 +13,8 @@ namespace CFC.Data.Managers
 
         void SendPasswordResetToken(string to, PasswordResetToken token);
 
+        void SendVerifyToken(string to, VerifyUserToken token);
+
         string GetEmailTemplate(string path);
     }
 }

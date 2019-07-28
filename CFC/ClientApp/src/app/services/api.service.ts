@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
-import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel, EditUser } from '../models/user-models';
+import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -44,6 +44,22 @@ export class ApiService {
 
   private getUserListUrl() {
     return this.baseUrl + 'api/Account/GetUsers';
+  }
+
+  private blockUserUrl() {
+    return this.baseUrl + 'api/Account/BlockUser';
+  }
+
+  private removeUserUrl() {
+    return this.baseUrl + 'api/Account/RemoveUser';
+  }
+
+  private verifyUserUrl() {
+    return this.baseUrl + 'api/Account/VerifyUser';
+  }
+
+  private getVerifyTokenUrl(token) {
+    return this.baseUrl + `api/Account/GetVerifyToken/${token}`;
   }
 
 
@@ -134,7 +150,47 @@ export class ApiService {
       }));
   }
 
-  getUserList() { 
+  getVerifyToken(token): any { 
+    return this.http.get(this.getVerifyTokenUrl(token),  this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  verifyUser(data: UserVerifyToken) { 
+    return this.http.post(this.verifyUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  blockUser(id: string, block: boolean) {
+    const data = {
+      id,
+      block
+    } 
+    return this.http.post(this.blockUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  removeUser(id: string, remove: boolean) {
+    const data = {
+      id,
+      remove
+    } 
+    return this.http.post(this.removeUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  getUserList() :any { 
     return this.http.get(this.getUserListUrl(), this.headers).pipe(
       catchError(error => {
         console.log(error);

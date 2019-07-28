@@ -60,5 +60,9 @@
     "block-user": "Zablokovať používateľa",
     "confirmed": "Potvrdený",
     "not-confirmed": "Nepotvrdený",
-    "actions": "Akcie"
+    "actions": "Akcie",
+    "back": "Späť",
+    "refresh": "Obnoviť",
+    "verify-email": "Aktivovať email",
+    "email-activated": "Email bol aktivovaný. Pokračujte prihlásením"
 }

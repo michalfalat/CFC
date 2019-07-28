@@ -60,6 +60,10 @@
     "block-user": "Block user",
     "confirmed": "Confirmed",
     "not-confirmed": "Not confirmed",
-    "actions": "Actions"
+    "actions": "Actions",
+    "back": "Back",
+    "refresh": "Refresh",
+    "verify-email": "Verify email",
+    "email-activated": "Email was activated. Continue with login"
 
 }

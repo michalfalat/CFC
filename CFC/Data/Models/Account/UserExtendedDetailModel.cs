@@ -18,6 +18,9 @@ namespace CFC.Data.Models
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool Blocked { get; set; }
+        public bool Obsolete { get; set; }
+        public string Role { get; set; }
 
     }
 }

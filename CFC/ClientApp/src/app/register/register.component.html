@@ -1,24 +1,40 @@
 <mat-card class="form-container  bigger-width">
-  <h3>{{ 'register_new_user' | translate }}</h3>
-  <form class="form">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-icon-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ 'register_new_user' | translate }} </span>
+    </span>
+    <span class="spacer"></span>
+
+  </div>
+  <form class="form" #formRef="ngForm">
     <mat-form-field class="full-width">
       <input matInput placeholder="{{'name' | translate}}" value="" name="name" [(ngModel)]="user.name" required>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="{{'surname' | translate}}" value="" name="surname" [(ngModel)]="user.surname" required>
+      <input matInput placeholder="{{'surname' | translate}}" value="" name="surname" [(ngModel)]="user.surname"
+        required>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="{{'email' | translate}}" value="" name="email" [(ngModel)]="user.email" required>
+      <input matInput placeholder="{{'email' | translate}}" value="" name="email" #emailRef="ngModel"
+        [(ngModel)]="user.email" required minlength="8"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+      <mat-error *ngIf="emailRef.invalid">{{ 'enter-valid-email' | translate }}</mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
       <input matInput placeholder="{{'phone' | translate}}" value="" name="phone" [(ngModel)]="user.phone">
     </mat-form-field>
     <p *ngIf="existingUserError" class="error-label">{{'existing_user_error' | translate}}</p>
-  
-    
-  <button mat-raised-button color="primary" class="login-button" type="button" *ngIf="loadingAction">
-    <mat-progress-spinner mode="indeterminate" color="accent" style="margin: 0 auto; height: 5px !important;  "></mat-progress-spinner></button>
-  <button mat-raised-button color="primary" class="login-button" (click)="registerUser()" *ngIf="!loadingAction">{{ 'register' | translate }}</button>
+
+
+
+    <button mat-raised-button color="primary" class="main-button" (click)="registerUser()"
+      [disabled]="formRef.invalid || loadingData">{{ 'register' | translate }}</button>
   </form>
 
 </mat-card>

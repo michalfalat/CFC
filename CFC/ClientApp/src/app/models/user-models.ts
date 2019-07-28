@@ -22,6 +22,13 @@ export class UserPasswordReset {
     password2: string;
 }
 
+export class UserVerifyToken {
+    email: string;
+    token: string;
+    password: string;
+    password2: string;
+}
+
 export class PasswordResetModel {
     token: string;
     link: string;

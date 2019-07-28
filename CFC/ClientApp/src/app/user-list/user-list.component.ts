@@ -11,7 +11,7 @@ export class UserListComponent implements OnInit {
   public loadingData = true;
   public userList;
   public displayedColumns: string[] = ['name', 'surname', 'email', 'emailConfirmed', 'phoneNumber', 'actions'];  
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, {read: true}) sort: MatSort;
 
   constructor(private apiService: ApiService, private ref: ChangeDetectorRef) { }
 
@@ -19,7 +19,13 @@ export class UserListComponent implements OnInit {
     this.getUsers();
   }
 
+  refresh() {
+    this.getUsers();
+  }
+
   getUsers() {
+    this.userList = [];
+    this.loadingData = true;
     this.apiService.getUserList().subscribe(response => {
       console.log(response);
       this.userList = new MatTableDataSource(response.data);

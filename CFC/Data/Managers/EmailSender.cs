@@ -64,11 +64,21 @@ namespace CFC.Data.Managers
         public void SendPasswordResetToken(string to, PasswordResetToken token)
         {
             var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
-            template = template.Replace("{headerText}", "Password reset")
-                                .Replace("{mainText}", "Reset your password on following link:")
+            template = template.Replace("{headerText}", "Reset hesla")
+                                .Replace("{mainText}", "Vaše heslo si môžete zmeniť na nasledujúcom odkaze:")
                                 .Replace("{buttonLink}", $"https://localhost:44388/reset-password/{token.Link}")
-                                .Replace("{buttonText}", "Reset password");
-            this.SendEmail(to, "Password reset", template);
+                                .Replace("{buttonText}", "Zmeniť heslo");
+            this.SendEmail(to, "CFC - Reset hesla", template);
+        }
+
+        public void SendVerifyToken(string to, VerifyUserToken token)
+        {
+            var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
+            template = template.Replace("{headerText}", "Overenie emailovej adresy pre CFC")
+                                .Replace("{mainText}", "Táto emailová adresa bola zaregistrovaná v systéme CFC. Pre potvrdenie emailu prosím kliknite na nasledujúci odkaz:")
+                                .Replace("{buttonLink}", $"https://localhost:44388/verify/{token.Token}")
+                                .Replace("{buttonText}", "Overenie emailu");
+            this.SendEmail(to, "CFC - Overenie emailovej adresy", template);
         }
 
         private string ReadFile(string path)

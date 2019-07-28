@@ -31,7 +31,7 @@
             [disabled]="editMode === false">
         </mat-form-field>
         <button mat-raised-button [disabled]="editMode === false || userDataForm.valid === false" color="primary"
-          class="login-button" (click)="editUser()" type="submit">{{ 'save-changes' | translate }}</button>
+          class="main-button" (click)="editUser()" type="submit">{{ 'save-changes' | translate }}</button>
       </form>
     </mat-tab>
     <mat-tab label="{{ 'password-change' | translate}}">
@@ -73,7 +73,7 @@
         <p *ngIf="errorPasswordMatch && passwordChangeForm.newPassword !== passwordChangeForm.newPassword2"
           class="error-label centered">{{ 'error-password-match' | translate }}</p>
 
-        <button mat-raised-button color="primary" [disabled]="passwordChangeFormRef.invalid" class="login-button"
+        <button mat-raised-button color="primary" [disabled]="passwordChangeFormRef.invalid" class="main-button"
           type="submit">{{ 'change-password' | translate }}</button>
       </form>
 

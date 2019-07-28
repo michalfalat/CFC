@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Repositories
 {
-    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
+    public class VerifyTokenRepository : Repository<VerifyUserToken>, IVerifyTokenRepository
     {
-        public ApplicationUserRepository(ApplicationDbContext repositoryContext)
+        public VerifyTokenRepository(ApplicationDbContext repositoryContext)
             : base(repositoryContext)
         {
         }
-
     }
 }
