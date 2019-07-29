@@ -17,7 +17,7 @@ export class UserDetailComponent implements OnInit {
   public loadingData = true;
   public errorPasswordMatch = false;
 
-  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) { 
+  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) {
     this.userDetail = new UserDetail();
     this.passwordChangeForm = new PasswordChangeModel();
   }
@@ -27,6 +27,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   changePassword(form: NgForm) {
+    this.errorPasswordMatch = false;
     if(this.passwordChangeForm.newPassword !== this.passwordChangeForm.newPassword2) {
       this.errorPasswordMatch = true;
       return;
@@ -44,7 +45,7 @@ export class UserDetailComponent implements OnInit {
       this.passwordChangeForm = new PasswordChangeModel();
       form.resetForm();
     })
-    
+
   }
 
   getUser() {
@@ -76,7 +77,7 @@ export class UserDetailComponent implements OnInit {
       this.notifyService.error(this.translateService.instant(error.error.errorLabel));
       this.loadingData = false;
     })
-    
+
 
   }
 

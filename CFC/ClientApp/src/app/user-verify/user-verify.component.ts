@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class UserVerifyComponent implements OnInit {
   public loadingData = true;
   public formData: UserVerifyToken;
+  public errorPasswordMatch = false;
 
   constructor(private route: ActivatedRoute, private apiService: ApiService, private notifyService: NotifyService,
     private translateService: TranslateService, private router: Router) {
@@ -33,7 +34,12 @@ export class UserVerifyComponent implements OnInit {
   }
 
 
-  verify() { 
+  verify() {
+    this.errorPasswordMatch = false;
+    if(this.formData.password !== this.formData.password2) {
+      this.errorPasswordMatch = true;
+      return;
+    }
     this.loadingData = true;
     this.apiService.verifyUser(this.formData).subscribe((response) => {
     this.notifyService.info(this.translateService.instant("email-activated"));
