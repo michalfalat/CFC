@@ -88,7 +88,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             path: 'users',
             component: UserListComponent,
             pathMatch: 'full',
-          
+
           },
           {
             path: 'users/add',

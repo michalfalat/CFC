@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   public existingUserError: Boolean = false;
   public loadingData = false;
 
-  constructor(private apiService: ApiService, 
+  constructor(private apiService: ApiService,
     private router : Router) {
     this.user = new RegisterUser();
    }
@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
         case "existingUser":
           this.existingUserError = true;
           break;
-      
+
         default:
           break;
       }

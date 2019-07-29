@@ -5,14 +5,14 @@ export class LoginUser {
 
 
 export class UserInfo {
-    email: string;    
+    email: string;
     role: string;
 }
 
 export class UserLoginInfo {
     email: string;
     token: string;
-    role: string;    
+    role: string;
 }
 
 export class UserPasswordReset {
@@ -45,14 +45,14 @@ export class RegisterUser {
     name: string;
     surname: string;
     email: string;
-    phone: string;    
+    phone: string;
 }
 
 export class UserDetail {
     name: string;
     surname: string;
     email: string;
-    phone: string;    
+    phone: string;
 }
 
 
@@ -60,6 +60,6 @@ export class EditUser {
     name: string;
     surname: string;
     email: string;
-    phone: string;    
+    phone: string;
 }
 

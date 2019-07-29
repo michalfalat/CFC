@@ -17,9 +17,9 @@ export class AppComponent {
   private userData: UserInfo = null;
   public selectedLanguage = "";
   public openedSidebar = true;
-  
+
   title = 'app';
-  constructor(private languageService: LanguageService, 
+  constructor(private languageService: LanguageService, private translateService: TranslateService,
     public authService: AuthService, public darkThemeService: DarkThemeService,
     private router: Router, public authGuardService: AuthGuard) {
       this.userData = this.authService.getUser();
@@ -27,16 +27,18 @@ export class AppComponent {
       this.authService.user.subscribe((user) => {
         this.userData = user;
       })
-    
+      this.translateService.onLangChange.subscribe(() => {
+        this.selectedLanguage = this.languageService.getLanguage();
+      })
+
   }
 
   public navigate(route) {
     this.router.navigate([route]);
   }
-  
+
   public changeLanguage(lang) {
     this.languageService.changeLanguage(lang);
-    this.selectedLanguage = this.languageService.getLanguage();
   }
 
   public logout(){

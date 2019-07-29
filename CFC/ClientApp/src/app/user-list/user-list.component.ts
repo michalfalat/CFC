@@ -10,8 +10,8 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 export class UserListComponent implements OnInit {
   public loadingData = true;
   public userList;
-  public displayedColumns: string[] = ['name', 'surname', 'email', 'emailConfirmed', 'phoneNumber', 'actions'];  
-  @ViewChild(MatSort, {read: true}) sort: MatSort;
+  public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];  
+  @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService, private ref: ChangeDetectorRef) { }
 
@@ -27,13 +27,23 @@ export class UserListComponent implements OnInit {
     this.userList = [];
     this.loadingData = true;
     this.apiService.getUserList().subscribe(response => {
-      console.log(response);
       this.userList = new MatTableDataSource(response.data);
       this.userList.sort = this.sort;
-      console.log(this.userList);
       this.ref.detectChanges();
       this.loadingData = false;
 
+    }, error => {
+      console.log("error");
+      this.loadingData = false;
+    })
+  }
+
+  blockUser(element) {
+    const id = element.id;
+    const block  = element.blocked ? false : true;
+    this.loadingData = true;
+    this.apiService.blockUser(id, block).subscribe(response => {
+     this.getUsers();
     }, error => {
       console.log("error");
       this.loadingData = false;

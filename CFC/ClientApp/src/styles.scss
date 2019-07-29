@@ -44,6 +44,13 @@
 
   } 
 
+  .form-container.full-width {
+    max-width: 1900px;
+    width: 100%;
+    margin: 50px auto;
+
+  } 
+
   .main-button {
       width: 100%;
   }
@@ -195,4 +202,8 @@ background-color: #90909029;
 
 .actionButtons span:last-child {
   margin-right: 0px;
+}
+
+.blocked-row {
+  background-color: #9e474754 !important;
 }
