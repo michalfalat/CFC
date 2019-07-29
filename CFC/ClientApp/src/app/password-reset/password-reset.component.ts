@@ -17,8 +17,8 @@ export class PasswordResetComponent implements OnInit {
   public formData: UserPasswordReset;
   private tokenLink: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, 
-    private notifyService: NotifyService, private translateService: TranslateService) { 
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService,
+    private notifyService: NotifyService, private translateService: TranslateService) {
     this.formData = new UserPasswordReset();
   }
 
@@ -26,16 +26,15 @@ export class PasswordResetComponent implements OnInit {
     this.tokenLink  = this.route.snapshot.params.token;
     console.log(this.tokenLink);
     this.apiService.requestPasswordToken(this.tokenLink).subscribe((response) => {
-      console.log(response);
-      this.formData.token = response.token;
+      this.formData.token = response.data.token;
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error("Invalid token");
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.router.navigate(['/']);
       console.log(error);
       this.loadingData = false;
-    })
+    });
 
   }
   log(data) {
@@ -44,7 +43,7 @@ export class PasswordResetComponent implements OnInit {
 
   reset() {
     this.errorPasswordMatch = false;
-    if(this.formData.password1 !== this.formData.password2) {
+    if (this.formData.password1 !== this.formData.password2) {
       this.errorPasswordMatch = true;
       return;
     }
@@ -54,16 +53,15 @@ export class PasswordResetComponent implements OnInit {
     model.password = this.formData.password1;
     this.loadingData = true;
     this.apiService.changeResetPassword(model).subscribe((response) => {
-      console.log(response);
-      this.notifyService.info(this.translateService.instant("password-changed"));
+      this.notifyService.info(this.translateService.instant('password-changed'));
       this.router.navigate(['/login']);
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       console.log(error);
       this.loadingData = false;
-    })
+    });
 
   }
 

@@ -4,53 +4,37 @@ import { UserDetail, PasswordChangeModel, EditUser } from '../models/user-models
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.css']
+  selector: 'app-user-edit',
+  templateUrl: './user-edit.component.html',
+  styleUrls: ['./user-edit.component.scss']
 })
-export class UserDetailComponent implements OnInit {
+export class UserEditComponent implements OnInit {
+
   public userDetail: UserDetail;
-  public passwordChangeForm: PasswordChangeModel;
   public editMode = false;
   public loadingData = true;
-  public errorPasswordMatch = false;
-
-  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) {
+  constructor(private route: ActivatedRoute, private apiService: ApiService,
+    private notifyService: NotifyService, private translateService: TranslateService, private router: Router) {
     this.userDetail = new UserDetail();
-    this.passwordChangeForm = new PasswordChangeModel();
   }
 
   ngOnInit() {
+    this.userDetail.id = this.route.snapshot.params.id;
     this.getUser();
   }
 
-  changePassword(form: NgForm) {
-    this.errorPasswordMatch = false;
-    if (this.passwordChangeForm.newPassword !== this.passwordChangeForm.newPassword2) {
-      this.errorPasswordMatch = true;
-      return;
-    }
-    this.loadingData = true;
-    this.apiService.changePassword(this.passwordChangeForm).subscribe((response) => {
-      this.notifyService.info(this.translateService.instant('password-changed'));
-      this.loadingData = false;
-      this.passwordChangeForm = new PasswordChangeModel();
-      form.resetForm();
-
-    }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      this.loadingData = false;
-      this.passwordChangeForm = new PasswordChangeModel();
-      form.resetForm();
-    });
-
+  goBack() {
+    this.router.navigate(['/admin/users']);
   }
 
   getUser() {
-    this.apiService.userDetail().subscribe(response => {
+    this.apiService.userDetailAdmin(this.userDetail.id).subscribe(response => {
       this.userDetail = response.data.user;
+      this.userDetail.id = this.route.snapshot.params.id;
       this.loadingData = false;
 
     }, error => {
@@ -72,18 +56,17 @@ export class UserDetailComponent implements OnInit {
       this.notifyService.info(this.translateService.instant('data-saved'));
       this.loadingData = false;
       this.editMode = false;
-      this.getUser();
+      this.goBack();
 
     }, error => {
       this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
     });
-
-
   }
 
   toogleEditMode() {
-    this.editMode =  !this.editMode;
+    this.editMode = !this.editMode;
   }
+
 
 }

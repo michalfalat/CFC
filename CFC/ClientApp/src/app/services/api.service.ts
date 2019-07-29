@@ -10,36 +10,39 @@ import { AuthService } from './auth.service';
 })
 export class ApiService {
 
-  private registerUserUrl(){
-    return this.baseUrl + 'api/Account/Register'
+  private registerUserUrl() {
+    return this.baseUrl + 'api/Account/Register';
   }
 
-  private loginUserUrl(){
-    return this.baseUrl + 'api/Account/Login'
+  private loginUserUrl() {
+    return this.baseUrl + 'api/Account/Login';
   }
 
-  private userInfoUrl(){
-    return this.baseUrl + 'api/Account/UserDetail'
+  private userInfoUrl() {
+    return this.baseUrl + 'api/Account/UserDetail';
+  }
+  private userInfoUrl2(id: string) {
+    return this.baseUrl + `api/Account/UserDetail/${id}`;
   }
 
   private requestPasswordResetEmailUrl() {
-    return this.baseUrl + 'api/Account/RequestNewPassword'
+    return this.baseUrl + 'api/Account/RequestNewPassword';
   }
 
   private requestPasswordTokenUrl() {
-    return this.baseUrl + 'api/Account/RequestPasswordToken'
+    return this.baseUrl + 'api/Account/RequestPasswordToken';
   }
 
   private changeResetPasswordUrl() {
-    return this.baseUrl + 'api/Account/PasswordReset'
+    return this.baseUrl + 'api/Account/PasswordReset';
   }
 
   private changePasswordUrl() {
-    return this.baseUrl + 'api/Account/ChangePassword'
+    return this.baseUrl + 'api/Account/ChangePassword';
   }
 
   private editUserUrl() {
-    return this.baseUrl + 'api/Account/EditUser'
+    return this.baseUrl + 'api/Account/EditUser';
   }
 
   private getUserListUrl() {
@@ -67,9 +70,9 @@ export class ApiService {
   private headers;
 
   constructor(private http: HttpClient,
-    private authService : AuthService,
-      @Inject('BASE_URL') private baseUrl: string) { 
-   this.headers = new HttpHeaders()
+    private authService: AuthService,
+      @Inject('BASE_URL') private baseUrl: string) {
+   this.headers = new HttpHeaders();
    this.headers.append('Content-Type', 'application/json');
   // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
   }
@@ -89,7 +92,7 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model)); 
+        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -98,31 +101,41 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model)); 
+        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
-  requestEmailForPasswordReset(email: string) : any {
+  userDetailAdmin(id: string): any {
+    return this.http.get(this.userInfoUrl2(id), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+        //return this.handleError(error, () => this.registerUser(model));
+      }));
+  }
+
+
+  requestEmailForPasswordReset(email: string): any {
     const data = {
       emailAddress: email
-    }
+    };
     return this.http.post(this.requestPasswordResetEmailUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model)); 
+        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
-  requestPasswordToken(token: string) : any {
+  requestPasswordToken(token: string): any {
     const data = {
       token: token
-    }
+    };
     return this.http.post(this.requestPasswordTokenUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model)); 
+        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -142,7 +155,7 @@ export class ApiService {
       }));
   }
 
-  editUser(data: EditUser) { 
+  editUser(data: EditUser) {
     return this.http.post(this.editUserUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -150,7 +163,7 @@ export class ApiService {
       }));
   }
 
-  getVerifyToken(token): any { 
+  getVerifyToken(token): any {
     return this.http.get(this.getVerifyTokenUrl(token),  this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -158,7 +171,7 @@ export class ApiService {
       }));
   }
 
-  verifyUser(data: UserVerifyToken) { 
+  verifyUser(data: UserVerifyToken) {
     return this.http.post(this.verifyUserUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -170,7 +183,7 @@ export class ApiService {
     const data = {
       id,
       block
-    } 
+    };
     return this.http.post(this.blockUserUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -182,7 +195,7 @@ export class ApiService {
     const data = {
       id,
       remove
-    } 
+    };
     return this.http.post(this.removeUserUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -190,7 +203,7 @@ export class ApiService {
       }));
   }
 
-  getUserList() :any { 
+  getUserList(): any {
     return this.http.get(this.getUserListUrl(), this.headers).pipe(
       catchError(error => {
         console.log(error);

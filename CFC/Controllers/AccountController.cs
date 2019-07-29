@@ -59,7 +59,7 @@ namespace CFC.Controllers
             var currentUser = await this._userManager.FindByNameAsync("administrator");
             if (currentUser != null)
             {
-                return Ok(new { result = "OK", password = "Go ahead!" });
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { password = "GO AHEAD!" }));
             }
             var user = new ApplicationUser()
             {
@@ -77,11 +77,12 @@ namespace CFC.Controllers
             var roleResult = await this._userManager.AddToRoleAsync(user, "admin");
             if (result.Succeeded && roleResult.Succeeded)
             {
-                return Ok(new { result = "OK", password = pwd });
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { password = pwd }));
             }
             else
             {
-                return Ok(new { result = "ERROR", errors = result.Errors.Concat(roleResult.Errors).ToArray() });
+                this._logger.Log(LogLevel.Warning, $"generate default user failed: {result.Errors.Concat(roleResult.Errors).ToArray().ToString()}");
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
             }
         }
 
@@ -95,17 +96,17 @@ namespace CFC.Controllers
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                 if (appUser == null)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
                 }
 
                 if (appUser.Blocked)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Blocked", ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED, ""));
                 }
 
                 if (appUser.Obsolete)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Obsolete", ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.OBSOLETE, ""));
                 }
 
 
@@ -120,20 +121,21 @@ namespace CFC.Controllers
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "2FA", ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.DOUBLE_FA, ""));
                 }
                 if (result.IsLockedOut)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "Locked", ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED, ""));
                 }
                 else
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidLogin", ""));
+                    this._logger.Log(LogLevel.Warning, $"Invalid login result status for user {appUser.Email}: {result.ToString()}");
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
                 }
             }
             else
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidLogin", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
         }
 
@@ -145,7 +147,7 @@ namespace CFC.Controllers
             var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.EmailAddress);
             if (appUser == null)
             {
-                return StatusCode(403, new { message = "InvalidEmailAddress" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
             var passwordToken = new PasswordResetToken();
             passwordToken.UserEmail = model.EmailAddress;
@@ -153,7 +155,7 @@ namespace CFC.Controllers
             passwordToken.ValidTo = DateTimeOffset.UtcNow.AddDays(1); // add 1 day for reset
             this._applicationUserManager.CreatePasswordResetToken(passwordToken);
             this._emailSender.SendPasswordResetToken(model.EmailAddress, passwordToken);
-            return Ok();
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
 
         }
 
@@ -163,16 +165,15 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(404, new { message = "InvalidToken" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
             var guidLink = Guid.Parse(tokenLink.Token);
             var token = await this._applicationUserManager.GetTokenFromLink(guidLink);
             if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
             {
-                return StatusCode(403, new { message = "InvalidToken" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN, ""));
             }
-            return Ok(new { result = "OK", token = token.Token });
-
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { token = token.Token }));
         }
 
         [HttpPost("[action]")]
@@ -184,34 +185,32 @@ namespace CFC.Controllers
                 var token = await this._applicationUserManager.GetTokenFromLink(passwordReset.Link);
                 if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed || token.Token != passwordReset.Token)
                 {
-                    return StatusCode(403, new { message = "InvalidToken" });
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN, ""));
                 }
                 else
                 {
                     var appUser = _userManager.Users.SingleOrDefault(r => r.Email == token.UserEmail);
                     if (appUser == null)
                     {
-                        return StatusCode(403, new { message = "InvalidEmailAddress" });
+                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
                     }
                     var result = await this._userManager.ResetPasswordAsync(appUser, token.Token, passwordReset.Password);
                     if (result.Succeeded)
                     {
                         await this._applicationUserManager.MarkPasswordResetTokenAsUsed(token.Id);
-                        return Ok();
+                        return Ok(new ResponseDTO(ResponseDTOStatus.OK));
                     }
                     else
                     {
-                        return StatusCode(403, new { result = "ERROR", errors = result.Errors.Concat(result.Errors).ToArray() });
+                        this._logger.Log(LogLevel.Warning, $"Invalid password for reset user {appUser.Email}: {result.Errors.ToArray().ToString()}");
+                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED, ""));
                     }
                 }
-
             }
             else
             {
-                return StatusCode(403, new { message = "InvalidToken" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
-
-
         }
 
 
@@ -222,13 +221,13 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
 
             var existingUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
             if (existingUser != null)
             {
-                return StatusCode(400, new { message = "existingUser" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.EXISTING_USER, ""));
             }
 
             var user = new ApplicationUser()
@@ -253,24 +252,24 @@ namespace CFC.Controllers
                 token.Token = Guid.NewGuid().ToString();
                 this._applicationUserManager.CreateVerifyUserToken(token);
                 this._emailSender.SendVerifyToken(user.Email, token);
-                return Ok(new { result = "OK" });
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK));
             }
             else
             {
-                return Ok(new { result = "ERROR", errors = result.Errors.Concat(roleResult.Errors).ToArray() });
+                this._logger.Log(LogLevel.Warning, $"Invalid  error when registering user {user.Email}: {result.Errors.Concat(roleResult.Errors).ToArray().ToString()}");
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED, ""));
             }
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> UserDetail()
         {
-            var user2 = this.HttpContext.User;
             var userId = this._userManager.GetUserId(this.HttpContext.User);
 
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
             if (existingUser == null)
             {
-                return StatusCode(404, new { message = "userNotFound" });
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
 
             var user = new UserDetailModel()
@@ -280,7 +279,28 @@ namespace CFC.Controllers
                 Name = existingUser.Name,
                 Surname = existingUser.Surname,
             };
-            return Ok(user);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { user }));
+
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> UserDetail(string id)
+        {
+
+            var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == id);
+            if (existingUser == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+            }
+
+            var user = new UserDetailModel()
+            {
+                Email = existingUser.Email,
+                Phone = existingUser.PhoneNumber,
+                Name = existingUser.Name,
+                Surname = existingUser.Surname,
+            };
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { user }));
 
         }
 
@@ -289,20 +309,28 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+            }
+            var loggedUserId = this._userManager.GetUserId(this.HttpContext.User);
+
+            var loggedUser = _userManager.Users.SingleOrDefault(r => r.Id == loggedUserId);
+            if (loggedUser.Email != model.Email && (await this.IsAdmin()) == false)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+
             }
 
             var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
             if (appUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
 
             appUser.Name = model.Name;
             appUser.Surname = model.Surname;
             appUser.PhoneNumber = model.Phone;
-            this._applicationUserManager.EditUser(appUser);           
-            return Ok();
+            this._applicationUserManager.EditUser(appUser);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
 
         }
 
@@ -312,28 +340,29 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
             var userId = this._userManager.GetUserId(this.HttpContext.User);
             if (userId == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
 
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
 
             var result = await this._userManager.ChangePasswordAsync(existingUser, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                return Ok(new ResponseDTO());
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK));
             }
             else
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "InvalidPassword", result.Errors.ToArray().ToString()));
+                this._logger.Log(LogLevel.Warning, $"Invalid  error when changing password for {existingUser.Email}: {result.Errors.ToArray().ToString()}");
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED, result.Errors.ToArray().ToString()));
             }
 
         }
@@ -343,8 +372,8 @@ namespace CFC.Controllers
         {
             var isAdmin = await this.IsAdmin();
             if (!isAdmin)
-            { 
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
             }
 
             var users = await this._applicationUserManager.GetUserList();
@@ -363,17 +392,18 @@ namespace CFC.Controllers
             var isAdmin = await this.IsAdmin();
             if (!isAdmin)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
             if (model.Block)
             {
                 this._applicationUserManager.BlockUser(existingUser);
-            } else
+            }
+            else
             {
                 this._applicationUserManager.UnblockUser(existingUser);
 
@@ -387,12 +417,12 @@ namespace CFC.Controllers
             var isAdmin = await this.IsAdmin();
             if (!isAdmin)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "AdminNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
             if (model.Remove)
             {
@@ -412,23 +442,23 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "ModelStateError", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
             }
             var token = await this._applicationUserManager.GetVerifyToken(model.Token);
-            if(token == null || token.Obsolete)
+            if (token == null || token.Obsolete)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "NotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
             this._applicationUserManager.VerifyUser(existingUser);
             var resetToken = await this._userManager.GeneratePasswordResetTokenAsync(existingUser);
             await this._userManager.ResetPasswordAsync(existingUser, resetToken, model.Password);
             await this._applicationUserManager.MarkVerifyUserTokenAsUsed(token.Id);
-          
+
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
@@ -439,15 +469,15 @@ namespace CFC.Controllers
             var token = await this._applicationUserManager.GetVerifyToken(data);
             if (token == null || token.Obsolete)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "NotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, "UserNotFound", ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
             }
 
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email}));
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email }));
         }
 
         //TODO make annotation
@@ -515,433 +545,5 @@ namespace CFC.Controllers
             }
 
         }
-
-
-        //
-        //    // GET: /Account/Login
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult Login(string returnUrl = null)
-        //    {
-        //        ViewData["ReturnUrl"] = returnUrl;
-        //        return View();
-        //    }
-
-        //    //
-        //    // POST: /Account/Login
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-        //    {
-        //        ViewData["ReturnUrl"] = returnUrl;
-        //        if (ModelState.IsValid)
-        //        {
-        //            // This doesn't count login failures towards account lockout
-        //            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-        //            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-        //            if (result.Succeeded)
-        //            {
-        //                _logger.LogInformation(1, "User logged in.");
-        //                return RedirectToLocal(returnUrl);
-        //            }
-        //            if (result.RequiresTwoFactor)
-        //            {
-        //                return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        //            }
-        //            if (result.IsLockedOut)
-        //            {
-        //                _logger.LogWarning(2, "User account locked out.");
-        //                return View("Lockout");
-        //            }
-        //            else
-        //            {
-        //                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //                return View(model);
-        //            }
-        //        }
-
-        //        // If we got this far, something failed, redisplay form
-        //        return View(model);
-        //    }
-
-        //    //
-        //    // GET: /Account/Register
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult Register()
-        //    {
-        //        return View();
-        //    }
-
-        //    //
-        //    // POST: /Account/Register
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> Register(RegisterViewModel model)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //            var result = await _userManager.CreateAsync(user, model.Password);
-        //            if (result.Succeeded)
-        //            {
-        //                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-        //                // Send an email with this link
-        //                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        //                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-        //                //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-        //                //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-        //                await _signInManager.SignInAsync(user, isPersistent: false);
-        //                _logger.LogInformation(3, "User created a new account with password.");
-        //                return RedirectToAction(nameof(HomeController.Index), "Home");
-        //            }
-        //            AddErrors(result);
-        //        }
-
-        //        // If we got this far, something failed, redisplay form
-        //        return View(model);
-        //    }
-
-        //    //
-        //    // POST: /Account/LogOff
-        //    [HttpPost]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> LogOff()
-        //    {
-        //        await _signInManager.SignOutAsync();
-        //        _logger.LogInformation(4, "User logged out.");
-        //        return RedirectToAction(nameof(HomeController.Index), "Home");
-        //    }
-
-        //    //
-        //    // POST: /Account/ExternalLogin
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public IActionResult ExternalLogin(string provider, string returnUrl = null)
-        //    {
-        //        // Request a redirect to the external login provider.
-        //        var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
-        //        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        //        return new ChallengeResult(provider, properties);
-        //    }
-
-        //    //
-        //    // GET: /Account/ExternalLoginCallback
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
-        //    {
-        //        var info = await _signInManager.GetExternalLoginInfoAsync();
-        //        if (info == null)
-        //        {
-        //            return RedirectToAction(nameof(Login));
-        //        }
-
-        //        // Sign in the user with this external login provider if the user already has a login.
-        //        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
-        //        if (result.Succeeded)
-        //        {
-        //            _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-        //            return RedirectToLocal(returnUrl);
-        //        }
-        //        if (result.RequiresTwoFactor)
-        //        {
-        //            return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl });
-        //        }
-        //        if (result.IsLockedOut)
-        //        {
-        //            return View("Lockout");
-        //        }
-        //        else
-        //        {
-        //            // If the user does not have an account, then ask the user to create an account.
-        //            ViewData["ReturnUrl"] = returnUrl;
-        //            ViewData["LoginProvider"] = info.LoginProvider;
-        //            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-        //            return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = email });
-        //        }
-        //    }
-
-        //    //
-        //    // POST: /Account/ExternalLoginConfirmation
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
-        //    {
-        //        if (_signInManager.IsSignedIn(User))
-        //        {
-        //            return RedirectToAction(nameof(ManageController.Index), "Manage");
-        //        }
-
-        //        if (ModelState.IsValid)
-        //        {
-        //            // Get the information about the user from the external login provider
-        //            var info = await _signInManager.GetExternalLoginInfoAsync();
-        //            if (info == null)
-        //            {
-        //                return View("ExternalLoginFailure");
-        //            }
-        //            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //            var result = await _userManager.CreateAsync(user);
-        //            if (result.Succeeded)
-        //            {
-        //                result = await _userManager.AddLoginAsync(user, info);
-        //                if (result.Succeeded)
-        //                {
-        //                    await _signInManager.SignInAsync(user, isPersistent: false);
-        //                    _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-        //                    return RedirectToLocal(returnUrl);
-        //                }
-        //            }
-        //            AddErrors(result);
-        //        }
-
-        //        ViewData["ReturnUrl"] = returnUrl;
-        //        return View(model);
-        //    }
-
-        //    // GET: /Account/ConfirmEmail
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        //    {
-        //        if (userId == null || code == null)
-        //        {
-        //            return View("Error");
-        //        }
-        //        var user = await _userManager.FindByIdAsync(userId);
-        //        if (user == null)
-        //        {
-        //            return View("Error");
-        //        }
-        //        var result = await _userManager.ConfirmEmailAsync(user, code);
-        //        return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        //    }
-
-        //    //
-        //    // GET: /Account/ForgotPassword
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult ForgotPassword()
-        //    {
-        //        return View();
-        //    }
-
-        //    //
-        //    // POST: /Account/ForgotPassword
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var user = await _userManager.FindByNameAsync(model.Email);
-        //            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-        //            {
-        //                // Don't reveal that the user does not exist or is not confirmed
-        //                return View("ForgotPasswordConfirmation");
-        //            }
-
-        //            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-        //            // Send an email with this link
-        //            //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //            //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-        //            //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-        //            //   "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
-        //            //return View("ForgotPasswordConfirmation");
-        //        }
-
-        //        // If we got this far, something failed, redisplay form
-        //        return View(model);
-        //    }
-
-        //    //
-        //    // GET: /Account/ForgotPasswordConfirmation
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult ForgotPasswordConfirmation()
-        //    {
-        //        return View();
-        //    }
-
-        //    //
-        //    // GET: /Account/ResetPassword
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult ResetPassword(string code = null)
-        //    {
-        //        return code == null ? View("Error") : View();
-        //    }
-
-        //    //
-        //    // POST: /Account/ResetPassword
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return View(model);
-        //        }
-        //        var user = await _userManager.FindByNameAsync(model.Email);
-        //        if (user == null)
-        //        {
-        //            // Don't reveal that the user does not exist
-        //            return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-        //        }
-        //        var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-        //        }
-        //        AddErrors(result);
-        //        return View();
-        //    }
-
-        //    //
-        //    // GET: /Account/ResetPasswordConfirmation
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public IActionResult ResetPasswordConfirmation()
-        //    {
-        //        return View();
-        //    }
-
-        //    //
-        //    // GET: /Account/SendCode
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
-        //    {
-        //        var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-        //        if (user == null)
-        //        {
-        //            return View("Error");
-        //        }
-        //        var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(user);
-        //        var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-        //        return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        //    }
-
-        //    //
-        //    // POST: /Account/SendCode
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> SendCode(SendCodeViewModel model)
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return View();
-        //        }
-
-        //        var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-        //        if (user == null)
-        //        {
-        //            return View("Error");
-        //        }
-
-        //        // Generate the token and send it
-        //        var code = await _userManager.GenerateTwoFactorTokenAsync(user, model.SelectedProvider);
-        //        if (string.IsNullOrWhiteSpace(code))
-        //        {
-        //            return View("Error");
-        //        }
-
-        //        var message = "Your security code is: " + code;
-        //        if (model.SelectedProvider == "Email")
-        //        {
-        //            await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
-        //        }
-        //        else if (model.SelectedProvider == "Phone")
-        //        {
-        //            await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
-        //        }
-
-        //        return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-        //    }
-
-        //    //
-        //    // GET: /Account/VerifyCode
-        //    [HttpGet]
-        //    [AllowAnonymous]
-        //    public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
-        //    {
-        //        // Require that the user has already logged in via username/password or external login
-        //        var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-        //        if (user == null)
-        //        {
-        //            return View("Error");
-        //        }
-        //        return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        //    }
-
-        //    //
-        //    // POST: /Account/VerifyCode
-        //    [HttpPost]
-        //    [AllowAnonymous]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return View(model);
-        //        }
-
-        //        // The following code protects for brute force attacks against the two factor codes.
-        //        // If a user enters incorrect codes for a specified amount of time then the user account
-        //        // will be locked out for a specified amount of time.
-        //        var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
-        //        if (result.Succeeded)
-        //        {
-        //            return RedirectToLocal(model.ReturnUrl);
-        //        }
-        //        if (result.IsLockedOut)
-        //        {
-        //            _logger.LogWarning(7, "User account locked out.");
-        //            return View("Lockout");
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "Invalid code.");
-        //            return View(model);
-        //        }
-        //    }
-
-        //    #region Helpers
-
-        //    private void AddErrors(IdentityResult result)
-        //    {
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
-        //    }
-
-        //    private async Task<ApplicationUser> GetCurrentUserAsync()
-        //    {
-        //        return await _userManager.GetUserAsync(HttpContext.User);
-        //    }
-
-        //    private IActionResult RedirectToLocal(string returnUrl)
-        //    {
-        //        if (Url.IsLocalUrl(returnUrl))
-        //        {
-        //            return Redirect(returnUrl);
-        //        }
-        //        else
-        //        {
-        //            return RedirectToAction(nameof(HomeController.Index), "Home");
-        //        }
-        //    }
-
-        //    #endregion
-        //}
     }
 }

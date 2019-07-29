@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ForgottenPasswordComponent implements OnInit {
   public email: string;
-  public loadingData= false;
+  public loadingData = false;
   public emailSent = false;
 
   constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) { }
@@ -20,13 +20,13 @@ export class ForgottenPasswordComponent implements OnInit {
 
   sendLink() {
     this.loadingData = true;
-    this.apiService.requestEmailForPasswordReset(this.email).subscribe( (response) => {
+    this.apiService.requestEmailForPasswordReset(this.email).subscribe((response) => {
       console.log(response);
       // this.notifyService.info(this.translateService.instant("email-sent"));
       this.loadingData = false;
       this.emailSent = true;
-    }, error => {      
-      this.notifyService.warning(this.translateService.instant(error.error.errorLabel));
+    }, error => {
+      this.notifyService.warning(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
       console.log(error);
     })

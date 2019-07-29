@@ -49,6 +49,7 @@ export class RegisterUser {
 }
 
 export class UserDetail {
+    id: string;
     name: string;
     surname: string;
     email: string;
@@ -57,6 +58,7 @@ export class UserDetail {
 
 
 export class EditUser {
+
     name: string;
     surname: string;
     email: string;

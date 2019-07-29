@@ -64,5 +64,12 @@
     "back": "Späť",
     "refresh": "Obnoviť",
     "verify-email": "Aktivovať email",
-    "email-activated": "Email bol aktivovaný. Pokračujte prihlásením"
+    "email-activated": "Email bol aktivovaný. Pokračujte prihlásením",
+    "user-blocked": "Používateľ bol zablokovaný",
+    "user-unblocked": "Používateľ bol odblokovaný",
+    "role": "Rola",
+    "unblock-user": "Odblokovať používateľa",
+    "Owner": "Spoločník",
+    "Admin": "Administrátor",
+    "user-detail": "Detail používateľa"
 }

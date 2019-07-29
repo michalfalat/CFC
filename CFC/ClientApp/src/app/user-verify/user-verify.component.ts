@@ -28,28 +28,28 @@ export class UserVerifyComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.router.navigate(['/login']);
-    })
+    });
   }
 
 
   verify() {
     this.errorPasswordMatch = false;
-    if(this.formData.password !== this.formData.password2) {
+    if (this.formData.password !== this.formData.password2) {
       this.errorPasswordMatch = true;
       return;
     }
     this.loadingData = true;
     this.apiService.verifyUser(this.formData).subscribe((response) => {
-    this.notifyService.info(this.translateService.instant("email-activated"));
+    this.notifyService.info(this.translateService.instant('email-activated'));
     this.loadingData = false;
     this.router.navigate(['/login']);
 
   }, error => {
-    this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+    this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
     this.loadingData = false;
-  })
+  });
 
   }
 

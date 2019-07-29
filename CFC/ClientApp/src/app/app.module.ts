@@ -29,6 +29,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { CompanyListComponent } from './company-list/company-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AboutComponent } from './about/about.component';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     CompanyListComponent,
     DashboardComponent,
     AboutComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -93,6 +95,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           {
             path: 'users/add',
             component: RegisterComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'users/edit/:id',
+            component: UserEditComponent,
             pathMatch: 'full'
           },
           {

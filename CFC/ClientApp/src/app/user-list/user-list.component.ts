@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { MatSort, MatTableDataSource } from '@angular/material';
+import { NotifyService } from '../services/notify.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-list',
@@ -10,10 +12,10 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 export class UserListComponent implements OnInit {
   public loadingData = true;
   public userList;
-  public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];  
+  public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
-  constructor(private apiService: ApiService, private ref: ChangeDetectorRef) { }
+  constructor(private apiService: ApiService, private ref: ChangeDetectorRef, private notifyService: NotifyService, private translateService: TranslateService) { }
 
   ngOnInit() {
     this.getUsers();
@@ -33,9 +35,9 @@ export class UserListComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      console.log("error");
+      console.log('error');
       this.loadingData = false;
-    })
+    });
   }
 
   blockUser(element) {
@@ -43,11 +45,16 @@ export class UserListComponent implements OnInit {
     const block  = element.blocked ? false : true;
     this.loadingData = true;
     this.apiService.blockUser(id, block).subscribe(response => {
+      if(block) {
+        this.notifyService.info(this.translateService.instant('user-blocked'));
+      } else {
+        this.notifyService.info(this.translateService.instant('user-unblocked'));
+      }
      this.getUsers();
     }, error => {
-      console.log("error");
+      this.notifyService.error(this.translateService.instant('user-blocked'));
       this.loadingData = false;
-    })
+    });
   }
 
 }

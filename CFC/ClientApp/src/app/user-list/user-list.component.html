@@ -41,7 +41,7 @@
       </ng-container>
       <ng-container matColumnDef="role">
           <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'role' | translate }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.role }} </td>
+          <td mat-cell *matCellDef="let element"> {{element.role | translate }} </td>
         </ng-container>
       <ng-container matColumnDef="emailConfirmed">
         <th mat-header-cell *matHeaderCellDef> {{ 'emailConfirmed' | translate }} </th>
@@ -50,7 +50,7 @@
             {{ element.emailConfirmed === true ? 'check' : 'close'}} </mat-icon>
         </td>
       </ng-container>
-     
+
 
       <ng-container matColumnDef="phoneNumber">
         <th mat-header-cell *matHeaderCellDef> {{ 'phone' | translate }} </th>
@@ -59,8 +59,8 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button matTooltip="{{ 'edit' | translate }}" >
-            <mat-icon>edit</mat-icon>
+          <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}"  routerLink="{{'/admin/users/edit/' + element.id }}">
+            <mat-icon>info</mat-icon>
           </button>
           <button mat-icon-button matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}" (click)="blockUser(element)">
             <mat-icon> {{ element.blocked === true ? 'settings_backup_restore' : 'block'}}</mat-icon>

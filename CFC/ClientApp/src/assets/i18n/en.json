@@ -64,6 +64,13 @@
     "back": "Back",
     "refresh": "Refresh",
     "verify-email": "Verify email",
-    "email-activated": "Email was activated. Continue with login"
+    "email-activated": "Email was activated. Continue with login",
+    "user-blocked": "User was blocked",
+    "user-unblocked": "User was unblocked",
+    "role": "Role",
+    "unblock-user": "Unblock user",
+    "Owner": "Companion",
+    "Admin": "Administrator",
+    "user-detail": "User detail"
 
 }

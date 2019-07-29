@@ -13,10 +13,26 @@ namespace CFC.Data.Models
             this.Status = ResponseDTOStatus.OK;
             this.Message = "";
             this.Data = null;
-            this.ErrorLabel = "";
+            this.ErrorLabel = ResponseDTOErrorLabel.NONE;
             this.Error = "";
         }
-        public ResponseDTO(ResponseDTOStatus status, string errorLabel, string error)
+        public ResponseDTO(ResponseDTOStatus status)
+        {
+            this.Status = status;
+            this.Message = "";
+            this.Data = null;
+            this.ErrorLabel = ResponseDTOErrorLabel.NONE;
+            this.Error = "";
+        }
+        public ResponseDTO(ResponseDTOStatus status, object data)
+        {
+            this.Status = status;
+            this.Message = "";
+            this.Data = data;
+            this.ErrorLabel = ResponseDTOErrorLabel.NONE;
+            this.Error = "";
+        }
+        public ResponseDTO(ResponseDTOStatus status, ResponseDTOErrorLabel errorLabel, string error)
         {
             this.Status = status;
             this.Message = "";
@@ -25,7 +41,7 @@ namespace CFC.Data.Models
             this.Error = error;
         }
 
-        public ResponseDTO(ResponseDTOStatus status, string message="", object data=null, string errorLabel= "", string error = "")
+        public ResponseDTO(ResponseDTOStatus status, ResponseDTOErrorLabel errorLabel, string message = "", object data = null, string error = "")
         {
             this.Status = status;
             this.Message = message;
@@ -38,7 +54,7 @@ namespace CFC.Data.Models
         public string Message { get; set; }
 
         public object Data { get; set; }
-        public string ErrorLabel { get; set; }
+        public ResponseDTOErrorLabel ErrorLabel { get; set; }
 
         public string Error { get; set; }
     }
