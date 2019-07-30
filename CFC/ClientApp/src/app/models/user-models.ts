@@ -41,7 +41,7 @@ export class PasswordChangeModel {
     newPassword2: string;
 }
 
-export class RegisterUser {
+export class AddUser {
     name: string;
     surname: string;
     email: string;

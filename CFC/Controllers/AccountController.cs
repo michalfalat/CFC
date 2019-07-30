@@ -64,7 +64,7 @@ namespace CFC.Controllers
             var user = new ApplicationUser()
             {
                 UserName = "administrator",
-                Email = "admin@admin.sk",
+                Email = "cfcsystem19@gmail.com",
                 EmailConfirmed = true,
                 Name = "administrator",
                 Surname = "administrator",
@@ -74,7 +74,7 @@ namespace CFC.Controllers
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
             await this.GenerateRoles();
-            var roleResult = await this._userManager.AddToRoleAsync(user, "admin");
+            var roleResult = await this._userManager.AddToRoleAsync(user, "Administrator");
             if (result.Succeeded && roleResult.Succeeded)
             {
                 return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { password = pwd }));
@@ -96,17 +96,17 @@ namespace CFC.Controllers
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                 if (appUser == null)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
                 }
 
                 if (appUser.Blocked)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED));
                 }
 
                 if (appUser.Obsolete)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.OBSOLETE, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.OBSOLETE));
                 }
 
 
@@ -121,21 +121,21 @@ namespace CFC.Controllers
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.DOUBLE_FA, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.DOUBLE_FA));
                 }
                 if (result.IsLockedOut)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED));
                 }
                 else
                 {
                     this._logger.Log(LogLevel.Warning, $"Invalid login result status for user {appUser.Email}: {result.ToString()}");
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
                 }
             }
             else
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
         }
 
@@ -147,7 +147,7 @@ namespace CFC.Controllers
             var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.EmailAddress);
             if (appUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
             var passwordToken = new PasswordResetToken();
             passwordToken.UserEmail = model.EmailAddress;
@@ -165,13 +165,13 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
             var guidLink = Guid.Parse(tokenLink.Token);
             var token = await this._applicationUserManager.GetTokenFromLink(guidLink);
             if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN));
             }
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { token = token.Token }));
         }
@@ -185,14 +185,14 @@ namespace CFC.Controllers
                 var token = await this._applicationUserManager.GetTokenFromLink(passwordReset.Link);
                 if (token == null || token.ValidTo < DateTimeOffset.UtcNow || token.IsUsed || token.Token != passwordReset.Token)
                 {
-                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN, ""));
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.INVALID_TOKEN));
                 }
                 else
                 {
                     var appUser = _userManager.Users.SingleOrDefault(r => r.Email == token.UserEmail);
                     if (appUser == null)
                     {
-                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
                     }
                     var result = await this._userManager.ResetPasswordAsync(appUser, token.Token, passwordReset.Password);
                     if (result.Succeeded)
@@ -203,31 +203,31 @@ namespace CFC.Controllers
                     else
                     {
                         this._logger.Log(LogLevel.Warning, $"Invalid password for reset user {appUser.Email}: {result.Errors.ToArray().ToString()}");
-                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED, ""));
+                        return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
                     }
                 }
             }
             else
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
         }
 
 
 
         [HttpPost("[action]")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]RegisterRequestViewModel model)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> AddUser([FromBody]RegisterRequestViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
 
             var existingUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
             if (existingUser != null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.EXISTING_USER, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.EXISTING_USER));
             }
 
             var user = new ApplicationUser()
@@ -243,7 +243,7 @@ namespace CFC.Controllers
             };
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
-            var roleResult = await this._userManager.AddToRoleAsync(user, "owner");
+            var roleResult = await this._userManager.AddToRoleAsync(user, "Owner");
             if (result.Succeeded && roleResult.Succeeded)
             {
                 var token = new VerifyUserToken();
@@ -257,7 +257,7 @@ namespace CFC.Controllers
             else
             {
                 this._logger.Log(LogLevel.Warning, $"Invalid  error when registering user {user.Email}: {result.Errors.Concat(roleResult.Errors).ToArray().ToString()}");
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
             }
         }
 
@@ -269,7 +269,7 @@ namespace CFC.Controllers
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             var user = new UserDetailModel()
@@ -290,7 +290,7 @@ namespace CFC.Controllers
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == id);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             var user = new UserDetailModel()
@@ -305,25 +305,26 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Administrator,Owner")]
         public async Task<IActionResult> EditUser([FromBody]UserEditModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
             var loggedUserId = this._userManager.GetUserId(this.HttpContext.User);
 
             var loggedUser = _userManager.Users.SingleOrDefault(r => r.Id == loggedUserId);
             if (loggedUser.Email != model.Email && (await this.IsAdmin()) == false)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
 
             }
 
             var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
             if (appUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             appUser.Name = model.Name;
@@ -340,18 +341,18 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
             var userId = this._userManager.GetUserId(this.HttpContext.User);
             if (userId == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == userId);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             var result = await this._userManager.ChangePasswordAsync(existingUser, model.OldPassword, model.NewPassword);
@@ -368,13 +369,14 @@ namespace CFC.Controllers
         }
 
         [HttpGet("[action]")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> GetUsers()
         {
-            var isAdmin = await this.IsAdmin();
-            if (!isAdmin)
-            {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
-            }
+            //var isAdmin = await this.IsAdmin();
+            //if (!isAdmin)
+            //{
+            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
+            //}
 
             var users = await this._applicationUserManager.GetUserList();
             var userModels = this._mapper.Map<List<UserExtendedDetailModel>>(users);
@@ -387,17 +389,18 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> BlockUser([FromBody]BlockUserModel model)
         {
-            var isAdmin = await this.IsAdmin();
-            if (!isAdmin)
-            {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
-            }
+            //var isAdmin = await this.IsAdmin();
+            //if (!isAdmin)
+            //{
+            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
+            //}
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
             if (model.Block)
             {
@@ -412,17 +415,18 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> RemoveUser([FromBody]RemoveUserModel model)
         {
-            var isAdmin = await this.IsAdmin();
-            if (!isAdmin)
-            {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN, ""));
-            }
+            //var isAdmin = await this.IsAdmin();
+            //if (!isAdmin)
+            //{
+            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
+            //}
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
             if (model.Remove)
             {
@@ -442,17 +446,17 @@ namespace CFC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
             var token = await this._applicationUserManager.GetVerifyToken(model.Token);
             if (token == null || token.Obsolete)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
             this._applicationUserManager.VerifyUser(existingUser);
             var resetToken = await this._userManager.GeneratePasswordResetTokenAsync(existingUser);
@@ -469,12 +473,12 @@ namespace CFC.Controllers
             var token = await this._applicationUserManager.GetVerifyToken(data);
             if (token == null || token.Obsolete)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Email == token.Email);
             if (existingUser == null)
             {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND, ""));
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email }));
@@ -495,7 +499,7 @@ namespace CFC.Controllers
                 return false;
             }
 
-            var isAdmin = await this._userManager.IsInRoleAsync(existingUser, "Admin");
+            var isAdmin = await this._userManager.IsInRoleAsync(existingUser, "Administrator");
             if (!isAdmin)
             {
                 return false;
@@ -504,18 +508,20 @@ namespace CFC.Controllers
         }
 
 
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        private async Task<object> GenerateJwtToken(string email, ApplicationUser user)
         {
+            var role = await this._userManager.GetRolesAsync(user);
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, role.FirstOrDefault())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("jwtTokenPassw0rd"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+            var expires = DateTime.Now.AddDays(365);
 
             var token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],
@@ -531,7 +537,7 @@ namespace CFC.Controllers
 
         private async Task GenerateRoles()
         {
-            string[] roleNames = { "admin", "owner" };
+            string[] roleNames = { "Administrator", "Owner" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)

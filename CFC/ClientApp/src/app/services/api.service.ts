@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
-import { LoginUser, UserPasswordReset, PasswordResetModel, RegisterUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
+import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -10,8 +10,8 @@ import { AuthService } from './auth.service';
 })
 export class ApiService {
 
-  private registerUserUrl() {
-    return this.baseUrl + 'api/Account/Register';
+  private addUserUrl() {
+    return this.baseUrl + 'api/Account/AddUser';
   }
 
   private loginUserUrl() {
@@ -77,12 +77,11 @@ export class ApiService {
   // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
   }
 
-  registerUser(model: RegisterUser): any {
-    return this.http.post(this.registerUserUrl(), model, this.headers).pipe(
+  addUser(model: AddUser): any {
+    return this.http.post(this.addUserUrl(), model, this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
 
   }
@@ -92,7 +91,6 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -101,7 +99,6 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -110,7 +107,6 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -123,7 +119,6 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 
@@ -135,7 +130,6 @@ export class ApiService {
       catchError(error => {
         console.log(error);
         return throwError(error);
-        //return this.handleError(error, () => this.registerUser(model));
       }));
   }
 

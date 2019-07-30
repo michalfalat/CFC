@@ -41,6 +41,15 @@ namespace CFC.Data.Models
             this.Error = error;
         }
 
+        public ResponseDTO(ResponseDTOStatus status, ResponseDTOErrorLabel errorLabel)
+        {
+            this.Status = status;
+            this.Message = "";
+            this.Data = null;
+            this.ErrorLabel = errorLabel;
+            this.Error = "";
+        }
+
         public ResponseDTO(ResponseDTOStatus status, ResponseDTOErrorLabel errorLabel, string message = "", object data = null, string error = "")
         {
             this.Status = status;

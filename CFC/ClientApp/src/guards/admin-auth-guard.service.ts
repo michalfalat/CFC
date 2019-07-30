@@ -14,8 +14,8 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.isEnabledFor("Admin")) {
-        return true;
+    if (this.authService.isEnabledFor('Administrator')) {
+      return true;
     }
 
     // navigate to login page
@@ -25,8 +25,8 @@ export class AdminAuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.isEnabledFor("Admin")) {
-        return true;
+    if (this.authService.isEnabledFor('Administrator')) {
+      return true;
     }
 
     // navigate to login page

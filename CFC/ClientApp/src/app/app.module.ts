@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from './material.module';
 import { LoginComponent } from './login/login.component';
 import { DefaultUserComponent } from './default-user/default-user.component';
-import { RegisterComponent } from './register/register.component';
+import { AddUserComponent } from './register/register.component';
 import { UserVerifyComponent } from './user-verify/user-verify.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { AuthInterceptor } from './auth-interceptor/auth-interceptor.component';
@@ -45,7 +45,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     FetchDataComponent,
     LoginComponent,
     DefaultUserComponent,
-    RegisterComponent,
+    AddUserComponent,
     UserVerifyComponent,
     UserDetailComponent,
     PasswordResetComponent,
@@ -94,7 +94,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           },
           {
             path: 'users/add',
-            component: RegisterComponent,
+            component: AddUserComponent,
             pathMatch: 'full'
           },
           {

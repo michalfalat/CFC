@@ -45,7 +45,7 @@ export class UserListComponent implements OnInit {
     const block  = element.blocked ? false : true;
     this.loadingData = true;
     this.apiService.blockUser(id, block).subscribe(response => {
-      if(block) {
+      if (block) {
         this.notifyService.info(this.translateService.instant('user-blocked'));
       } else {
         this.notifyService.info(this.translateService.instant('user-unblocked'));

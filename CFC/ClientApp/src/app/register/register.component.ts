@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { RegisterUser } from '../models/user-models';
+import { AddUser } from '../models/user-models';
 import { Router } from '@angular/router';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,15 +10,15 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class AddUserComponent implements OnInit {
 
-  public user: RegisterUser;
+  public user: AddUser;
   public existingUserError: Boolean = false;
   public loadingData = false;
 
   constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService,
     private router: Router) {
-    this.user = new RegisterUser();
+    this.user = new AddUser();
    }
 
   ngOnInit() {
@@ -27,10 +27,10 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/admin/users']);
   }
 
-  registerUser() {
+  addUser() {
     this.loadingData = true;
     this.existingUserError = false;
-    this.apiService.registerUser(this.user).subscribe(response => {
+    this.apiService.addUser(this.user).subscribe(response => {
       this.loadingData = false;
       this.notifyService.info(this.translateService.instant('data-saved'));
       this.goBack();

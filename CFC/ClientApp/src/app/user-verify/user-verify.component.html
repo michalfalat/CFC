@@ -1,7 +1,7 @@
 <mat-card class="form-container  bigger-width">
   <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-  <h3>{{ 'welcome_to_system' | translate }}, {{ formData.email }}</h3>
-  <p>{{ 'create_password_text' | translate }}</p>
+  <h3>{{ 'welcome-to-system' | translate }}, {{ formData.email }}</h3>
+  <p>{{ 'create-password-text' | translate }}</p>
   <form class="form" #formRef="ngForm">
     <mat-form-field class="full-width">
       <input matInput placeholder="{{ 'new-password' | translate }}" name="password" #passwordRef="ngModel" #p1

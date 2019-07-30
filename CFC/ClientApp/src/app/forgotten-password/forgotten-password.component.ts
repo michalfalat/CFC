@@ -29,7 +29,7 @@ export class ForgottenPasswordComponent implements OnInit {
       this.notifyService.warning(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
       console.log(error);
-    })
+    });
 
   }
 

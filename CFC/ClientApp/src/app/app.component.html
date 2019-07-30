@@ -7,7 +7,7 @@
           &nbsp;Financial Control System
         </button>
         <br>
-        <div *ngIf="authService.isEnabledFor('Admin')">
+        <div *ngIf="authService.isEnabledFor('Administrator')">
           <!-- ADMIN ROUTES -->
           <button mat-list-item routerLink="/admin/dashboard" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>bar_chart</mat-icon>
@@ -28,9 +28,9 @@
           <button mat-list-item routerLink="/dashboard" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
-          </button>         
+          </button>
 
-        </div>       
+        </div>
         <button mat-list-item routerLink="/about" [routerLinkActive]="['activeLink']">
           <mat-icon matListIcon>info</mat-icon>
           <span> {{'about' | translate }}</span>
