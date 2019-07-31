@@ -30,6 +30,7 @@ import { CompanyListComponent } from './company-list/company-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AboutComponent } from './about/about.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { CompanyAddComponent } from './company-add/company-add.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -56,6 +57,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DashboardComponent,
     AboutComponent,
     UserEditComponent,
+    CompanyAddComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -105,6 +107,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           {
             path: 'companies',
             component: CompanyListComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'companies/add',
+            component: CompanyAddComponent,
             pathMatch: 'full'
           },
           // <-- The rest of your admin routes

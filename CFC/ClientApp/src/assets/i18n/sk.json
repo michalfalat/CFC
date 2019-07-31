@@ -71,5 +71,12 @@
     "unblock-user": "Odblokovať používateľa",
     "Owner": "Spoločník",
     "Admin": "Administrátor",
-    "user-detail": "Detail používateľa"
+    "user-detail": "Detail používateľa",
+    "name2": "Názov",
+    "identification-number": "IČO",
+    "registration-date": "Registrácia",
+    "branches-count": "Počet pobočiek",
+    "owners-count": "Počet vlastníkov",
+    "status": "Status",
+    "add-company": "Pridať firmu"
 }

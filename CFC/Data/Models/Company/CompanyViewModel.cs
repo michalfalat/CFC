@@ -4,29 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CFC.Data.Entities
+namespace CFC.Data.Models
 {
-    public class Company : IEntity
+    public class CompanyViewModel
     {
-        public Company()
-        {
-
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
         public string IdentificationNumber { get; set; }
-
         public DateTimeOffset RegistrationDate { get; set; }
 
         public CompanyStatus Status { get; set; }
-
         public bool Obsolete { get; set; }
 
-
-        public ICollection<CompanyOffice> Offices { get; set; }
-        public ICollection<ApplicationUserCompany> Owners { get; set; }
-
+        public int BranchesCount { get; set; }
+        public int OwnersCount { get; set; }
 
     }
 }

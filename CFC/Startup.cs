@@ -47,8 +47,16 @@ namespace CFC
               .AddDefaultTokenProviders();
 
 
+
+            // REPOSITORIES
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+
+
+
+            // MANAGERS
             services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
+            services.AddScoped<ICompanyManager, CompanyManager>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton(Configuration);
 

@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
+import { CompanyAddModel } from '../models/company-models';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,14 @@ export class ApiService {
   private getVerifyTokenUrl(token) {
     return this.baseUrl + `api/Account/GetVerifyToken/${token}`;
   }
+
+  private addCompanyUrl() {
+    return this.baseUrl + 'api/Company';
+  }
+  private getCompaniesUrl() {
+    return this.baseUrl + 'api/Company';
+  }
+
 
 
 
@@ -199,6 +208,23 @@ export class ApiService {
 
   getUserList(): any {
     return this.http.get(this.getUserListUrl(), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+
+  }
+
+  addCompany(data: CompanyAddModel) {
+    return this.http.post(this.addCompanyUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  getCompanies(): any {
+    return this.http.get(this.getCompaniesUrl(), this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);

@@ -71,6 +71,14 @@
     "unblock-user": "Unblock user",
     "Owner": "Companion",
     "Admin": "Administrator",
-    "user-detail": "User detail"
+    "user-detail": "User detail",
+    "name2": "Name",
+    "identification-number": "Identification number",
+    "registration-date": "Registration",
+    "branches-count": "No. of branches",
+    "owners-count": "No. of owners",
+    "status": "Status",
+    "add-company": "Add company"
+
 
 }

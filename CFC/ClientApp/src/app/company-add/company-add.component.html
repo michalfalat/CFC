@@ -1,0 +1,28 @@
+<mat-card class="form-container  bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-icon-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ 'add-company' | translate }} </span>
+    </span>
+    <span class="spacer"></span>
+
+  </div>
+  <form class="form" #formRef="ngForm">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'name2' | translate}}" value="" name="name" [(ngModel)]="company.name" required
+        minlength="5">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'identification-number' | translate}}" value="" name="identificationNumber"
+        [(ngModel)]="company.identificationNumber" required minlength="5">
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="main-button" (click)="add()"
+      [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+  </form>
+
+</mat-card>
