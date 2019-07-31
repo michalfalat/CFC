@@ -8,9 +8,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from './material.module';
 import { LoginComponent } from './login/login.component';
@@ -41,9 +38,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     LoginComponent,
     DefaultUserComponent,
     AddUserComponent,
@@ -64,10 +58,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent, data: { title: 'Login' } },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'default-user-generator', component: DefaultUserComponent },
       { path: 'user', component: UserDetailComponent },
       { path: 'reset-password/:token', component: PasswordResetComponent },

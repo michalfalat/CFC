@@ -41,20 +41,20 @@ export class CompanyListComponent implements OnInit {
     });
   }
 
-  blockUser(element) {
+  removeCompany(element) {
     const id = element.id;
     const block  = element.blocked ? false : true;
     this.loadingData = true;
-    this.apiService.blockUser(id, block).subscribe(response => {
-      if (block) {
-        this.notifyService.info(this.translateService.instant('user-blocked'));
-      } else {
-        this.notifyService.info(this.translateService.instant('user-unblocked'));
-      }
-     this.getCompanies();
-    }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
-      this.loadingData = false;
-    });
+    // this.apiService.blockCompany(id, block).subscribe(response => {
+    //   if (block) {
+    //     this.notifyService.info(this.translateService.instant('company-blocked'));
+    //   } else {
+    //     this.notifyService.info(this.translateService.instant('company-unblocked'));
+    //   }
+    //  this.getCompanies();
+    // }, error => {
+    //   this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+    //   this.loadingData = false;
+    // });
   }
 }
