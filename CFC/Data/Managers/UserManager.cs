@@ -10,20 +10,20 @@ namespace CFC.Data.Managers
 {
     public class ApplicationUserManager : IApplicationUserManager
     {
-        public IRepositoryWrapper Repository { get; set; }
+        private IRepositoryWrapper _repository { get; set; }
         public ApplicationUserManager(IRepositoryWrapper repository)
         {
-            this.Repository = repository;
+            this._repository = repository;
         }
         public void Create(ApplicationUser entity)
         {
-            this.Repository.ApplicationUserRepository.Create(entity);
-            this.Repository.Save();
+            this._repository.ApplicationUserRepository.Create(entity);
+            this._repository.Save();
         }
 
         public Task<ApplicationUser> FindById(string id)
         {
-            return this.Repository.ApplicationUserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
+            return this._repository.ApplicationUserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
         }
 
         [Obsolete]
@@ -52,33 +52,33 @@ namespace CFC.Data.Managers
 
         public Task<PasswordResetToken> GetTokenFromLink(Guid link)
         {
-            return this.Repository.PasswordResetTokenRepository.FindByCondition(u => u.Link == link).FirstOrDefaultAsync();
+            return this._repository.PasswordResetTokenRepository.FindByCondition(u => u.Link == link).FirstOrDefaultAsync();
         }
 
         public void CreatePasswordResetToken(PasswordResetToken entity)
         {
-            this.Repository.PasswordResetTokenRepository.Create(entity);
-            this.Repository.Save();
+            this._repository.PasswordResetTokenRepository.Create(entity);
+            this._repository.Save();
         }
 
         public async Task MarkPasswordResetTokenAsUsed(int id)
         {
-            var token = await this.Repository.PasswordResetTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
+            var token = await this._repository.PasswordResetTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
             token.IsUsed = true;
-            this.Repository.PasswordResetTokenRepository.Update(token);
-            this.Repository.Save();
+            this._repository.PasswordResetTokenRepository.Update(token);
+            this._repository.Save();
         }
 
         public void Edit(ApplicationUser entity)
         {
-            this.Repository.ApplicationUserRepository.Update(entity);
-            this.Repository.Save();
+            this._repository.ApplicationUserRepository.Update(entity);
+            this._repository.Save();
 
         }
 
         public Task<List<ApplicationUser>> GetAll()
         {
-            return this.Repository.ApplicationUserRepository.FindAll().ToListAsync();
+            return this._repository.ApplicationUserRepository.FindAll().ToListAsync();
         }
 
         public void BlockUser(ApplicationUser entity)
@@ -113,21 +113,21 @@ namespace CFC.Data.Managers
 
         public void CreateVerifyUserToken(VerifyUserToken entity)
         {
-            this.Repository.VerifyTokenRepository.Create(entity);
-            this.Repository.Save();
+            this._repository.VerifyTokenRepository.Create(entity);
+            this._repository.Save();
         }
 
         public Task<VerifyUserToken> GetVerifyToken(string id)
         {
-            return this.Repository.VerifyTokenRepository.FindByCondition(u => u.Token == id).FirstOrDefaultAsync();
+            return this._repository.VerifyTokenRepository.FindByCondition(u => u.Token == id).FirstOrDefaultAsync();
         }
 
         public async Task MarkVerifyUserTokenAsUsed(int id)
         {
-            var token = await this.Repository.VerifyTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
+            var token = await this._repository.VerifyTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();
             token.Obsolete = true;
-            this.Repository.VerifyTokenRepository.Update(token);
-            this.Repository.Save();
+            this._repository.VerifyTokenRepository.Update(token);
+            this._repository.Save();
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CFC.Data
 {
@@ -47,5 +48,14 @@ namespace CFC.Data
             this.Context.Set<T>().Remove(entity);
         }
 
+        public void Save()
+        {
+            this.Context.SaveChanges();
+        }
+
+        public Task SaveAsync()
+        {
+            return this.Context.SaveChangesAsync();
+        }
     }
 }
