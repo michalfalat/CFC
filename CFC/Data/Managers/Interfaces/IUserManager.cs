@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Managers
 {
-    public interface IApplicationUserManager
+    public interface IApplicationUserManager : IManager<ApplicationUser>
     {
-        void Create(ApplicationUser entity);
         Task<ApplicationUser> FindById(string id);
         string GenerateRandomPassword();
 
@@ -23,21 +22,16 @@ namespace CFC.Data.Managers
 
         Task MarkPasswordResetTokenAsUsed(int id);
 
-        void EditUser(ApplicationUser entity);
 
         void BlockUser(ApplicationUser entity);
 
-        void RemoveUser(ApplicationUser entity);
 
         void UnblockUser(ApplicationUser entity);
-
-        void UnremoveUser(ApplicationUser entity);
 
         void VerifyUser(ApplicationUser entity);
 
         Task MarkVerifyUserTokenAsUsed(int id);
 
-        Task<List<ApplicationUser>> GetUserList();
 
 
     }

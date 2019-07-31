@@ -26,6 +26,12 @@ namespace CFC.Data.Managers
             return this.Repository.ApplicationUserRepository.FindByCondition(u => u.Id == id).FirstOrDefaultAsync();
         }
 
+        [Obsolete]
+        public Task<ApplicationUser> FindById(int id)
+        {
+            throw new NotSupportedException();
+        }
+
         public string GenerateRandomPassword()
         {
             Random r = new Random();
@@ -63,14 +69,14 @@ namespace CFC.Data.Managers
             this.Repository.Save();
         }
 
-        public void EditUser(ApplicationUser entity)
+        public void Edit(ApplicationUser entity)
         {
             this.Repository.ApplicationUserRepository.Update(entity);
             this.Repository.Save();
 
         }
 
-        public Task<List<ApplicationUser>> GetUserList()
+        public Task<List<ApplicationUser>> GetAll()
         {
             return this.Repository.ApplicationUserRepository.FindAll().ToListAsync();
         }
@@ -78,31 +84,31 @@ namespace CFC.Data.Managers
         public void BlockUser(ApplicationUser entity)
         {
             entity.Blocked = true;
-            this.EditUser(entity);
+            this.Edit(entity);
         }
 
         public void UnblockUser(ApplicationUser entity)
         {
             entity.Blocked = false;
-            this.EditUser(entity);
+            this.Edit(entity);
         }
 
-        public void UnremoveUser(ApplicationUser entity)
+        public void Unremove(ApplicationUser entity)
         {
             entity.Obsolete = false;
-            this.EditUser(entity);
+            this.Edit(entity);
         }
 
-        public void RemoveUser(ApplicationUser entity)
+        public void Remove(ApplicationUser entity)
         {
             entity.Obsolete = true;
-            this.EditUser(entity);
+            this.Edit(entity);
         }
 
         public void VerifyUser(ApplicationUser entity)
         {
             entity.EmailConfirmed = true;
-            this.EditUser(entity);
+            this.Edit(entity);
         }
 
         public void CreateVerifyUserToken(VerifyUserToken entity)

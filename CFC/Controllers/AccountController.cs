@@ -330,7 +330,7 @@ namespace CFC.Controllers
             appUser.Name = model.Name;
             appUser.Surname = model.Surname;
             appUser.PhoneNumber = model.Phone;
-            this._applicationUserManager.EditUser(appUser);
+            this._applicationUserManager.Edit(appUser);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
 
         }
@@ -378,7 +378,7 @@ namespace CFC.Controllers
             //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
             //}
 
-            var users = await this._applicationUserManager.GetUserList();
+            var users = await this._applicationUserManager.GetAll();
             var userModels = this._mapper.Map<List<UserExtendedDetailModel>>(users);
             foreach (var user in users)
             {
@@ -430,11 +430,11 @@ namespace CFC.Controllers
             }
             if (model.Remove)
             {
-                this._applicationUserManager.RemoveUser(existingUser);
+                this._applicationUserManager.Remove(existingUser);
             }
             else
             {
-                this._applicationUserManager.UnremoveUser(existingUser);
+                this._applicationUserManager.Unremove(existingUser);
 
             }
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
