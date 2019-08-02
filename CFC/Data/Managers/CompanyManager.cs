@@ -31,7 +31,9 @@ namespace CFC.Data.Managers
 
         public Task<Company> FindById(int id)
         {
-            return this._companyRepository.FindByCondition(a => a.Id == id).FirstOrDefaultAsync();
+            return this._companyRepository.FindByCondition(a => a.Id == id)
+                .Include(a => a.Owners)
+                .ThenInclude(b => b.User).FirstOrDefaultAsync();
         }
 
         public Task<List<Company>> GetAll()
@@ -49,6 +51,18 @@ namespace CFC.Data.Managers
         {
             entity.Obsolete = false;
             this.Edit(entity);
+        }
+
+        public void AddUserToCompany(ApplicationUserCompany entity, Company company)
+        {
+            if(company.Owners == null)
+            {
+                company.Owners = new List<ApplicationUserCompany>();
+            }
+            this._repository.ApplicationUserCompanyRepository.Create(entity);
+            this._repository.ApplicationUserCompanyRepository.Save();
+            company.Owners.Add(entity);
+            this.Edit(company);
         }
     }
 }

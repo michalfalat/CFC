@@ -124,15 +124,38 @@ namespace CFC.Controllers
 
         [HttpPost("{id}/AddUser")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> AddUserToCompany(int id)
+        public async Task<IActionResult> AddUserToCompany(int id, [FromBody]CompanyAddUserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            var userCompany = new ApplicationUserCompany();
+            userCompany.CompanyId = company.Id;
+            userCompany.UserId = model.UserId;
+            userCompany.Percentage = model.Percentage;
+            this._companyManager.AddUserToCompany(userCompany, company);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpGet("{id}/Users")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetCompanyUsers(int id)
         {
             var company = await this._companyManager.FindById(id);
             if (company == null)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            // TODO
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+            var companyOwners = company.Owners.ToList();
+
+            var companyOwnersModel = this._mapper.Map<List<CompanyDetailViewModel>>(companyOwners);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { owners = companyOwnersModel}));
         }
 
     }

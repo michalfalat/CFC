@@ -12,6 +12,7 @@ namespace CFC.Data.Repositories
         private IApplicationUserRepository _userRepository;
         private IPasswordResetTokenRepository _passwordResetTokenRepository;
         private IVerifyTokenRepository _verifyTokenRepository;
+        private IApplicationUserCompanyRepository _userCompanyRepository;
         public ICompanyRepository CompanyRepository {
             get
             {
@@ -34,6 +35,19 @@ namespace CFC.Data.Repositories
                 }
 
                 return _userRepository;
+            }
+        }
+
+        public IApplicationUserCompanyRepository ApplicationUserCompanyRepository
+        {
+            get
+            {
+                if (_userCompanyRepository == null)
+                {
+                    _userCompanyRepository = new ApplicationUserCompanyRepository(_dbContext);
+                }
+
+                return _userCompanyRepository;
             }
         }
 

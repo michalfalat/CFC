@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
-import { CompanyAddModel } from '../models/company-models';
+import { CompanyAddModel, CompanyOwnerAddModel } from '../models/company-models';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +77,12 @@ export class ApiService {
   }
   private unremoveCompanyUrl(id) {
     return this.baseUrl + `api/Company/Unremove/${id}`;
+  }
+  private getCompanyUrl(id) {
+    return this.baseUrl + `api/Company/${id}`;
+  }
+  private addUserToCompanyUrl(id) {
+    return this.baseUrl + `api/Company/${id}/AddUser`;
   }
 
 
@@ -252,7 +258,22 @@ export class ApiService {
         console.log(error);
         return throwError(error);
       }));
+  }
 
+  getCompany(id): any {
+    return this.http.get(this.getCompanyUrl(id), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  addUserToCompany(owner: CompanyOwnerAddModel): any {
+    return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
   }
 
 }

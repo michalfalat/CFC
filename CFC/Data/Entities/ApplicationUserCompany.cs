@@ -14,8 +14,11 @@ namespace CFC.Data.Entities
 
         public int Id { get; set; }
         public ApplicationUser User { get; set; }
+        public virtual string UserId { get; set; }
+
         public Company Company { get; set; }
-        public decimal Precentage { get; set; }
+        public virtual int CompanyId { get; set; }
+        public decimal Percentage { get; set; }
 
     }
 }

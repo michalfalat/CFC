@@ -1,0 +1,106 @@
+<mat-card class="form-container bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-icon-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ 'company' | translate }} {{ company?.name }} </span>
+    </span>
+    <span class="spacer"></span>
+
+  </div>
+  <mat-tab-group mat-align-tabs="center" dynamicHeight>
+    <mat-tab label="{{ 'info' | translate}}">
+      <br>
+      TODO
+    </mat-tab>
+    <mat-tab label="{{ 'branches' | translate}}">
+      <br>
+      TODO
+
+    </mat-tab>
+    <mat-tab label="{{ 'owners' | translate }}" >
+      <br>
+      <div *ngIf="companyOwners !== undefined && companyOwners.data.length > 0">
+          <table mat-table [dataSource]="companyOwners" matSort class="basic-table">
+              <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="userSurname">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'surname' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.userSurname}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="percentage">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'percentage' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.percentage  }} % </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+                <td mat-cell *matCellDef="let element">
+                  <!-- <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/detail/' + element.id }}">
+                    <mat-icon>info</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}" (click)="remove(element)">
+                    <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
+                  </button> -->
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsOwners"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsOwners;" [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+            </table>
+      </div>
+      <div *ngIf="addUserFormVisible == true">
+          <form class="form " #newOwnerformRef="ngForm">
+              <mat-form-field>
+                  <mat-label>{{ 'owner' | translate }}</mat-label>
+                  <mat-select [(ngModel)]="newOwner.userId"  name="userId">
+                    <mat-option *ngFor="let user of allUsers" [value]="user.id">
+                      {{user.name}} {{user.surname }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field >
+                    <mat-label>{{ 'share-percentage' | translate }}</mat-label>
+                    <input matInput  name="percentage" [(ngModel)]="newOwner.percentage" type="number">
+                  </mat-form-field>
+                  <button mat-raised-button [disabled]=" newOwnerformRef.valid === false" color="primary"
+                  class="" (click)="saveCompanyUser()" type="submit">{{ 'add' | translate }}</button>
+                  <button mat-raised-button
+                  class="" (click)="addUserFormVisible = false" color="primary">{{ 'cancel' | translate }}</button>
+
+              <!-- <mat-form-field class="full-width">
+                <input matInput placeholder="Email" name="email" [(ngModel)]="userDetail.email" disabled>
+              </mat-form-field>
+
+              <mat-form-field class="full-width">
+                <input matInput placeholder="{{ 'surname' | translate }}" name="surname" [(ngModel)]="userDetail.surname"
+                  [disabled]="editMode === false" required minlength="3">
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input matInput placeholder="{{ 'phone' | translate}}" name="phone" [(ngModel)]="userDetail.phone"
+                  [disabled]="editMode === false">
+              </mat-form-field>
+              <button mat-raised-button [disabled]="editMode === false || userDataForm.valid === false" color="primary"
+                class="main-button" (click)="editUser()" type="submit">{{ 'save-changes' | translate }}</button> -->
+            </form>
+        </div>
+      <div *ngIf="addUserFormVisible == false">
+        <button mat-raised-button (click)="addUser()" color="primary" class="full-width">
+            <mat-icon matListIcon>add</mat-icon>
+            <span> {{ 'add-user' | translate }}</span>
+          </button>
+        </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+</mat-card>
