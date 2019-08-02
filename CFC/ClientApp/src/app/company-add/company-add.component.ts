@@ -15,10 +15,12 @@ export class CompanyAddComponent implements OnInit {
   public existingUserError: Boolean = false;
   public loadingData = false;
 
-  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService,
+  constructor(private apiService: ApiService,
+    private notifyService: NotifyService,
+    private translateService: TranslateService,
     private router: Router) {
     this.company = new CompanyAddModel();
-   }
+  }
 
   ngOnInit() {
   }

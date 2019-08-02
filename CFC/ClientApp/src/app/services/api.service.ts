@@ -72,6 +72,12 @@ export class ApiService {
   private getCompaniesUrl() {
     return this.baseUrl + 'api/Company';
   }
+  private removeCompanyUrl(id) {
+    return this.baseUrl + `api/Company/${id}`;
+  }
+  private unremoveCompanyUrl(id) {
+    return this.baseUrl + `api/Company/Unremove/${id}`;
+  }
 
 
 
@@ -221,6 +227,23 @@ export class ApiService {
         console.log(error);
         return throwError(error);
       }));
+  }
+
+  removeCompany(id: string, remove: boolean) {
+    if (remove) {
+    return this.http.delete(this.removeCompanyUrl(id), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+    } else {
+      return this.http.post(this.unremoveCompanyUrl(id), this.headers).pipe(
+        catchError(error => {
+          console.log(error);
+          return throwError(error);
+        }));
+
+    }
   }
 
   getCompanies(): any {

@@ -82,5 +82,58 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { companies = companyModels }));
         }
 
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Administrator,Owner")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            var companyModel = this._mapper.Map<CompanyDetailViewModel>(company);
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            this._companyManager.Remove(company);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpPost("Unremove/{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Unremove(int id)
+        {
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            this._companyManager.Unremove(company);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpPost("{id}/AddUser")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> AddUserToCompany(int id)
+        {
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            // TODO
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
     }
 }

@@ -7,7 +7,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from './material.module';
 import { LoginComponent } from './login/login.component';
@@ -28,6 +27,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AboutComponent } from './about/about.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { CompanyAddComponent } from './company-add/company-add.component';
+import { CompanyDetailComponent } from './company-detail/company-detail.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -37,7 +37,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
     LoginComponent,
     DefaultUserComponent,
     AddUserComponent,
@@ -52,6 +51,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AboutComponent,
     UserEditComponent,
     CompanyAddComponent,
+    CompanyDetailComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -100,6 +100,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           {
             path: 'companies',
             component: CompanyListComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'companies/detail/:id',
+            component: CompanyDetailComponent,
             pathMatch: 'full'
           },
           {
