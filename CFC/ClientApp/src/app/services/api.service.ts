@@ -84,6 +84,9 @@ export class ApiService {
   private addUserToCompanyUrl(id) {
     return this.baseUrl + `api/Company/${id}/AddUser`;
   }
+  private removeUserFromCompanyUrl(id, userId) {
+    return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
+  }
 
 
 
@@ -272,6 +275,21 @@ export class ApiService {
     return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
       catchError(error => {
         console.log(error);
+        return throwError(error);
+      }));
+  }
+  removeUserFromCompany(companyId, userId): any {
+    return this.http.delete(this.removeUserFromCompanyUrl(companyId, userId), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        if (error.status === 500) {
+          const ERROR_INT = {
+            errorLabel : {
+              value: 'INTERNAL_SERVER_ERROR'
+            }
+          };
+          error.error = ERROR_INT;
+        }
         return throwError(error);
       }));
   }

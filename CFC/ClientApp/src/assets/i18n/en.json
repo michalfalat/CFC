@@ -78,7 +78,18 @@
     "branches-count": "No. of branches",
     "owners-count": "No. of owners",
     "status": "Status",
-    "add-company": "Add company"
+    "add-company": "Add company",
+    "owner": "Owner",
+    "add-owner": "Add owner",
+    "owners": "Owners",
+    "branches": "Branches",
+    "company-share-percentag": "Company share percentage",
+    "company": "Company",
+    "confirm-remove-owner": "Are you sure to delete user from this company?",
+    "no": "No",
+    "yes": "Yes"
+
+
 
 
 }

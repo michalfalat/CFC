@@ -78,5 +78,14 @@
     "branches-count": "Počet pobočiek",
     "owners-count": "Počet vlastníkov",
     "status": "Status",
-    "add-company": "Pridať firmu"
+    "add-company": "Pridať firmu",
+    "owner": "Spoločník",
+    "add-owner": "Pridať spoločníka",
+    "owners": "Spoločníci",
+    "branches": "Pobočky",
+    "company-share-percentage": "Podiel vo firme",
+    "company": "Firma",
+    "confirm-remove-owner": "Naozaj chcete vymazať spoločníka z tejto firmy?",
+    "no": "Nie",
+    "yes": "Áno"
 }

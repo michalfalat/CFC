@@ -28,6 +28,7 @@ import { AboutComponent } from './about/about.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { CompanyAddComponent } from './company-add/company-add.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -37,6 +38,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    ConfirmDialogComponent,
     LoginComponent,
     DefaultUserComponent,
     AddUserComponent,
@@ -58,7 +60,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      { path: '', component: LoginComponent, data: { title: 'Login' } },
       { path: 'login', component: LoginComponent, data: { title: 'Login' } },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'default-user-generator', component: DefaultUserComponent },
@@ -132,6 +134,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     CookieService,
     AuthGuard
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmDialogComponent],
 })
 export class AppModule { }

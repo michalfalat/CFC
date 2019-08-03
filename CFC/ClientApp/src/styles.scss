@@ -5,7 +5,7 @@
 *:focus {outline:none !important}
 
 .spacer {
-    /* This fills the remaining space, by using flexbox. 
+    /* This fills the remaining space, by using flexbox.
        Every toolbar row uses a flexbox row layout. */
     flex: 1 1 auto;
   }
@@ -17,7 +17,7 @@
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   .full-width {
     width: 100%;
   }
@@ -36,20 +36,20 @@
     max-width: 700px;
     margin: 50px auto;
 
-  } 
+  }
 
   .form-container.big-width {
     max-width: 1000px;
     margin: 50px auto;
 
-  } 
+  }
 
   .form-container.full-width {
     max-width: 1900px;
     width: 100%;
     margin: 50px auto;
 
-  } 
+  }
 
   .main-button {
       width: 100%;
@@ -81,7 +81,7 @@ input:-webkit-autofill {
     display: flex;
   }
 
-  .mainSection {    
+  .mainSection {
     display: flex;
     flex-direction: column;
     min-height: calc(100% - 70px);
@@ -143,15 +143,15 @@ input:-webkit-autofill {
     display: none !important;
 }
 
-.showOnHover { 
+.showOnHover {
   visibility: hidden !important;
  }
-.enableHover:hover .showOnHover { 
+.enableHover:hover .showOnHover {
   visibility: visible !important;
 }
 
 
-.sidebarLogo {  
+.sidebarLogo {
   max-width: 50px;
   filter: opacity(0.75);
 }
@@ -206,4 +206,7 @@ background-color: #90909029;
 
 .blocked-row {
   background-color: #9e474754 !important;
+}
+.autocenter {
+  margin: auto;
 }

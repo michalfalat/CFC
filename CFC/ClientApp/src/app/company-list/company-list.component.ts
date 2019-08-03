@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit,  ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { NotifyService } from '../services/notify.service';
@@ -15,7 +15,7 @@ export class CompanyListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'branchesCount', 'ownersCount', 'status', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
-  constructor(private apiService: ApiService, private ref: ChangeDetectorRef,
+  constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService) { }
 
   ngOnInit() {
@@ -32,7 +32,6 @@ export class CompanyListComponent implements OnInit {
     this.apiService.getCompanies().subscribe(response => {
       this.companyList = new MatTableDataSource(response.data.companies);
       this.companyList.sort = this.sort;
-      this.ref.detectChanges();
       this.loadingData = false;
 
     }, error => {

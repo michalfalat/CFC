@@ -126,6 +126,7 @@ namespace CFC.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> AddUserToCompany(int id, [FromBody]CompanyAddUserModel model)
         {
+            //TODO check percentage overflow 
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
@@ -140,6 +141,24 @@ namespace CFC.Controllers
             userCompany.UserId = model.UserId;
             userCompany.Percentage = model.Percentage;
             this._companyManager.AddUserToCompany(userCompany, company);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpDelete("{id}/RemoveUser/{userId}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> RemoveUserFromCompany(int id, string userId)
+        {
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            var user = await this._applicationUserManager.FindById(userId);
+            if (user == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            this._companyManager.RemoveUserFromCompany(user, company);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 

@@ -14,10 +14,12 @@ import { MatButtonModule, MatCheckboxModule,  MatInputModule, MatToolbarModule, 
    MatSlideToggleModule,
    MatSidenavModule,
    MatSortModule,
-   MatSelectModule} from '@angular/material';
+   MatSelectModule,
+   MatDialogModule} from '@angular/material';
 
 @NgModule({
   imports:  [
+    MatDialogModule,
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
@@ -40,6 +42,7 @@ import { MatButtonModule, MatCheckboxModule,  MatInputModule, MatToolbarModule, 
     MatSelectModule,
   ],
   exports: [
+    MatDialogModule,
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,

@@ -33,12 +33,16 @@ namespace CFC.Data.Managers
         {
             return this._companyRepository.FindByCondition(a => a.Id == id)
                 .Include(a => a.Owners)
-                .ThenInclude(b => b.User).FirstOrDefaultAsync();
+                .ThenInclude(b => b.User)
+                .Include(a => a.Offices).FirstOrDefaultAsync();
         }
 
         public Task<List<Company>> GetAll()
         {
-            return this._companyRepository.FindAll().ToListAsync();
+            return this._companyRepository.FindAll()
+                .Include(s => s.Owners)
+                .Include(s => s.Offices)
+                .ToListAsync();
         }
 
         public void Remove(Company entity)
@@ -55,7 +59,7 @@ namespace CFC.Data.Managers
 
         public void AddUserToCompany(ApplicationUserCompany entity, Company company)
         {
-            if(company.Owners == null)
+            if (company.Owners == null)
             {
                 company.Owners = new List<ApplicationUserCompany>();
             }
@@ -63,6 +67,20 @@ namespace CFC.Data.Managers
             this._repository.ApplicationUserCompanyRepository.Save();
             company.Owners.Add(entity);
             this.Edit(company);
+        }
+
+        public void RemoveUserFromCompany(ApplicationUser user, Company company)
+        {
+            var entity = this._repository.ApplicationUserCompanyRepository.FindByCondition(a => a.CompanyId == company.Id && a.UserId == user.Id).FirstOrDefault();
+            if (entity != null)
+            {
+                //company.Owners.Remove(entity);
+                //this.Edit(company);
+                //user.Companies.Remove(entity);
+                //this._repository.ApplicationUserRepository.Save();
+                this._repository.ApplicationUserCompanyRepository.Delete(entity);
+                this._repository.ApplicationUserCompanyRepository.Save();
+            }
         }
     }
 }
