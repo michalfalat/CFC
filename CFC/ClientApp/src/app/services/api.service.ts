@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
-import { CompanyAddModel, CompanyOwnerAddModel } from '../models/company-models';
+import { CompanyAddModel, CompanyOwnerAddModel, OfficeAddModel } from '../models/company-models';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +66,7 @@ export class ApiService {
     return this.baseUrl + `api/Account/GetVerifyToken/${token}`;
   }
 
+  // COMPANY
   private addCompanyUrl() {
     return this.baseUrl + 'api/Company';
   }
@@ -81,11 +82,38 @@ export class ApiService {
   private getCompanyUrl(id) {
     return this.baseUrl + `api/Company/${id}`;
   }
+  private getCompanyPreviewUrl(id) {
+    return this.baseUrl + `api/Company/${id}/Preview`;
+  }
   private addUserToCompanyUrl(id) {
     return this.baseUrl + `api/Company/${id}/AddUser`;
   }
   private removeUserFromCompanyUrl(id, userId) {
     return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
+  }
+
+
+  // OFFICE
+  private addOfficeUrl() {
+    return this.baseUrl + 'api/Office';
+  }
+  private getOfficesUrl() {
+    return this.baseUrl + 'api/Office';
+  }
+  private removeOfficeUrl(id) {
+    return this.baseUrl + `api/Office/${id}`;
+  }
+  private unremoveOfficeUrl(id) {
+    return this.baseUrl + `api/Office/Unremove/${id}`;
+  }
+  private getOfficeUrl(id) {
+    return this.baseUrl + `api/Office/${id}`;
+  }
+  private addUserToOfficeUrl(id) {
+    return this.baseUrl + `api/Office/${id}/AddUser`;
+  }
+  private removeUserFromOfficeUrl(id, userId) {
+    return this.baseUrl + `api/Office/${id}/RemoveUser/${userId}`;
   }
 
 
@@ -99,6 +127,20 @@ export class ApiService {
    this.headers = new HttpHeaders();
    this.headers.append('Content-Type', 'application/json');
   // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
+  }
+
+  checkInternalError(error) {
+    if (error.status === 500) {
+      const ERROR_INT = {
+        errorLabel : {
+          value: 'INTERNAL_SERVER_ERROR'
+        }
+      };
+      error.error = ERROR_INT;
+      console.log(`INTERNAL ERROR: ${error}`);
+    } else {
+      return error;
+    }
   }
 
   addUser(model: AddUser): any {
@@ -271,27 +313,53 @@ export class ApiService {
       }));
   }
 
+  getCompanyPreview(id): any {
+    return this.http.get(this.getCompanyPreviewUrl(id), this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
+
   addUserToCompany(owner: CompanyOwnerAddModel): any {
     return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
       catchError(error => {
-        console.log(error);
+        error = this.checkInternalError(error);
         return throwError(error);
       }));
   }
   removeUserFromCompany(companyId, userId): any {
     return this.http.delete(this.removeUserFromCompanyUrl(companyId, userId), this.headers).pipe(
       catchError(error => {
-        console.log(error);
-        if (error.status === 500) {
-          const ERROR_INT = {
-            errorLabel : {
-              value: 'INTERNAL_SERVER_ERROR'
-            }
-          };
-          error.error = ERROR_INT;
-        }
+        error = this.checkInternalError(error);
         return throwError(error);
       }));
+  }
+
+
+  addOffice(data: OfficeAddModel) {
+    return this.http.post(this.addOfficeUrl(), data, this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
+
+  removeOfficeFromCompany(id: number, remove: boolean) {
+    if (remove) {
+    return this.http.delete(this.removeOfficeUrl(id), this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+    } else {
+      return this.http.post(this.unremoveOfficeUrl(id), this.headers).pipe(
+        catchError(error => {
+          error = this.checkInternalError(error);
+          return throwError(error);
+        }));
+
+    }
   }
 
 }

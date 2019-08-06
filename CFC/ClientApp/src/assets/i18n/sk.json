@@ -48,7 +48,7 @@
     "show-sidebar": "Zobraziť bočný panel",
     "dashboard": "Prehľad",
     "users": "Používatelia",
-    "companies": "Zoznam spoločností",
+    "companies": "Zoznam firiem",
     "cancel": "Zrušiť",
     "data-saved": "Údaje boli uložené",
     "about-system": "Informácie o systéme",
@@ -87,5 +87,12 @@
     "company": "Firma",
     "confirm-remove-owner": "Naozaj chcete vymazať spoločníka z tejto firmy?",
     "no": "Nie",
-    "yes": "Áno"
+    "yes": "Áno",
+    "description": "Popis",
+    "add-office": "Pridať pobočku",
+    "remove": "Odstrániť",
+    "company-detail": "Detail firmy",
+    "confirm-remove-office": "Naozaj chcete vymazať pobočku z tejto firmy?",
+    "no-data": "Žiadne údaje nie sú k dispozícii",
+    "block": "Zablokovať"
 }

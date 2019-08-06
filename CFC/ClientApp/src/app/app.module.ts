@@ -29,6 +29,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { CompanyAddComponent } from './company-add/company-add.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { OfficeAddComponent } from './office-add/office-add.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     UserEditComponent,
     CompanyAddComponent,
     CompanyDetailComponent,
+    OfficeAddComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -105,8 +107,13 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             pathMatch: 'full'
           },
           {
-            path: 'companies/detail/:id',
+            path: 'companies/:id',
             component: CompanyDetailComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'companies/:id/addOffice',
+            component: OfficeAddComponent,
             pathMatch: 'full'
           },
           {

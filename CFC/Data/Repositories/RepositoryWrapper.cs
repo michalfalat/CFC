@@ -9,10 +9,12 @@ namespace CFC.Data.Repositories
     {
         private ApplicationDbContext _dbContext;
         private ICompanyRepository _companyRepository;
+        private IOfficeRepository _officeRepository;
         private IApplicationUserRepository _userRepository;
         private IPasswordResetTokenRepository _passwordResetTokenRepository;
         private IVerifyTokenRepository _verifyTokenRepository;
         private IApplicationUserCompanyRepository _userCompanyRepository;
+        private IApplicationUserOfficeRepository _userOfficeRepository;
         public ICompanyRepository CompanyRepository {
             get
             {
@@ -22,6 +24,19 @@ namespace CFC.Data.Repositories
                 }
 
                 return _companyRepository;
+            }
+        }
+
+        public IOfficeRepository OfficeRepository
+        {
+            get
+            {
+                if (_officeRepository == null)
+                {
+                    _officeRepository = new OfficeRepository(_dbContext);
+                }
+
+                return _officeRepository;
             }
         }
 
@@ -48,6 +63,19 @@ namespace CFC.Data.Repositories
                 }
 
                 return _userCompanyRepository;
+            }
+        }
+
+        public IApplicationUserOfficeRepository ApplicationUserOfficeRepository
+        {
+            get
+            {
+                if (_userOfficeRepository == null)
+                {
+                    _userOfficeRepository = new ApplicationUserOfficeRepository(_dbContext);
+                }
+
+                return _userOfficeRepository;
             }
         }
 

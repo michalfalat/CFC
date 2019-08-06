@@ -8,9 +8,11 @@ namespace CFC.Data.Repositories
     public interface IRepositoryWrapper
     {
         ICompanyRepository CompanyRepository { get; }
+        IOfficeRepository OfficeRepository { get; }
 
         IApplicationUserRepository ApplicationUserRepository { get; }
         IApplicationUserCompanyRepository ApplicationUserCompanyRepository { get; }
+        IApplicationUserOfficeRepository ApplicationUserOfficeRepository { get; }
 
         IPasswordResetTokenRepository PasswordResetTokenRepository { get; }
         IVerifyTokenRepository VerifyTokenRepository { get; }

@@ -24,7 +24,7 @@ namespace CFC.Data.Entities
         public bool Obsolete { get; set; }
 
 
-        public ICollection<CompanyOffice> Offices { get; set; }
+        public ICollection<Office> Offices { get; set; }
         public ICollection<ApplicationUserCompany> Owners { get; set; }
 
 

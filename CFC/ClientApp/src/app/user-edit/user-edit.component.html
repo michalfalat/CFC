@@ -1,8 +1,8 @@
-<mat-card class="form-container bigger-width enableHover">
+<mat-card class="form-container full-width enableHover">
   <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
   <div class="flexLayout">
     <span>
-      <button mat-icon-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">
+      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
         <mat-icon>arrow_back</mat-icon>
       </button>
     </span>

@@ -87,7 +87,15 @@
     "company": "Company",
     "confirm-remove-owner": "Are you sure to delete user from this company?",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "description": "Description",
+    "add-office": "Add office",
+    "remove": "Remove",
+    "company-detail": "Company detail",
+    "confirm-remove-office": "Are you sure to delete office from this company?",
+    "no-data": "No data available",
+    "block": "Block"
+
 
 
 

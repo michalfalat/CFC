@@ -9,3 +9,10 @@ export class CompanyOwnerAddModel {
   percentage: number;
 
 }
+
+export class OfficeAddModel {
+  companyId: number;
+  name: string;
+  description: string;
+
+}

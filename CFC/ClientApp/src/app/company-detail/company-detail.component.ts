@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserDetail } from '../models/user-models';
 import { CompanyOwnerAddModel } from '../models/company-models';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -15,19 +15,24 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   styleUrls: ['./company-detail.component.scss'],
 })
 export class CompanyDetailComponent implements OnInit {
+  public selectedTab = 0;
   public companyId;
   public company;
   public companyOwners;
+  public companyOffices;
   public loadingData = false;
   public addUserFormVisible = false;
+  public editMode = false;
 
   public newOwner: CompanyOwnerAddModel;
   public allUsers: UserDetail[] = [];
 
   public maxNewOwnerPercentage = 100;
 
-  public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'percentage',  'actions'];
-  @ViewChild(MatSort, {read: false}) sort: MatSort;
+  public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'percentage', 'actions'];
+  public displayedColumnsOffices: string[] = ['name', 'description', 'registrationDate', 'ownersCount', 'actions'];
+  @ViewChild(MatSort, { read: false }) sortOwners: MatSort;
+  @ViewChild(MatSort, { read: false }) sortOffices: MatSort;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
@@ -38,14 +43,25 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sortOwners = new MatSort();
+    this.sortOffices = new MatSort();
     this.companyId = this.route.snapshot.params.id;
+    const tab = this.route.snapshot.params.tab;
+    const tabOptions = {
+      info: 0,
+      offices: 1,
+      owners: 2,
+    };
+    if (tab !== null) {
+      this.selectedTab = tabOptions[tab];
+    }
+    console.log(tab);
     if (this.companyId == null) {
       this.goBack();
     }
     this.newOwner = new CompanyOwnerAddModel();
     this.newOwner.percentage = this.maxNewOwnerPercentage;
     this.loadCompany();
-    this.loadUsers();
   }
 
   goBack() {
@@ -57,8 +73,12 @@ export class CompanyDetailComponent implements OnInit {
       console.log(response);
       this.company = response.data.company;
       this.companyOwners = new MatTableDataSource(response.data.company.owners);
-      this.companyOwners.sort = this.sort;
-      console.log(this.companyOwners);
+      this.companyOwners.sort = this.sortOwners;
+
+
+      this.companyOffices = new MatTableDataSource(response.data.company.offices);
+      this.companyOffices.sort = this.sortOffices;
+      this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
 
@@ -70,8 +90,7 @@ export class CompanyDetailComponent implements OnInit {
   }
   loadUsers() {
     this.apiService.getUserList().subscribe(response => {
-      console.log(response);
-      this.allUsers = response.data;
+      this.allUsers = response.data.filter(u => u.role === 'Owner' && this.company.owners.map(c => c.userId).includes(u.id) === false);
       this.loadingData = false;
 
     }, error => {
@@ -85,9 +104,26 @@ export class CompanyDetailComponent implements OnInit {
     this.addUserFormVisible = true;
   }
 
+  addOffice() {
+    this.router.navigate([`/admin/companies/${ this.companyId }/addOffice`]);
+  }
+
   removeCompanyUser(userId) {
     this.loadingData = true;
     this.apiService.removeUserFromCompany(this.companyId, userId).subscribe(response => {
+      console.log(response);
+      this.loadingData = false;
+      this.loadCompany();
+    }, error => {
+      console.log(error);
+      this.loadingData = false;
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+    });
+  }
+  removeCompanyOffice(element) {
+    this.loadingData = true;
+    const remove = element.obsolete === true ? false : true;
+    this.apiService.removeOfficeFromCompany(element.id, remove).subscribe(response => {
       console.log(response);
       this.loadingData = false;
       this.loadCompany();
@@ -103,8 +139,8 @@ export class CompanyDetailComponent implements OnInit {
     this.company.owners.forEach(owner => {
       totalPercentageSum += owner.percentage;
     });
-  this.maxNewOwnerPercentage = 100 - totalPercentageSum;
-  this.newOwner.percentage = this.maxNewOwnerPercentage;
+    this.maxNewOwnerPercentage = 100 - totalPercentageSum;
+    this.newOwner.percentage = this.maxNewOwnerPercentage;
   }
 
   saveCompanyUser() {
@@ -130,12 +166,29 @@ export class CompanyDetailComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
       if (result === true) {
         this.removeCompanyUser(userId);
       }
     });
+  }
+  openRemoveOfficeDialog(office): void {
+    if (office.obsolete) {
+      this.removeCompanyOffice(office);
+    } else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: this.translateService.instant('confirm-remove-office')
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.removeCompanyOffice(office);
+        }
+      });
+    }
+  }
+
+  toogleEditMode() {
+    this.editMode = !this.editMode;
   }
 
 

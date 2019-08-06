@@ -1,0 +1,27 @@
+<mat-card class="form-container  bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
+        <mat-icon>arrow_back</mat-icon>
+        {{ companyName }}
+      </button>
+    </span>
+    <span>
+      <span class="header"> / {{ 'add-office' | translate }} </span>
+    </span>
+    <span class="spacer"></span>
+
+  </div>
+  <form class="form" #formRef="ngForm">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'name2' | translate}}" value="" name="name" [(ngModel)]="office.name" required minlength="5">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+        <input matInput placeholder="{{'description' | translate }}" value="" name="description" [(ngModel)]="office.description" >
+      </mat-form-field>
+    <button mat-raised-button color="primary" class="main-button" (click)="add()"
+      [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+  </form>
+
+</mat-card>

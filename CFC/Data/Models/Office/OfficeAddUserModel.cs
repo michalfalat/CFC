@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CFC.Data.Models
 {
-    public class CompanyUserViewModel
+    public class OfficeAddUserModel
     {
-        public int Id { get; set; }
+        [Required]
         public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string UserSurname { get; set; }
-        public int CompanyId { get; set; }
+        [Required]
+        public int OfficeId { get; set; }
+        [Required]
         public decimal Percentage { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace CFC.Data.Profiles
             CreateMap<UserExtendedDetailModel, ApplicationUser>();
 
             CreateMap<CompanyAddModel, Company>();
+            CreateMap<Company, CompanyPreviewModel>();
             CreateMap<Company, CompanyViewModel>()
                 .ForMember(d => d.BranchesCount, s => s.MapFrom(source => source.Offices.Count))
                 .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count));
@@ -25,6 +26,13 @@ namespace CFC.Data.Profiles
             CreateMap<ApplicationUserCompany, CompanyUserViewModel>()
                 .ForMember(d => d.UserName, s => s.MapFrom(source => source.User.Name))
                 .ForMember(d => d.UserSurname, s => s.MapFrom(source => source.User.Surname));
+
+
+
+            CreateMap<OfficeAddModel, Office>();
+            CreateMap<Office, OfficeDetailViewModel>();
+            CreateMap<Office, OfficeViewModel>()
+                .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count));
         }
     }
 }

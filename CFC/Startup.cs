@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -52,12 +53,14 @@ namespace CFC
             // REPOSITORIES
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IOfficeRepository, OfficeRepository>();
 
 
 
             // MANAGERS
             services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
             services.AddScoped<ICompanyManager, CompanyManager>();
+            services.AddScoped<IOfficeManager, OfficeManager>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton(Configuration);
 
@@ -107,7 +110,11 @@ namespace CFC
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
