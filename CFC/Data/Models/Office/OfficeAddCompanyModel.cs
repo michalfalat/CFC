@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Models
 {
-    public class OfficeAddUserModel
+    public class OfficeAddCompanyModel
     {
         [Required]
-        public string UserId { get; set; }
+        public int CompanyId { get; set; }
         [Required]
         public int OfficeId { get; set; }
         [Required]

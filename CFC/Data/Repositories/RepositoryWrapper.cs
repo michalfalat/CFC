@@ -14,7 +14,7 @@ namespace CFC.Data.Repositories
         private IPasswordResetTokenRepository _passwordResetTokenRepository;
         private IVerifyTokenRepository _verifyTokenRepository;
         private IApplicationUserCompanyRepository _userCompanyRepository;
-        private IApplicationUserOfficeRepository _userOfficeRepository;
+        private ICompanyOfficeRepository _companyOfficeRepository;
         public ICompanyRepository CompanyRepository {
             get
             {
@@ -66,16 +66,16 @@ namespace CFC.Data.Repositories
             }
         }
 
-        public IApplicationUserOfficeRepository ApplicationUserOfficeRepository
+        public ICompanyOfficeRepository CompanyOfficeRepository
         {
             get
             {
-                if (_userOfficeRepository == null)
+                if (_companyOfficeRepository == null)
                 {
-                    _userOfficeRepository = new ApplicationUserOfficeRepository(_dbContext);
+                    _companyOfficeRepository = new CompanyOfficeRepository(_dbContext);
                 }
 
-                return _userOfficeRepository;
+                return _companyOfficeRepository;
             }
         }
 

@@ -15,9 +15,7 @@ namespace CFC.Data.Models
 
         public OfficeStatus Status { get; set; }
         public bool Obsolete { get; set; }
-        public int CompanyId { get; set; }
-        public string CompanyName { get; set; }
 
-        public int OwnersCount { get; set; }
+        public int CompaniesCount { get; set; }
     }
 }

@@ -19,10 +19,8 @@ namespace CFC.Data.Entities
         public bool Obsolete { get; set; }
         public DateTimeOffset RegistrationDate { get; set; }
         public OfficeStatus Status { get; set; }
-        public Company Company { get; set; }
-        public virtual int CompanyId { get; set; }
 
-        public ICollection<ApplicationUserOffice> Owners { get; set; }
+        public ICollection<CompanyOffice> Companies { get; set; }
 
 
     }

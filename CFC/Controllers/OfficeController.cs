@@ -65,11 +65,7 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
-            var company = await this._companyManager.FindById(model.CompanyId);
-            if (company == null)
-            {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
-            }
+           
             var office = this._mapper.Map<OfficeAddModel, Office>(model);
             office.Obsolete = false;
             office.RegistrationDate = DateTimeOffset.UtcNow;
@@ -130,9 +126,9 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
-        [HttpPost("{id}/AddUser")]
+        [HttpPost("{id}/AddCompany")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> AddUserToOffice(int id, [FromBody]OfficeAddUserModel model)
+        public async Task<IActionResult> AddCompanyToOffice(int id, [FromBody]OfficeAddCompanyModel model)
         {
             //TODO check percentage overflow 
             if (!ModelState.IsValid)
@@ -144,45 +140,43 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            var userOffice = new ApplicationUserOffice();
-            userOffice.OfficeId = model.OfficeId;
-            userOffice.UserId = model.UserId;
-            userOffice.Percentage = model.Percentage;
-            this._officeManager.AddUserToOffice(userOffice, office);
+
+            var userOffice = this._mapper.Map<CompanyOffice>(model);
+            this._officeManager.AddCompanyToOffice(userOffice, office);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
-        [HttpDelete("{id}/RemoveUser/{userId}")]
+        [HttpDelete("{id}/RemoveCompany/{companyId}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> RemoveUserFromOffice(int id, string userId)
+        public async Task<IActionResult> RemoveCompanyFromOffice(int id, int companyId)
         {
             var office = await this._officeManager.FindById(id);
             if (office == null)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            var user = await this._applicationUserManager.FindById(userId);
-            if (user == null)
+            var company = await this._companyManager.FindById(companyId);
+            if (company == null)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            this._officeManager.RemoveUserFromOffice(user, office);
+            this._officeManager.RemoveCompanyFromOffice(company, office);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
-        [HttpGet("{id}/Users")]
+        [HttpGet("{id}/Companies")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetOfficeUsers(int id)
+        public async Task<IActionResult> GetOfficeCompanies(int id)
         {
             var office = await this._officeManager.FindById(id);
             if (office == null)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            var officeOwners = office.Owners.ToList();
+            var companyOffices = office.Companies.ToList();
 
-            var officeyOwnersModel = this._mapper.Map<List<OfficeDetailViewModel>>(officeOwners);
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { owners = officeyOwnersModel }));
+            var companyOfficesModel = this._mapper.Map<List<OfficeDetailViewModel>>(companyOffices);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { companies = companyOfficesModel }));
         }
 
     }

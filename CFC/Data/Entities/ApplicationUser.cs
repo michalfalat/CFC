@@ -19,7 +19,6 @@ namespace CFC.Data.Entities
         public bool Obsolete { get; set; }
 
         public ICollection<ApplicationUserCompany> Companies { get; set; }
-        public ICollection<ApplicationUserOffice> Offices { get; set; }
 
 
     }

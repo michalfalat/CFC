@@ -30,6 +30,8 @@ import { CompanyAddComponent } from './company-add/company-add.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { OfficeAddComponent } from './office-add/office-add.component';
+import { OfficeDetailComponent } from './office-detail/office-detail.component';
+import { OfficeListComponent } from './office-list/office-list.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -56,6 +58,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     CompanyAddComponent,
     CompanyDetailComponent,
     OfficeAddComponent,
+    OfficeDetailComponent,
+    OfficeListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -107,20 +111,31 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             pathMatch: 'full'
           },
           {
+            path: 'companies/add',
+            component: CompanyAddComponent,
+            pathMatch: 'full'
+          },
+          {
             path: 'companies/:id',
             component: CompanyDetailComponent,
             pathMatch: 'full'
           },
           {
-            path: 'companies/:id/addOffice',
+            path: 'offices',
+            component: OfficeListComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'offices/add',
             component: OfficeAddComponent,
             pathMatch: 'full'
           },
           {
-            path: 'companies/add',
-            component: CompanyAddComponent,
+            path: 'offices/:id',
+            component: OfficeDetailComponent,
             pathMatch: 'full'
           },
+
           // <-- The rest of your admin routes
         ]
       }

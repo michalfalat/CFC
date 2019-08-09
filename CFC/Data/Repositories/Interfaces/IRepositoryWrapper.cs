@@ -12,7 +12,7 @@ namespace CFC.Data.Repositories
 
         IApplicationUserRepository ApplicationUserRepository { get; }
         IApplicationUserCompanyRepository ApplicationUserCompanyRepository { get; }
-        IApplicationUserOfficeRepository ApplicationUserOfficeRepository { get; }
+        ICompanyOfficeRepository CompanyOfficeRepository { get; }
 
         IPasswordResetTokenRepository PasswordResetTokenRepository { get; }
         IVerifyTokenRepository VerifyTokenRepository { get; }

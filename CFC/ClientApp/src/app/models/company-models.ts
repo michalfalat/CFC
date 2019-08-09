@@ -11,7 +11,6 @@ export class CompanyOwnerAddModel {
 }
 
 export class OfficeAddModel {
-  companyId: number;
   name: string;
   description: string;
 

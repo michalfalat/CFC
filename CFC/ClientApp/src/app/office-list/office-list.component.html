@@ -1,0 +1,69 @@
+<mat-card class="form-container  full-width">
+  <div class="flexLayout">
+    <span>
+      <h3>{{ 'offices' | translate }}</h3>
+    </span>
+    <span class="spacer"></span>
+    <span class="actionButtons">
+      <span>
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
+      </span>
+      <span>
+        <button mat-raised-button routerLink="/admin/offices/add" color="primary">
+          <mat-icon matListIcon>add</mat-icon>
+          <span> {{ 'add-office' | translate }}</span>
+        </button>
+      </span>
+    </span>
+  </div>
+  <br>
+  <div>
+    <table mat-table [dataSource]="officeList" matSort class="basic-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name2' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'description' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="registrationDate">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'registration-date' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.registrationDate | date: 'dd/MM/yyyy' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="companiesCount">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'companies-count' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.companiesCount}} </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+          <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'status' | translate }} </th>
+          <td mat-cell *matCellDef="let element"> {{element.status }} </td>
+        </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button matTooltip="{{ 'office-detail' | translate }}"  routerLink="{{'/admin/offices/' + element.id }}">
+            <mat-icon>info</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}" (click)="remove(element)">
+            <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+    </table>
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+    <router-outlet></router-outlet>
+  </div>
+
+
+</mat-card>

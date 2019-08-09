@@ -8,7 +8,7 @@ namespace CFC.Data.Managers
 {
     public interface IOfficeManager : IManager<Office>
     {
-        void AddUserToOffice(ApplicationUserOffice entity, Office office);
-        void RemoveUserFromOffice(ApplicationUser user, Office office);
+        void AddCompanyToOffice(CompanyOffice entity, Office office);
+        void RemoveCompanyFromOffice(Company company, Office office);
     }
 }

@@ -14,7 +14,6 @@ namespace CFC.Data.Models
         public DateTimeOffset RegistrationDate { get; set; }
         public OfficeStatus Status { get; set; }
         public bool Obsolete { get; set; }
-        public CompanyDetailViewModel Company { get; set; }
-        public ICollection<OfficeUserViewModel> Owners { get; set; }
+        public ICollection<OfficeCompanyViewModel> Companies { get; set; }
     }
 }

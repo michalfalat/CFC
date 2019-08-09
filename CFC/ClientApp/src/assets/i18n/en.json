@@ -94,7 +94,9 @@
     "company-detail": "Company detail",
     "confirm-remove-office": "Are you sure to delete office from this company?",
     "no-data": "No data available",
-    "block": "Block"
+    "block": "Block",
+    "offices": "Offices",
+    "companies-count": "No. of companies"
 
 
 

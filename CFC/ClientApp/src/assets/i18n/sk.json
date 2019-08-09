@@ -94,5 +94,7 @@
     "company-detail": "Detail firmy",
     "confirm-remove-office": "Naozaj chcete vymazať pobočku z tejto firmy?",
     "no-data": "Žiadne údaje nie sú k dispozícii",
-    "block": "Zablokovať"
+    "block": "Zablokovať",
+    "offices": "Pobočky",
+    "companies-count": "Počet firiem"
 }

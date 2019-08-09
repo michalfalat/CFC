@@ -29,10 +29,11 @@ namespace CFC.Data.Profiles
 
 
 
+            CreateMap<OfficeAddCompanyModel, CompanyOffice>();
             CreateMap<OfficeAddModel, Office>();
             CreateMap<Office, OfficeDetailViewModel>();
             CreateMap<Office, OfficeViewModel>()
-                .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count));
+                .ForMember(d => d.CompaniesCount, s => s.MapFrom(source => source.Companies.Count));
         }
     }
 }

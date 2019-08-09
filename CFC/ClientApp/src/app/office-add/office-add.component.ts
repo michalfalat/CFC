@@ -15,7 +15,6 @@ export class OfficeAddComponent implements OnInit {
 
   public companyId;
   public companyName;
-  public existingUserError: Boolean = false;
   public loadingData = false;
 
   constructor(private apiService: ApiService,
@@ -25,28 +24,25 @@ export class OfficeAddComponent implements OnInit {
     private route: ActivatedRoute) {
     this.office = new OfficeAddModel();
 
-    this.companyId = this.route.snapshot.params.id;
-    this.office.companyId = this.companyId;
-    this.apiService.getCompanyPreview(this.companyId).subscribe(response => {
-      this.loadingData = false;
-      this.companyName = response.data.company.name;
+    // this.apiService.getCompanyPreview(this.companyId).subscribe(response => {
+    //   this.loadingData = false;
+    //   this.companyName = response.data.company.name;
 
-    }, error => {
-      this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      this.goBack();
-    });
+    // }, error => {
+    //   this.loadingData = false;
+    //   console.log(error);
+    //   this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+    //   this.goBack();
+    // });
   }
 
   ngOnInit() {
   }
   goBack() {
-    this.router.navigate([`/admin/companies/${this.companyId}`]);
+    this.router.navigate([`/admin/offices`]);
   }
   add() {
     this.loadingData = true;
-    this.existingUserError = false;
     this.apiService.addOffice(this.office).subscribe(response => {
       this.loadingData = false;
       this.notifyService.info(this.translateService.instant('data-saved'));

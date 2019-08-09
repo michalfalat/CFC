@@ -32,16 +32,14 @@ namespace CFC.Data.Managers
         public Task<Office> FindById(int id)
         {
             return this._officeRepository.FindByCondition(a => a.Id == id)
-                .Include(a => a.Owners)
-                .ThenInclude(b => b.User)
-                .Include(a => a.Company).FirstOrDefaultAsync();
+                .Include(a => a.Companies)
+                .FirstOrDefaultAsync();
         }
 
         public Task<List<Office>> GetAll()
         {
             return this._officeRepository.FindAll()
-                .Include(s => s.Owners)
-                .Include(s => s.Company)
+                .Include(s => s.Companies)
                 .ToListAsync();
         }
 
@@ -57,30 +55,57 @@ namespace CFC.Data.Managers
             this.Edit(entity);
         }
 
-        public void AddUserToOffice(ApplicationUserOffice entity, Office office)
+        public void AddCompanyToOffice(CompanyOffice entity, Office office)
         {
-            if (office.Owners == null)
+            if (office.Companies == null)
             {
-                office.Owners = new List<ApplicationUserOffice>();
+                office.Companies = new List<CompanyOffice>();
             }
-            this._repository.ApplicationUserOfficeRepository.Create(entity);
-            this._repository.ApplicationUserOfficeRepository.Save();
-            office.Owners.Add(entity);
+            this._repository.CompanyOfficeRepository.Create(entity);
+            this._repository.CompanyOfficeRepository.Save();
+            office.Companies.Add(entity);
             this.Edit(office);
         }
 
-        public void RemoveUserFromOffice(ApplicationUser user, Office office)
+        public void RemoveCompanyFromOffice(Company company, Office office)
         {
-            var entity = this._repository.ApplicationUserOfficeRepository.FindByCondition(a => a.OfficeId == office.Id && a.UserId == user.Id).FirstOrDefault();
+            var entity = this._repository.CompanyOfficeRepository.FindByCondition(a => a.OfficeId == office.Id && a.CompanyId == company.Id).FirstOrDefault();
             if (entity != null)
             {
-                //office.Owners.Remove(entity);
-                //this.Edit(office);
-                //user.Companies.Remove(entity);
-                //this._repository.ApplicationUserRepository.Save();
-                this._repository.ApplicationUserOfficeRepository.Delete(entity);
-                this._repository.ApplicationUserOfficeRepository.Save();
+                office.Companies.Remove(entity);
+                this.Edit(office);
+                company.Offices.Remove(entity);
+                this._repository.CompanyRepository.Save();
+                this._repository.CompanyOfficeRepository.Delete(entity);
+                this._repository.CompanyOfficeRepository.Save();
             }
         }
+
+
+        //public void AddUserToOffice(ApplicationUserOffice entity, Office office)
+        //{
+        //    if (office.Owners == null)
+        //    {
+        //        office.Owners = new List<ApplicationUserOffice>();
+        //    }
+        //    this._repository.ApplicationUserOfficeRepository.Create(entity);
+        //    this._repository.ApplicationUserOfficeRepository.Save();
+        //    office.Owners.Add(entity);
+        //    this.Edit(office);
+        //}
+
+        //public void RemoveUserFromOffice(ApplicationUser user, Office office)
+        //{
+        //    var entity = this._repository.ApplicationUserOfficeRepository.FindByCondition(a => a.OfficeId == office.Id && a.UserId == user.Id).FirstOrDefault();
+        //    if (entity != null)
+        //    {
+        //        //office.Owners.Remove(entity);
+        //        //this.Edit(office);
+        //        //user.Companies.Remove(entity);
+        //        //this._repository.ApplicationUserRepository.Save();
+        //        this._repository.ApplicationUserOfficeRepository.Delete(entity);
+        //        this._repository.ApplicationUserOfficeRepository.Save();
+        //    }
+        //}
     }
 }

@@ -21,6 +21,10 @@
             <mat-icon matListIcon>dashboard</mat-icon>
             <span> {{ 'companies' | translate }}</span>
           </button>
+          <button mat-list-item routerLink="/admin/offices" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>place</mat-icon>
+            <span> {{ 'offices' | translate }}</span>
+          </button>
 
         </div>
         <div *ngIf="authService.isEnabledFor('Owner')">

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Repositories
 {
-    public interface IApplicationUserOfficeRepository : IRepository<ApplicationUserOffice>
+    public interface ICompanyOfficeRepository : IRepository<CompanyOffice>
     {
     }
 }

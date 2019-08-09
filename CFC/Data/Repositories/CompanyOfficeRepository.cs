@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CFC.Data.Repositories
 {
-    public class ApplicationUserOfficeRepository : Repository<ApplicationUserOffice>, IApplicationUserOfficeRepository
+    public class CompanyOfficeRepository : Repository<CompanyOffice>, ICompanyOfficeRepository
     {
-        public ApplicationUserOfficeRepository(ApplicationDbContext repositoryContext)
+        public CompanyOfficeRepository(ApplicationDbContext repositoryContext)
             : base(repositoryContext)
         {
         }

@@ -109,11 +109,11 @@ export class ApiService {
   private getOfficeUrl(id) {
     return this.baseUrl + `api/Office/${id}`;
   }
-  private addUserToOfficeUrl(id) {
-    return this.baseUrl + `api/Office/${id}/AddUser`;
+  private addCompanyToOfficeUrl(id) {
+    return this.baseUrl + `api/Office/${id}/AddCompany`;
   }
-  private removeUserFromOfficeUrl(id, userId) {
-    return this.baseUrl + `api/Office/${id}/RemoveUser/${userId}`;
+  private removeCompanyFromOfficeUrl(id, companyId) {
+    return this.baseUrl + `api/Office/${id}/RemoveCompany/${companyId}`;
   }
 
 
@@ -356,6 +356,32 @@ export class ApiService {
       return this.http.post(this.unremoveOfficeUrl(id), this.headers).pipe(
         catchError(error => {
           error = this.checkInternalError(error);
+          return throwError(error);
+        }));
+
+    }
+  }
+
+
+  getOffices(): any {
+    return this.http.get(this.getOfficesUrl(), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  removeOffice(id: string, remove: boolean) {
+    if (remove) {
+    return this.http.delete(this.removeOfficeUrl(id), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+    } else {
+      return this.http.post(this.unremoveOfficeUrl(id), this.headers).pipe(
+        catchError(error => {
+          console.log(error);
           return throwError(error);
         }));
 

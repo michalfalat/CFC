@@ -9,8 +9,6 @@ namespace CFC.Data.Models
     public class OfficeAddModel
     {
         [Required]
-        public int CompanyId { get; set; }
-        [Required]
         [MinLength(5)]
         public string Name { get; set; }
         public string Description { get; set; }
