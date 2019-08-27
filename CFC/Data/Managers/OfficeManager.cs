@@ -32,7 +32,7 @@ namespace CFC.Data.Managers
         public Task<Office> FindById(int id)
         {
             return this._officeRepository.FindByCondition(a => a.Id == id)
-                .Include(a => a.Companies)
+                .Include(a => a.Companies).ThenInclude(b => b.Company)
                 .FirstOrDefaultAsync();
         }
 

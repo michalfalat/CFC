@@ -28,6 +28,13 @@ namespace CFC.Data.Profiles
                 .ForMember(d => d.UserSurname, s => s.MapFrom(source => source.User.Surname));
 
 
+            CreateMap<CompanyOffice, OfficeCompanyViewModel>()
+                .ForMember(d => d.OfficeId, s => s.MapFrom(source => source.Office.Id))
+                .ForMember(d => d.CompanyId, s => s.MapFrom(source => source.Company.Id))
+                .ForMember(d => d.CompanyName, s => s.MapFrom(source => source.Company.Name))
+                .ForMember(d => d.CompanyIdentificationNumber, s => s.MapFrom(source => source.Company.IdentificationNumber));
+
+
 
             CreateMap<OfficeAddCompanyModel, CompanyOffice>();
             CreateMap<OfficeAddModel, Office>();

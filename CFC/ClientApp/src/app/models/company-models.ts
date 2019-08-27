@@ -3,8 +3,8 @@ export class CompanyAddModel {
   identificationNumber: string;
 }
 
-export class CompanyOwnerAddModel {
-  userId: string;
+export class CompanyOfficeAddModel {
+  officeId: string;
   companyId: number;
   percentage: number;
 

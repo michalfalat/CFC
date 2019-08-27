@@ -4,7 +4,6 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserDetail } from '../models/user-models';
-import { CompanyOwnerAddModel } from '../models/company-models';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -24,7 +23,6 @@ export class CompanyDetailComponent implements OnInit {
   public addUserFormVisible = false;
   public editMode = false;
 
-  public newOwner: CompanyOwnerAddModel;
   public allUsers: UserDetail[] = [];
 
   public maxNewOwnerPercentage = 100;
@@ -59,8 +57,8 @@ export class CompanyDetailComponent implements OnInit {
     if (this.companyId == null) {
       this.goBack();
     }
-    this.newOwner = new CompanyOwnerAddModel();
-    this.newOwner.percentage = this.maxNewOwnerPercentage;
+    // this.newOwner = new CompanyOwnerAddModel();
+    // this.newOwner.percentage = this.maxNewOwnerPercentage;
     this.loadCompany();
   }
 
@@ -120,19 +118,19 @@ export class CompanyDetailComponent implements OnInit {
       this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
     });
   }
-  removeCompanyOffice(element) {
-    this.loadingData = true;
-    const remove = element.obsolete === true ? false : true;
-    this.apiService.removeOfficeFromCompany(element.id, remove).subscribe(response => {
-      console.log(response);
-      this.loadingData = false;
-      this.loadCompany();
-    }, error => {
-      console.log(error);
-      this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-    });
-  }
+  // removeCompanyOffice(element) {
+  //   this.loadingData = true;
+  //   const remove = element.obsolete === true ? false : true;
+  //   this.apiService.removeOfficeFromCompany(element.id, remove).subscribe(response => {
+  //     console.log(response);
+  //     this.loadingData = false;
+  //     this.loadCompany();
+  //   }, error => {
+  //     console.log(error);
+  //     this.loadingData = false;
+  //     this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+  //   });
+  // }
 
   calculateMaxPercentageForOwner() {
     let totalPercentageSum = 0;
@@ -140,25 +138,25 @@ export class CompanyDetailComponent implements OnInit {
       totalPercentageSum += owner.percentage;
     });
     this.maxNewOwnerPercentage = 100 - totalPercentageSum;
-    this.newOwner.percentage = this.maxNewOwnerPercentage;
+    // this.newOwner.percentage = this.maxNewOwnerPercentage;
   }
 
-  saveCompanyUser() {
-    this.loadingData = true;
-    this.newOwner.companyId = this.companyId;
-    this.apiService.addUserToCompany(this.newOwner).subscribe(response => {
-      console.log(response);
-      this.loadingData = false;
-      this.newOwner = new CompanyOwnerAddModel();
-      this.loadCompany();
-      this.addUserFormVisible = false;
-    }, error => {
-      console.log(error);
-      this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-    });
+  // saveCompanyUser() {
+  //   this.loadingData = true;
+  //   this.newOwner.companyId = this.companyId;
+  //   this.apiService.addUserToCompany(this.newOwner).subscribe(response => {
+  //     console.log(response);
+  //     this.loadingData = false;
+  //     this.newOwner = new CompanyOwnerAddModel();
+  //     this.loadCompany();
+  //     this.addUserFormVisible = false;
+  //   }, error => {
+  //     console.log(error);
+  //     this.loadingData = false;
+  //     this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+  //   });
 
-  }
+  // }
 
   openRemoveUserDialog(userId): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -171,21 +169,21 @@ export class CompanyDetailComponent implements OnInit {
       }
     });
   }
-  openRemoveOfficeDialog(office): void {
-    if (office.obsolete) {
-      this.removeCompanyOffice(office);
-    } else {
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: this.translateService.instant('confirm-remove-office')
-      });
+  // openRemoveOfficeDialog(office): void {
+  //   if (office.obsolete) {
+  //     this.removeCompanyOffice(office);
+  //   } else {
+  //     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //       data: this.translateService.instant('confirm-remove-office')
+  //     });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          this.removeCompanyOffice(office);
-        }
-      });
-    }
-  }
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       if (result === true) {
+  //         this.removeCompanyOffice(office);
+  //       }
+  //     });
+  //   }
+  // }
 
   toogleEditMode() {
     this.editMode = !this.editMode;

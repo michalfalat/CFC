@@ -4,12 +4,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
-import { CompanyAddModel, CompanyOwnerAddModel, OfficeAddModel } from '../models/company-models';
+import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel } from '../models/company-models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private headers;
 
   private addUserUrl() {
     return this.baseUrl + 'api/Account/AddUser';
@@ -85,9 +86,6 @@ export class ApiService {
   private getCompanyPreviewUrl(id) {
     return this.baseUrl + `api/Company/${id}/Preview`;
   }
-  private addUserToCompanyUrl(id) {
-    return this.baseUrl + `api/Company/${id}/AddUser`;
-  }
   private removeUserFromCompanyUrl(id, userId) {
     return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
   }
@@ -109,9 +107,10 @@ export class ApiService {
   private getOfficeUrl(id) {
     return this.baseUrl + `api/Office/${id}`;
   }
-  private addCompanyToOfficeUrl(id) {
+  private addOfficeToCompanyUrl(id) {
     return this.baseUrl + `api/Office/${id}/AddCompany`;
   }
+
   private removeCompanyFromOfficeUrl(id, companyId) {
     return this.baseUrl + `api/Office/${id}/RemoveCompany/${companyId}`;
   }
@@ -119,7 +118,6 @@ export class ApiService {
 
 
 
-  private headers;
 
   constructor(private http: HttpClient,
     private authService: AuthService,
@@ -321,13 +319,13 @@ export class ApiService {
       }));
   }
 
-  addUserToCompany(owner: CompanyOwnerAddModel): any {
-    return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
-      catchError(error => {
-        error = this.checkInternalError(error);
-        return throwError(error);
-      }));
-  }
+  // addUserToCompany(company: CompanyOfficeAddModel): any {
+  //   return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+  //     catchError(error => {
+  //       error = this.checkInternalError(error);
+  //       return throwError(error);
+  //     }));
+  // }
   removeUserFromCompany(companyId, userId): any {
     return this.http.delete(this.removeUserFromCompanyUrl(companyId, userId), this.headers).pipe(
       catchError(error => {
@@ -345,26 +343,33 @@ export class ApiService {
       }));
   }
 
-  removeOfficeFromCompany(id: number, remove: boolean) {
-    if (remove) {
-    return this.http.delete(this.removeOfficeUrl(id), this.headers).pipe(
+  addCompanyToOffice(company: CompanyOfficeAddModel): any {
+    return this.http.post(this.addOfficeToCompanyUrl(company.officeId), company,  this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
       }));
-    } else {
-      return this.http.post(this.unremoveOfficeUrl(id), this.headers).pipe(
-        catchError(error => {
-          error = this.checkInternalError(error);
-          return throwError(error);
-        }));
+  }
 
-    }
+  removeOfficeFromCompany(officeId: number, companyId: boolean) {
+    return this.http.delete(this.removeCompanyFromOfficeUrl(officeId, companyId), this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
   }
 
 
   getOffices(): any {
     return this.http.get(this.getOfficesUrl(), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  getOffice(id: number): any {
+    return this.http.get(this.getOfficeUrl(id), this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);
