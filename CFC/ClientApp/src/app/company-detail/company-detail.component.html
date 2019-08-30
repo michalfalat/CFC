@@ -54,22 +54,18 @@
         <table mat-table [dataSource]="companyOffices" matSort class="basic-table">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name2' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'description' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-          </ng-container>
 
-          <ng-container matColumnDef="registrationDate">
+          <!-- <ng-container matColumnDef="registrationDate">
             <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'registration-date' | translate }} </th>
             <td mat-cell *matCellDef="let element"> {{element.registrationDate | date: 'dd/MM/yyyy' }} </td>
-          </ng-container>
+          </ng-container> -->
 
-          <ng-container matColumnDef="ownersCount">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'owners-count' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.owners.length }} </td>
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'percentage' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.percentage }} % </td>
           </ng-container>
 
 

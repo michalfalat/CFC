@@ -12,6 +12,8 @@ namespace CFC.Data.Models
         public string CompanyName { get; set; }
         public string CompanyIdentificationNumber { get; set; }
         public int OfficeId { get; set; }
+        public string OfficeName { get; set; }
+        //public DateTime RegistrationDate { get; set; }
         public decimal Percentage { get; set; }
     }
 }

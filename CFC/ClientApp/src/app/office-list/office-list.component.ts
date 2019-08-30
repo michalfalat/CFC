@@ -3,6 +3,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { OfficeStatus } from '../models/enums';
 
 @Component({
   selector: 'app-office-list',
@@ -13,6 +14,7 @@ export class OfficeListComponent implements OnInit {
 
   public loadingData = false;
   public officeList;
+  public OfficeStatus = OfficeStatus;
   public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'companiesCount', 'status', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 

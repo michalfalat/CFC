@@ -32,6 +32,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { OfficeAddComponent } from './office-add/office-add.component';
 import { OfficeDetailComponent } from './office-detail/office-detail.component';
 import { OfficeListComponent } from './office-list/office-list.component';
+import { CompanyFinancialsComponent } from './company-financials/company-financials.component';
+import { PersonalFinancialsComponent } from './personal-financials/personal-financials.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -60,6 +62,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     OfficeAddComponent,
     OfficeDetailComponent,
     OfficeListComponent,
+    CompanyFinancialsComponent,
+    PersonalFinancialsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

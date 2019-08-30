@@ -83,7 +83,7 @@
     "add-owner": "Pridať spoločníka",
     "owners": "Spoločníci",
     "branches": "Pobočky",
-    "company-share-percentage": "Podiel vo firme",
+    "company-share-percentage": "Podiel firmy",
     "company": "Firma",
     "confirm-remove-owner": "Naozaj chcete vymazať spoločníka z tejto firmy?",
     "no": "Nie",
@@ -96,5 +96,8 @@
     "no-data": "Žiadne údaje nie sú k dispozícii",
     "block": "Zablokovať",
     "offices": "Pobočky",
-    "companies-count": "Počet firiem"
+    "companies-count": "Počet firiem",
+    "office-detail": "Detail pobočky",
+    "info": "Info",
+    "percentage": "Podiel"
 }

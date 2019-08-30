@@ -67,15 +67,17 @@ namespace CFC.Data.Managers
             this.Edit(office);
         }
 
-        public void RemoveCompanyFromOffice(Company company, Office office)
+        public void RemoveCompanyFromOffice(int companyId, int officeId)
         {
-            var entity = this._repository.CompanyOfficeRepository.FindByCondition(a => a.OfficeId == office.Id && a.CompanyId == company.Id).FirstOrDefault();
+            var office = this._officeRepository.FindByCondition(a => a.Id == officeId).FirstOrDefault();
+            var company = this._repository.CompanyRepository.FindByCondition(a => a.Id == companyId).FirstOrDefault();
+            var entity = this._repository.CompanyOfficeRepository.FindByCondition(a => a.OfficeId == officeId && a.CompanyId == companyId).FirstOrDefault();
             if (entity != null)
             {
-                office.Companies.Remove(entity);
-                this.Edit(office);
-                company.Offices.Remove(entity);
-                this._repository.CompanyRepository.Save();
+                //office.Companies.Remove(entity);
+                //this.Edit(office);
+                //company.Offices.Remove(entity);
+                //this._repository.CompanyRepository.Save();
                 this._repository.CompanyOfficeRepository.Delete(entity);
                 this._repository.CompanyOfficeRepository.Save();
             }

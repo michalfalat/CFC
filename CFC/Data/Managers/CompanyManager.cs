@@ -34,7 +34,8 @@ namespace CFC.Data.Managers
             return this._companyRepository.FindByCondition(a => a.Id == id)
                 .Include(a => a.Owners)
                 .ThenInclude(b => b.User)
-                .Include(a => a.Offices).FirstOrDefaultAsync();
+                .Include(a => a.Offices).ThenInclude(o => o.Office)
+                .FirstOrDefaultAsync();
         }
 
         public Task<List<Company>> GetAll()

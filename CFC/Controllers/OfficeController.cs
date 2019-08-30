@@ -160,7 +160,7 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            this._officeManager.RemoveCompanyFromOffice(company, office);
+            this._officeManager.RemoveCompanyFromOffice(companyId, id);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 

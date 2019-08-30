@@ -28,7 +28,7 @@ export class CompanyDetailComponent implements OnInit {
   public maxNewOwnerPercentage = 100;
 
   public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'percentage', 'actions'];
-  public displayedColumnsOffices: string[] = ['name', 'description', 'registrationDate', 'ownersCount', 'actions'];
+  public displayedColumnsOffices: string[] = ['name', 'percentage', 'actions'];
   @ViewChild(MatSort, { read: false }) sortOwners: MatSort;
   @ViewChild(MatSort, { read: false }) sortOffices: MatSort;
 

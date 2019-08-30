@@ -16,7 +16,7 @@ namespace CFC.Data.Models
         public CompanyStatus Status { get; set; }
 
         public bool Obsolete { get; set; }
-        public ICollection<OfficeDetailViewModel> Offices { get; set; }
+        public ICollection<OfficeCompanyViewModel> Offices { get; set; }
 
         public ICollection<CompanyUserViewModel> Owners { get; set; }
 

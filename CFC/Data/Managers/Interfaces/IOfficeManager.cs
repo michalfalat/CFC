@@ -9,6 +9,6 @@ namespace CFC.Data.Managers
     public interface IOfficeManager : IManager<Office>
     {
         void AddCompanyToOffice(CompanyOffice entity, Office office);
-        void RemoveCompanyFromOffice(Company company, Office office);
+        void RemoveCompanyFromOffice(int companyId, int officeId);
     }
 }

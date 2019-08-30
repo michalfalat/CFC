@@ -30,9 +30,11 @@ namespace CFC.Data.Profiles
 
             CreateMap<CompanyOffice, OfficeCompanyViewModel>()
                 .ForMember(d => d.OfficeId, s => s.MapFrom(source => source.Office.Id))
+                .ForMember(d => d.OfficeName, s => s.MapFrom(source => source.Office.Name))
                 .ForMember(d => d.CompanyId, s => s.MapFrom(source => source.Company.Id))
                 .ForMember(d => d.CompanyName, s => s.MapFrom(source => source.Company.Name))
                 .ForMember(d => d.CompanyIdentificationNumber, s => s.MapFrom(source => source.Company.IdentificationNumber));
+                //.ForMember(d => d.RegistrationDate, s => s.MapFrom(source => source.));
 
 
 

@@ -90,7 +90,6 @@ export class OfficeDetailComponent implements OnInit {
 
   removeCompanyOffice(element) {
     this.loadingData = true;
-    const remove = element.obsolete === true ? false : true;
     this.apiService.removeOfficeFromCompany(this.officeId, element.companyId).subscribe(response => {
       console.log(response);
       this.loadingData = false;
@@ -130,9 +129,6 @@ export class OfficeDetailComponent implements OnInit {
 
 
   openRemoveCompanyDialog(office): void {
-    if (office.obsolete) {
-      this.removeCompanyOffice(office);
-    } else {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: this.translateService.instant('confirm-remove-company')
       });
@@ -142,7 +138,6 @@ export class OfficeDetailComponent implements OnInit {
           this.removeCompanyOffice(office);
         }
       });
-    }
   }
 
   toogleEditMode() {

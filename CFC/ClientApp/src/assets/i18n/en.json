@@ -83,7 +83,7 @@
     "add-owner": "Add owner",
     "owners": "Owners",
     "branches": "Branches",
-    "company-share-percentag": "Company share percentage",
+    "company-share-percentage": "Company share percentage",
     "company": "Company",
     "confirm-remove-owner": "Are you sure to delete user from this company?",
     "no": "No",
@@ -96,7 +96,11 @@
     "no-data": "No data available",
     "block": "Block",
     "offices": "Offices",
-    "companies-count": "No. of companies"
+    "companies-count": "No. of companies",
+    "office-detail": "Office detail",
+    "info": "Info",
+    "percentage": "Percentage"
+
 
 
 
