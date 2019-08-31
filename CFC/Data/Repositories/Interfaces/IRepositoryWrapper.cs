@@ -16,6 +16,7 @@ namespace CFC.Data.Repositories
 
         IPasswordResetTokenRepository PasswordResetTokenRepository { get; }
         IVerifyTokenRepository VerifyTokenRepository { get; }
+        IMoneyRecordRepository  MoneyRecordRepository { get; }
 
         void Save();
     }

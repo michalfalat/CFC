@@ -33,9 +33,19 @@
             <input matInput placeholder="{{ 'description' | translate }}" name="description"
               [(ngModel)]="office.description" [disabled]="editMode === false" required minlength="3">
           </mat-form-field>
-          <mat-form-field class="full-width">
+          <!-- <mat-form-field class="full-width">
             <input matInput placeholder="{{ 'status' | translate }}" name="status" [(ngModel)]="office.status"
               [disabled]="editMode === false">
+          </mat-form-field> -->
+          {{ office.status }}
+          {{ officeStatus["0"] }}
+          {{ office.status }}
+          <mat-form-field class="full-width">
+            <mat-select [(ngModel)]="office.status" name="status" required placeholder="{{ 'status' | translate }}" [disabled]="editMode === false">
+              <mat-option *ngFor="let status of officeStatuses" [value]="officeStatus[status]">
+                {{ officeStatus[status] }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
           <button mat-raised-button [disabled]="true || editMode === false || formRef.valid === false" color="primary"
             class="main-button" (click)="editOffice()" type="submit">{{ 'save-changes' | translate }}</button>

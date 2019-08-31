@@ -21,6 +21,7 @@ namespace CFC.Data
         public virtual DbSet<CompanyOffice> CompanyOffices { get; set; }
         public virtual DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public virtual DbSet<VerifyUserToken> VerifyUserTokens { get; set; }
+        public virtual DbSet<MoneyRecord> MoneyRecords { get; set; }
         //public virtual DbSet<ApplicationUserCompany> ApplicatiionUserCompanies { get; set; }
         //public virtual DbSet<Office> Offices { get; set; }
         //public virtual DbSet<CompanyOffice> CompanyOffices { get; set; }

@@ -13,11 +13,11 @@ namespace CFC.Data.Entities
         }
 
         public int Id { get; set; }
-        public ApplicationUser User { get; set; }
-        public virtual string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
+        public string UserId { get; set; }
 
-        public Company Company { get; set; }
-        public virtual int CompanyId { get; set; }
+        public virtual Company Company { get; set; }
+        public int CompanyId { get; set; }
         public decimal Percentage { get; set; }
 
     }

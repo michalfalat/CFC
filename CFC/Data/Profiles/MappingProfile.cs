@@ -43,6 +43,17 @@ namespace CFC.Data.Profiles
             CreateMap<Office, OfficeDetailViewModel>();
             CreateMap<Office, OfficeViewModel>()
                 .ForMember(d => d.CompaniesCount, s => s.MapFrom(source => source.Companies.Count));
+
+            CreateMap<MoneyRecordAddModel, MoneyRecord>();
+            CreateMap<MoneyRecord, MoneyRecordViewModel>()
+                .ForMember(d => d.CreatorName, s => s.MapFrom(source => $"{source.Creator.Name} {source.Creator.Surname}"))
+                .ForMember(d => d.CompanyName, s => s.MapFrom(source => source.Company.Name))
+                .ForMember(d => d.OfficeName, s => s.MapFrom(source => source.Office.Name));
+            CreateMap<MoneyRecord, MoneyRecordDetailViewModel>()
+                .ForMember(d => d.CreatorName, s => s.MapFrom(source => $"{source.Creator.Name} {source.Creator.Surname}"))
+                .ForMember(d => d.CompanyName, s => s.MapFrom(source => source.Company.Name))
+                .ForMember(d => d.OfficeName, s => s.MapFrom(source => source.Office.Name));
+
         }
     }
 }

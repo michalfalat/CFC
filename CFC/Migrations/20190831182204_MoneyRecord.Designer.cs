@@ -4,14 +4,16 @@ using CFC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CFC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190831182204_MoneyRecord")]
+    partial class MoneyRecord
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,9 @@ namespace CFC.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("CreatorId");
+                    b.Property<Guid>("CreatorId");
+
+                    b.Property<string>("CreatorId1");
 
                     b.Property<string>("Description");
 
@@ -110,7 +114,7 @@ namespace CFC.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("CreatorId1");
 
                     b.HasIndex("OfficeId");
 
@@ -391,7 +395,7 @@ namespace CFC.Migrations
 
                     b.HasOne("CFC.Data.Entities.ApplicationUser", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId1");
 
                     b.HasOne("CFC.Data.Entities.Office", "Office")
                         .WithMany()

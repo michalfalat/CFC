@@ -34,6 +34,7 @@ import { OfficeDetailComponent } from './office-detail/office-detail.component';
 import { OfficeListComponent } from './office-list/office-list.component';
 import { CompanyFinancialsComponent } from './company-financials/company-financials.component';
 import { PersonalFinancialsComponent } from './personal-financials/personal-financials.component';
+import { CompanyFinancialsAddComponent } from './company-financials-add/company-financials-add.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -64,6 +65,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     OfficeListComponent,
     CompanyFinancialsComponent,
     PersonalFinancialsComponent,
+    CompanyFinancialsAddComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -139,6 +141,21 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             component: OfficeDetailComponent,
             pathMatch: 'full'
           },
+          {
+            path: 'companyRecords',
+            component: CompanyFinancialsComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'companyRecords/add',
+            component: CompanyFinancialsAddComponent,
+            pathMatch: 'full'
+          },
+          // {
+          //   path: 'officcompanyRecordses/:id',
+          //   component: CompanyFinancialDetailComponent,
+          //   pathMatch: 'full'
+          // },
 
           // <-- The rest of your admin routes
         ]

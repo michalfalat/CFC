@@ -99,7 +99,18 @@
     "companies-count": "No. of companies",
     "office-detail": "Office detail",
     "info": "Info",
-    "percentage": "Percentage"
+    "percentage": "Percentage",
+    "expenses-incomes": "Expenses and incomes",
+    "date": "Date",
+    "company-name": "Company name",
+    "office-name": "Office name",
+    "created-by": "Created by",
+    "amount-sum": "Amount",
+    "add-expense-income": "Add expense/income",
+    "expense": "Expense",
+    "income": "Income",
+    "type": "Type",
+    "office": "Office"
 
 
 

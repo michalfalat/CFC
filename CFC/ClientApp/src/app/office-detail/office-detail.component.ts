@@ -8,6 +8,7 @@ import { CompanyOfficeAddModel } from '../models/company-models';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { OfficeStatus, OfficeStatusLabelMapping } from '../models/enums';
 
 
 @Component({
@@ -27,6 +28,9 @@ export class OfficeDetailComponent implements OnInit {
 
   public maxNewCompanyPercentage;
   public newOfficeCompany;
+  public officeStatuses = Object.keys(OfficeStatus);
+  public officeStatus = OfficeStatus;
+  OfficeStatusLabelMapping = OfficeStatusLabelMapping;
 
   public displayedColumnsCompanies: string[] = ['companyName', 'companyIdentificationNumber', 'percentage', 'actions'];
 
@@ -45,6 +49,7 @@ export class OfficeDetailComponent implements OnInit {
     this.officeId = this.route.snapshot.params.id;
     this.newOfficeCompany = new CompanyOfficeAddModel();
     this.loadOffice();
+    console.log(this.officeStatuses);
   }
 
   goBack() {

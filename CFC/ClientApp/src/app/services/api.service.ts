@@ -5,6 +5,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
 import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel } from '../models/company-models';
+import { MoneyRecordAddModel } from '../models/money-record-models';
 
 @Injectable({
   providedIn: 'root'
@@ -116,6 +117,14 @@ export class ApiService {
   }
 
 
+  // MONEY RECORDS
+  private getMoneyRecordsUrl() {
+    return this.baseUrl + 'api/MoneyRecord';
+  }
+
+  private addMoneyRecordUrl() {
+    return this.baseUrl + 'api/MoneyRecord';
+  }
 
 
 
@@ -391,6 +400,23 @@ export class ApiService {
         }));
 
     }
+  }
+
+
+  getMoneyRecords(): any {
+    return this.http.get(this.getMoneyRecordsUrl(), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  addMoneyRecord(moneyRecord: MoneyRecordAddModel): any {
+    return this.http.post(this.addMoneyRecordUrl(), moneyRecord,  this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
   }
 
 }

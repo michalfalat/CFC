@@ -15,6 +15,7 @@ namespace CFC.Data.Repositories
         private IVerifyTokenRepository _verifyTokenRepository;
         private IApplicationUserCompanyRepository _userCompanyRepository;
         private ICompanyOfficeRepository _companyOfficeRepository;
+        private IMoneyRecordRepository _moneyRecordRepository;
         public ICompanyRepository CompanyRepository {
             get
             {
@@ -106,6 +107,18 @@ namespace CFC.Data.Repositories
             }
         }
 
+        public IMoneyRecordRepository MoneyRecordRepository
+        {
+            get
+            {
+                if (_moneyRecordRepository == null)
+                {
+                    _moneyRecordRepository = new MoneyRecordRepository(_dbContext);
+                }
+
+                return _moneyRecordRepository;
+            }
+        }
         public RepositoryWrapper(ApplicationDbContext repositoryContext)
         {
             _dbContext = repositoryContext;

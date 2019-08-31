@@ -99,5 +99,16 @@
     "companies-count": "Počet firiem",
     "office-detail": "Detail pobočky",
     "info": "Info",
-    "percentage": "Podiel"
+    "percentage": "Podiel",
+    "expenses-incomes": "Príjmy a výdaje",
+    "date": "Dátum",
+    "company-name": "Názov firmy",
+    "office-name": "Názov pobočky",
+    "created-by": "Vytvoril",
+    "amount-sum": "Suma",
+    "add-expense-income": "Pridať príjem / výdaj",
+    "expense": "Výdaj",
+    "income": "Príjem",
+    "type": "Typ",
+    "office": "Pobočka"
 }

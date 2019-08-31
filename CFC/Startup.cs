@@ -61,6 +61,7 @@ namespace CFC
             services.AddScoped<IApplicationUserManager, ApplicationUserManager>();
             services.AddScoped<ICompanyManager, CompanyManager>();
             services.AddScoped<IOfficeManager, OfficeManager>();
+            services.AddScoped<IMoneyRecordManager, MoneyRecordManager>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton(Configuration);
 

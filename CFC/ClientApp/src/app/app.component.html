@@ -25,6 +25,10 @@
             <mat-icon matListIcon>place</mat-icon>
             <span> {{ 'offices' | translate }}</span>
           </button>
+          <button mat-list-item routerLink="/admin/companyRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>compare_arrows</mat-icon>
+            <span> {{ 'expenses-incomes' | translate }}</span>
+          </button>
 
         </div>
         <div *ngIf="authService.isEnabledFor('Owner')">
