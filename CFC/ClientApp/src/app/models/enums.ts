@@ -1,8 +1,15 @@
 export enum OfficeStatus {
-  UNKNOWN = '0',
-  ACTIVE = '1',
-  CANCELED = '2',
-  BLOCKED = '3'
+  UNKNOWN = 0,
+  ACTIVE = 1,
+  CANCELED = 2,
+  BLOCKED = 3
+}
+
+export enum CompanyStatus {
+  UNKNOWN = 0,
+  ACTIVE = 1,
+  CANCELED = 2,
+  BLOCKED = 3
 }
 
 export enum MoneyRecordType {
@@ -10,9 +17,7 @@ export enum MoneyRecordType {
   INCOME = 2,
 }
 
-export const OfficeStatusLabelMapping: Record<OfficeStatus, string> = {
-  [OfficeStatus.UNKNOWN]: 'UNKNOWN',
-  [OfficeStatus.ACTIVE]: 'ACTIVE',
-  [OfficeStatus.CANCELED]: 'CANCELED',
-  [OfficeStatus.BLOCKED]: 'BLOCKED',
-};
+export enum CompanyUserRole {
+  EXECUTIVE = 1,
+  COMPANION = 2,
+}

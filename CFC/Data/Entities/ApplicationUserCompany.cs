@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CFC.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace CFC.Data.Entities
         public virtual Company Company { get; set; }
         public int CompanyId { get; set; }
         public decimal Percentage { get; set; }
+        public CompanyOwnerRole Role { get; set; }
 
     }
 }

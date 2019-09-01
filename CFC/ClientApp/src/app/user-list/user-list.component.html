@@ -45,7 +45,7 @@
         </ng-container>
       <ng-container matColumnDef="emailConfirmed">
         <th mat-header-cell *matHeaderCellDef> {{ 'emailConfirmed' | translate }} </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.emailConfirmed === false , 'green-text': element.emailConfirmed === true }">
           <mat-icon [matTooltip]="(element.emailConfirmed === true ? 'confirmed' : 'not-confirmed') | translate">
             {{ element.emailConfirmed === true ? 'check' : 'close'}} </mat-icon>
         </td>

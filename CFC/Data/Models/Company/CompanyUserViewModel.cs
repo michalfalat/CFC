@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CFC.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,5 +14,6 @@ namespace CFC.Data.Models
         public string UserSurname { get; set; }
         public int CompanyId { get; set; }
         public decimal Percentage { get; set; }
+        public CompanyOwnerRole Role { get; set; }
     }
 }

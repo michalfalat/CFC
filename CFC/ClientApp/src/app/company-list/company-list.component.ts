@@ -3,6 +3,8 @@ import { ApiService } from '../services/api.service';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { CompanyStatus } from '../models/enums';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-company-list',
@@ -12,11 +14,14 @@ import { TranslateService } from '@ngx-translate/core';
 export class CompanyListComponent implements OnInit {
   public loadingData = false;
   public companyList;
+
+  public companyStatus = CompanyStatus;
   public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'branchesCount', 'ownersCount', 'status', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,
-     private notifyService: NotifyService, private translateService: TranslateService) { }
+     private notifyService: NotifyService, private translateService: TranslateService,
+     public languageService: LanguageService) { }
 
   ngOnInit() {
     this.getCompanies();

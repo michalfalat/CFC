@@ -110,11 +110,12 @@
     "expense": "Expense",
     "income": "Income",
     "type": "Type",
-    "office": "Office"
-
-
-
-
-
+    "office": "Office",
+    "EXECUTIVE": "Executive",
+    "COMPANION": "Companion",
+    "UNKNOWN": "Unknown",
+    "ACTIVE": "Active",
+    "CANCELED": "Canceled",
+    "BLOCKED": "Blocked"
 
 }

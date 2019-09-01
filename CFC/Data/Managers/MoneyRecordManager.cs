@@ -43,6 +43,7 @@ namespace CFC.Data.Managers
                 .Include(s => s.Company)
                 .Include(s => s.Office)
                 .Include(s => s.Creator)
+                .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
         }
 

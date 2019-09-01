@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
-import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel } from '../models/company-models';
+import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel, CompanyOwnerAddModel } from '../models/company-models';
 import { MoneyRecordAddModel } from '../models/money-record-models';
 
 @Injectable({
@@ -86,6 +86,9 @@ export class ApiService {
   }
   private getCompanyPreviewUrl(id) {
     return this.baseUrl + `api/Company/${id}/Preview`;
+  }
+  private addUserToCompanyUrl(id) {
+    return this.baseUrl + `api/Company/${id}/AddUser`;
   }
   private removeUserFromCompanyUrl(id, userId) {
     return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
@@ -328,13 +331,13 @@ export class ApiService {
       }));
   }
 
-  // addUserToCompany(company: CompanyOfficeAddModel): any {
-  //   return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
-  //     catchError(error => {
-  //       error = this.checkInternalError(error);
-  //       return throwError(error);
-  //     }));
-  // }
+  addUserToCompany(owner: CompanyOwnerAddModel): any {
+    return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
   removeUserFromCompany(companyId, userId): any {
     return this.http.delete(this.removeUserFromCompanyUrl(companyId, userId), this.headers).pipe(
       catchError(error => {

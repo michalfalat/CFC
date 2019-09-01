@@ -22,6 +22,8 @@ namespace CFC.Data.Profiles
                 .ForMember(d => d.BranchesCount, s => s.MapFrom(source => source.Offices.Count))
                 .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count));
 
+
+            CreateMap<CompanyAddUserModel, ApplicationUserCompany>();
             CreateMap<Company, CompanyDetailViewModel>();
             CreateMap<ApplicationUserCompany, CompanyUserViewModel>()
                 .ForMember(d => d.UserName, s => s.MapFrom(source => source.User.Name))

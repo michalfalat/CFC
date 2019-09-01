@@ -18,7 +18,7 @@
     </mat-form-field>
     <mat-form-field class="full-width">
       <input matInput placeholder="{{'identification-number' | translate}}" value="" name="identificationNumber"
-        [(ngModel)]="company.identificationNumber" required minlength="5">
+        [(ngModel)]="company.identificationNumber" >
     </mat-form-field>
     <button mat-raised-button color="primary" class="main-button" (click)="add()"
       [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>

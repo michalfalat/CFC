@@ -4,6 +4,7 @@ import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { OfficeStatus } from '../models/enums';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-office-list',
@@ -13,13 +14,16 @@ import { OfficeStatus } from '../models/enums';
 export class OfficeListComponent implements OnInit {
 
   public loadingData = false;
+
+  public currentDateFormat = "";
   public officeList;
-  public OfficeStatus = OfficeStatus;
+  public officeStatus = OfficeStatus;
   public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'companiesCount', 'status', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,
-     private notifyService: NotifyService, private translateService: TranslateService) { }
+     private notifyService: NotifyService, private translateService: TranslateService, private languageService: LanguageService) {
+     }
 
   ngOnInit() {
     this.getOffices();

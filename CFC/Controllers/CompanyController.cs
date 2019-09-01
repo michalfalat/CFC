@@ -150,10 +150,8 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
-            var userCompany = new ApplicationUserCompany();
-            userCompany.CompanyId = company.Id;
-            userCompany.UserId = model.UserId;
-            userCompany.Percentage = model.Percentage;
+
+            var userCompany = this._mapper.Map<CompanyAddUserModel, ApplicationUserCompany>(model);
             this._companyManager.AddUserToCompany(userCompany, company);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
