@@ -29,6 +29,8 @@ namespace CFC.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IApplicationUserManager _applicationUserManager;
         private readonly ICompanyManager _companyManager;
+        private readonly IOfficeManager _officeManager;
+        private readonly IMoneyRecordManager _moneyRecordManager;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
@@ -42,7 +44,10 @@ namespace CFC.Controllers
             IApplicationUserManager applicationUserManager,
             IConfiguration configuration,
             ICompanyManager companyManager,
-            IEmailSender emailSender, IMapper mapper)
+            IEmailSender emailSender,
+            IOfficeManager officeManager,
+            IMoneyRecordManager moneyRecordManager,
+            IMapper mapper)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
@@ -53,6 +58,8 @@ namespace CFC.Controllers
             this._emailSender = emailSender;
             this._mapper = mapper;
             this._companyManager = companyManager;
+            this._officeManager = officeManager;
+            this._moneyRecordManager = moneyRecordManager;
         }
 
         [HttpPost]
@@ -78,6 +85,11 @@ namespace CFC.Controllers
         {
             var companies = await this._companyManager.GetAll();
             var companyModels = this._mapper.Map<List<CompanyViewModel>>(companies);
+            foreach (var company in companyModels)
+            {
+                var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
+                company.ActualCash = this._moneyRecordManager.SumRecords(records);
+            }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { companies = companyModels }));
         }
@@ -92,6 +104,8 @@ namespace CFC.Controllers
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
             var companyModel = this._mapper.Map<CompanyDetailViewModel>(company);
+            var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
+            companyModel.ActualCash = this._moneyRecordManager.SumRecords(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));
         }

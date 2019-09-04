@@ -18,7 +18,7 @@ export class OfficeListComponent implements OnInit {
   public currentDateFormat = "";
   public officeList;
   public officeStatus = OfficeStatus;
-  public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'companiesCount', 'status', 'actions'];
+  public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'status', 'companiesCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,

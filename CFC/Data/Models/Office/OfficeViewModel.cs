@@ -17,5 +17,6 @@ namespace CFC.Data.Models
         public bool Obsolete { get; set; }
 
         public int CompaniesCount { get; set; }
+        public decimal ActualCash { get; set; }
     }
 }

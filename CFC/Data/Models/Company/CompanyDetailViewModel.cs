@@ -20,5 +20,7 @@ namespace CFC.Data.Models
 
         public ICollection<CompanyUserViewModel> Owners { get; set; }
 
+        public decimal ActualCash { get; set; }
+
     }
 }

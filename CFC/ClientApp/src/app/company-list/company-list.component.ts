@@ -16,7 +16,7 @@ export class CompanyListComponent implements OnInit {
   public companyList;
 
   public companyStatus = CompanyStatus;
-  public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'branchesCount', 'ownersCount', 'status', 'actions'];
+  public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,

@@ -29,6 +29,7 @@ namespace CFC.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IApplicationUserManager _applicationUserManager;
         private readonly ICompanyManager _companyManager;
+        private readonly IMoneyRecordManager _moneyRecordManager;
         private readonly IOfficeManager _officeManager;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
@@ -44,7 +45,9 @@ namespace CFC.Controllers
             IConfiguration configuration,
             ICompanyManager companyManager,
             IOfficeManager officeManager,
-            IEmailSender emailSender, IMapper mapper)
+            IEmailSender emailSender,
+            IMoneyRecordManager moneyRecordManager,
+            IMapper mapper)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
@@ -56,6 +59,7 @@ namespace CFC.Controllers
             this._mapper = mapper;
             this._companyManager = companyManager;
             this._officeManager = officeManager;
+            this._moneyRecordManager = moneyRecordManager;
         }
 
         [HttpPost]
@@ -82,6 +86,11 @@ namespace CFC.Controllers
         {
             var offices = await this._officeManager.GetAll();
             var officeModels = this._mapper.Map<List<OfficeViewModel>>(offices);
+            foreach (var office in officeModels)
+            {
+                var records = await this._moneyRecordManager.GetAllForOffice(office.Id);
+                office.ActualCash = this._moneyRecordManager.SumRecords(records);
+            }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { offices = officeModels }));
         }
@@ -96,6 +105,8 @@ namespace CFC.Controllers
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
             var officeModel = this._mapper.Map<OfficeDetailViewModel>(office);
+            var records = await this._moneyRecordManager.GetAllForOffice(office.Id);
+            officeModel.ActualCash = this._moneyRecordManager.SumRecords(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { office = officeModel }));
         }

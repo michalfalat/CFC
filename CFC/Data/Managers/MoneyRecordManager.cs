@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CFC.Data.Entities;
+using CFC.Data.Enums;
 using CFC.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,6 +76,11 @@ namespace CFC.Data.Managers
                  .Include(a => a.Office)
                  .Include(a => a.Creator)
                  .ToListAsync();
+        }
+
+        public decimal SumRecords(List<MoneyRecord> records)
+        {
+           return records.Sum(a => ((a.Type == MoneyRecordType.INCOME) ? a.Amount : a.Amount * -1));
         }
     }
 }
