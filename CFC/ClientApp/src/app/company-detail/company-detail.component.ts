@@ -8,7 +8,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { CompanyOwnerAddModel } from '../models/company-models';
-import { CompanyUserRole } from '../models/enums';
+import { CompanyUserRole, CompanyStatus } from '../models/enums';
 
 @Component({
   selector: 'app-company-detail',
@@ -29,6 +29,9 @@ export class CompanyDetailComponent implements OnInit {
   public allUsers: UserDetail[] = [];
 
   public companyUserRole = CompanyUserRole;
+
+  public companyStatuses = Object.keys(CompanyStatus).filter(s => Number.isNaN(Number(s)));
+  public companyStatus = CompanyStatus;
 
   public maxNewOwnerPercentage = 100;
 
@@ -96,6 +99,20 @@ export class CompanyDetailComponent implements OnInit {
       this.allUsers = response.data.filter(u => u.role === 'Owner' && this.company.owners.map(c => c.userId).includes(u.id) === false);
       this.loadingData = false;
 
+    }, error => {
+      this.loadingData = false;
+      console.log(error);
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+    });
+  }
+
+  editCompany() {
+    this.company.companyId = this.companyId;
+    this.apiService.editCompany(this.company).subscribe(response => {
+      this.notifyService.info(this.translateService.instant('data-saved'));
+      this.loadingData = false;
+      this.editMode = false;
+      this.loadCompany();
     }, error => {
       this.loadingData = false;
       console.log(error);

@@ -31,19 +31,22 @@
           </mat-form-field>
           <mat-form-field class="full-width">
             <input matInput placeholder="{{ 'identification-number' | translate }}" name="identificationNumber"
-              [(ngModel)]="company.identificationNumber" [disabled]="editMode === false" required minlength="3">
+              [(ngModel)]="company.identificationNumber" [disabled]="editMode === false">
           </mat-form-field>
           <mat-form-field class="full-width">
-            <input matInput [matDatepicker]="picker1" placeholder="{{ 'status' | translate}}" name="registrationDate"
+            <input matInput [matDatepicker]="picker1" placeholder="{{ 'registration-date' | translate}}" name="registrationDate"
               [(ngModel)]="company.registrationDate" [disabled]="editMode === false">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="full-width">
-            <input matInput placeholder="{{ 'status' | translate}}" name="status" [(ngModel)]="company.status"
-              [disabled]="editMode === false">
+            <mat-select [(ngModel)]="company.status" name="status" required placeholder="{{ 'status' | translate }}" [disabled]="editMode === false">
+              <mat-option *ngFor="let status of companyStatuses" [value]="companyStatus[status]">
+                {{ status | translate }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
-          <button mat-raised-button [disabled]="true || editMode === false || formRef.valid === false" color="primary"
+          <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
             class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
         </form>
       </div>

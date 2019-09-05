@@ -124,6 +124,29 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));
         }
 
+        [HttpPost("[action]")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Edit([FromBody] CompanyEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+
+            var company = await this._companyManager.FindById(model.CompanyId);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            company.Name = model.Name;
+            company.IdentificationNumber = model.IdentificationNumber;
+            company.RegistrationDate = model.RegistrationDate;
+            company.Status = model.Status;
+            this._companyManager.Edit(company);
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Remove(int id)

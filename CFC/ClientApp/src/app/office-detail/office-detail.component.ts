@@ -19,7 +19,7 @@ import { OfficeStatus } from '../models/enums';
 export class OfficeDetailComponent implements OnInit {
   public selectedTab = 0;
   public officeId;
-  public office;
+  public office ;
   public officeCompanies;
   public companies;
   public loadingData = false;
@@ -28,7 +28,7 @@ export class OfficeDetailComponent implements OnInit {
 
   public maxNewCompanyPercentage;
   public newOfficeCompany;
-  public officeStatuses = Object.keys(OfficeStatus);
+  public officeStatuses = Object.keys(OfficeStatus).filter(s => Number.isNaN(Number(s)));
   public officeStatus = OfficeStatus;
 
   public displayedColumnsCompanies: string[] = ['companyName', 'companyIdentificationNumber', 'percentage', 'actions'];
@@ -85,6 +85,21 @@ export class OfficeDetailComponent implements OnInit {
 
   addCompany() {
     this.addCompanyFormVisible = true;
+  }
+
+
+  editOffice() {
+    this.office.officeId = this.officeId;
+    this.apiService.editOffice(this.office).subscribe(response => {
+      this.notifyService.info(this.translateService.instant('data-saved'));
+      this.loadingData = false;
+      this.editMode = false;
+      this.loadOffice();
+    }, error => {
+      this.loadingData = false;
+      console.log(error);
+      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+    });
   }
 
   // addOffice() {

@@ -63,6 +63,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Add([FromBody] OfficeAddModel model)
         {
             if (!ModelState.IsValid)
@@ -109,6 +110,29 @@ namespace CFC.Controllers
             officeModel.ActualCash = this._moneyRecordManager.SumRecords(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { office = officeModel }));
+        }
+
+        [HttpPost("[action]")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Edit([FromBody] OfficeEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+
+            var office = await this._officeManager.FindById(model.OfficeId);
+            if(office == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            office.Name = model.Name;
+            office.Description = model.Description;
+            office.RegistrationDate = model.RegistrationDate;
+            office.Status = model.Status;
+            this._officeManager.Edit(office);
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
         [HttpDelete("{id}")]

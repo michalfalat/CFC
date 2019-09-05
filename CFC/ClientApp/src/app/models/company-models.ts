@@ -18,6 +18,15 @@ export class OfficeAddModel {
 
 }
 
+export class EditCompanyModel {
+  public companyId: string;
+  public name: string;
+  public identificationNumber: string;
+  public registrationDate: any;
+  public status: any;
+}
+
+
 export class CompanyOwnerAddModel {
   userId: string;
   companyId: number;

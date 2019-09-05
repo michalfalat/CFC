@@ -4,8 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoginUser, UserPasswordReset, PasswordResetModel, AddUser, PasswordChangeModel, EditUser, UserVerifyToken } from '../models/user-models';
 import { AuthService } from './auth.service';
-import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel, CompanyOwnerAddModel } from '../models/company-models';
+import { CompanyAddModel, CompanyOfficeAddModel, OfficeAddModel, CompanyOwnerAddModel, EditCompanyModel } from '../models/company-models';
 import { MoneyRecordAddModel } from '../models/money-record-models';
+import { EditOfficeModel } from '../models/office-models';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,9 @@ export class ApiService {
   private getCompaniesUrl() {
     return this.baseUrl + 'api/Company';
   }
+  private editCompanyUrl() {
+    return this.baseUrl + 'api/Company/Edit';
+  }
   private removeCompanyUrl(id) {
     return this.baseUrl + `api/Company/${id}`;
   }
@@ -101,6 +105,10 @@ export class ApiService {
   }
   private getOfficesUrl() {
     return this.baseUrl + 'api/Office';
+  }
+
+  private editOfficeUrl() {
+    return this.baseUrl + 'api/Office/Edit';
   }
   private removeOfficeUrl(id) {
     return this.baseUrl + `api/Office/${id}`;
@@ -331,6 +339,15 @@ export class ApiService {
       }));
   }
 
+  editCompany(data: EditCompanyModel) {
+    console.log(data);
+    return this.http.post(this.editCompanyUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
   addUserToCompany(owner: CompanyOwnerAddModel): any {
     return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
       catchError(error => {
@@ -351,6 +368,15 @@ export class ApiService {
     return this.http.post(this.addOfficeUrl(), data, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
+
+  editOffice(data: EditOfficeModel) {
+    console.log(data)
+    return this.http.post(this.editOfficeUrl(), data, this.headers).pipe(
+      catchError(error => {
+        console.log(error);
         return throwError(error);
       }));
   }
