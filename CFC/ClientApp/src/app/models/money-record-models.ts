@@ -1,4 +1,6 @@
 export class MoneyRecordAddModel {
+
+  public destinationType: number;
   public companyId: number;
   public officeId: number;
   public type: any;

@@ -88,7 +88,7 @@ namespace CFC.Controllers
             foreach (var company in companyModels)
             {
                 var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
-                company.ActualCash = this._moneyRecordManager.SumRecords(records);
+                company.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
             }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { companies = companyModels }));
@@ -105,7 +105,7 @@ namespace CFC.Controllers
             }
             var companyModel = this._mapper.Map<CompanyDetailViewModel>(company);
             var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
-            companyModel.ActualCash = this._moneyRecordManager.SumRecords(records);
+            companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));
         }

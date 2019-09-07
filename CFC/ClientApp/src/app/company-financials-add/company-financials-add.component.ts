@@ -22,14 +22,14 @@ export class CompanyFinancialsAddComponent implements OnInit {
     private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute) {
+      this.record = new MoneyRecordAddModel();
+      this.record.type = 'income';
 
  }
 
   ngOnInit() {
     this.loadCompanies();
     this.loadOffices();
-    this.record = new MoneyRecordAddModel();
-    this.record.type = '1';
   }
 
   goBack() {

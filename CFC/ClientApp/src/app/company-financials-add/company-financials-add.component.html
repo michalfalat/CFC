@@ -7,7 +7,7 @@
       </button>
     </span>
     <span>
-      <span class="header"> {{ 'add-expense-income' | translate }} </span>
+      <span class="header"> {{ 'add' | translate }} {{ record.type | translate }} </span>
     </span>
     <span class="spacer"></span>
   </div>
@@ -16,16 +16,26 @@
     <mat-form-field class="full-width">
       <mat-label>{{ 'type' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.type" name="recordType" required>
-        <mat-option value="1">
+        <mat-option value="expense">
           {{ 'expense' | translate }}
         </mat-option>
-        <mat-option value="2">
+        <mat-option value="income">
           {{ 'income' | translate }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field class="full-width">
+      <mat-label>{{ 'destination-type' | translate }}</mat-label>
+      <mat-select [(ngModel)]="record.destination" name="destinationType">
+        <mat-option value="company">
+          {{ 'company' | translate }}
+        </mat-option>
+        <mat-option value="office">
+          {{ 'office' | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="record.destination ==='company'">
       <mat-label>{{ 'company' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.companyId" name="companyId" required>
         <mat-option *ngFor="let company of companies" [value]="company.id">
@@ -33,7 +43,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" *ngIf="record.destination ==='office'">
       <mat-label>{{ 'office' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.officeId" name="officeId">
         <mat-option *ngFor="let office of offices" [value]="office.id">
@@ -46,8 +56,8 @@
         required minlength="5">
     </mat-form-field>
     <mat-form-field class="full-width">
-      <span matPrefix>+&nbsp;</span>
-      <input matInput placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required
+      <span matPrefix [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}&nbsp;</span>
+      <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }" placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required
         type="number">
 
       <span matSuffix>&nbsp;&euro;</span>

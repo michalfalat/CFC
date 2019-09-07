@@ -72,6 +72,10 @@
       </tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+    <div *ngIf="recordList === undefined || recordList.data.length == 0" class="centered-info-secondary">
+      <br>
+      <p>{{ 'no-data' | translate }}</p>
+    </div>
     <router-outlet></router-outlet>
   </div>
 

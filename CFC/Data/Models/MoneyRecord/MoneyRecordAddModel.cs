@@ -9,8 +9,7 @@ namespace CFC.Data.Models
 {
     public class MoneyRecordAddModel
     {
-        [Required]
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         public int? OfficeId { get; set; }
 

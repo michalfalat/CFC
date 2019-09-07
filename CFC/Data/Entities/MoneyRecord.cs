@@ -16,7 +16,7 @@ namespace CFC.Data.Entities
 
         public string CreatorId { get; set; }
         public virtual ApplicationUser Creator { get; set; }
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
         public virtual Company Company { get; set; }
 
 

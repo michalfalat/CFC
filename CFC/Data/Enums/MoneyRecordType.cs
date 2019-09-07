@@ -9,5 +9,7 @@ namespace CFC.Data.Enums
     {
         EXPENSE = 1,
         INCOME = 2,
+        WITHDRAW = 3,
+        DEPOSIT = 4
     }
 }
