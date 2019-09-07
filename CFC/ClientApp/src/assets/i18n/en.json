@@ -116,6 +116,8 @@
     "UNKNOWN": "Unknown",
     "ACTIVE": "Active",
     "CANCELED": "Canceled",
-    "BLOCKED": "Blocked"
+    "BLOCKED": "Blocked",
+    "actual-money-state": "Actual money state",
+    "destination-type": "Destination type"
 
 }

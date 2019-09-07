@@ -116,5 +116,7 @@
     "UNKNOWN": "Neznámy",
     "ACTIVE": "Aktívna",
     "CANCELED": "Zrušená",
-    "BLOCKED": "Blokovaná"
+    "BLOCKED": "Blokovaná",
+    "actual-money-state": "Stav financií",
+    "destination-type": "Cieľová destinácia"
 }

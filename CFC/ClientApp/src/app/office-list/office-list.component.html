@@ -49,7 +49,7 @@
       </ng-container>
 
       <ng-container matColumnDef="actualMoneyState">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'actualMoneyState' | translate }} </th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'actual-money-state' | translate }} </th>
         <td mat-cell *matCellDef="let element"
           [ngClass]="{'red-text': element.actualCash < 0 , 'green-text': element.actualCash > 0  }">
           {{element.actualCash > 0 ? '+' : '' }}{{element.actualCash}} &euro;</td>

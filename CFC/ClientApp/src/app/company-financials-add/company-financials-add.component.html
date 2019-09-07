@@ -26,7 +26,7 @@
     </mat-form-field>
     <mat-form-field class="full-width">
       <mat-label>{{ 'destination-type' | translate }}</mat-label>
-      <mat-select [(ngModel)]="record.destination" name="destinationType">
+      <mat-select [(ngModel)]="record.destinationType" name="destinationType">
         <mat-option value="company">
           {{ 'company' | translate }}
         </mat-option>
@@ -56,7 +56,7 @@
         required minlength="5">
     </mat-form-field>
     <mat-form-field class="full-width">
-      <span matPrefix [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}&nbsp;</span>
+      <span matPrefix [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}</span>
       <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }" placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required
         type="number">
 
