@@ -35,7 +35,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="full-width" *ngIf="record.destination ==='company'">
+    <mat-form-field class="full-width" *ngIf="record.destinationType ==='company'">
       <mat-label>{{ 'company' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.companyId" name="companyId" required>
         <mat-option *ngFor="let company of companies" [value]="company.id">
@@ -43,7 +43,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="full-width" *ngIf="record.destination ==='office'">
+    <mat-form-field class="full-width" *ngIf="record.destinationType ==='office'">
       <mat-label>{{ 'office' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.officeId" name="officeId">
         <mat-option *ngFor="let office of offices" [value]="office.id">
