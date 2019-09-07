@@ -62,16 +62,14 @@
             routerLink="{{'/admin/offices/' + element.id }}">
             <mat-icon>info</mat-icon>
           </button>
-          <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}"
-            (click)="remove(element)">
-            <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
+          <button mat-icon-button matTooltip="{{ (element.obsolete ? 'restore' : 'remove') | translate }}" (click)="remove(element)">
+              <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
           </button>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}">
-      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.status == 2 || row.obsolete, 'warning-row': row.status == 3 }"></tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
     <router-outlet></router-outlet>

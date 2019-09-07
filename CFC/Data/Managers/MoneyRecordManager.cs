@@ -67,6 +67,7 @@ namespace CFC.Data.Managers
                  .Include(a => a.Company).ThenInclude(c => c.Offices)
                  .Include(a => a.Office).ThenInclude(c => c.Companies)
                  .Include(a => a.Creator)
+                 .OrderByDescending(s => s.CreatedAt)
                  .ToListAsync();
         }
 
@@ -76,6 +77,7 @@ namespace CFC.Data.Managers
                  .Include(a => a.Company)
                  .Include(a => a.Office).ThenInclude(c => c.Companies)
                  .Include(a => a.Creator)
+                 .OrderByDescending(s => s.CreatedAt)
                  .ToListAsync();
         }
 

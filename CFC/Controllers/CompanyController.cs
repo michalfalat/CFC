@@ -105,6 +105,8 @@ namespace CFC.Controllers
             }
             var companyModel = this._mapper.Map<CompanyDetailViewModel>(company);
             var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
+            var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
+            companyModel.Cashflow = recordsModels;
             companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));

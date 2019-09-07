@@ -14,7 +14,7 @@ namespace CFC.Data.Models
 
         public string CreatorId { get; set; }
         public string CreatorName { get; set; } // 
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
         public string CompanyName { get; set; } // 
 
         public int? OfficeId { get; set; }

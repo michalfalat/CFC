@@ -51,7 +51,7 @@
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
-        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }} {{element.amount}} &euro;</td>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}{{element.amount}} &euro;</td>
       </ng-container>
 
 
@@ -72,7 +72,7 @@
       </tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-    <div *ngIf="recordList === undefined || recordList.data.length == 0" class="centered-info-secondary">
+    <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0" class="centered-info-secondary">
       <br>
       <p>{{ 'no-data' | translate }}</p>
     </div>

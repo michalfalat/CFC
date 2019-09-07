@@ -15,6 +15,7 @@ namespace CFC.Data.Models
         public OfficeStatus Status { get; set; }
         public bool Obsolete { get; set; }
         public ICollection<OfficeCompanyViewModel> Companies { get; set; }
+        public ICollection<MoneyRecordViewModel> Cashflow { get; set; }
         public decimal ActualCash { get; set; }
     }
 }

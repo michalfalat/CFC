@@ -107,6 +107,8 @@ namespace CFC.Controllers
             }
             var officeModel = this._mapper.Map<OfficeDetailViewModel>(office);
             var records = await this._moneyRecordManager.GetAllForOffice(office.Id);
+            var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
+            officeModel.Cashflow = recordsModels;
             officeModel.ActualCash = this._moneyRecordManager.SumRecords(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { office = officeModel }));

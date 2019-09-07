@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -22,6 +22,8 @@ export class OfficeDetailComponent implements OnInit {
   public office ;
   public officeCompanies;
   public companies;
+
+  public cashflow;
   public loadingData = false;
   public addCompanyFormVisible = false;
   public editMode = false;
@@ -32,16 +34,20 @@ export class OfficeDetailComponent implements OnInit {
   public officeStatus = OfficeStatus;
 
   public displayedColumnsCompanies: string[] = ['companyName', 'companyIdentificationNumber', 'percentage', 'actions'];
+  public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'description', 'amount'];
 
 
   @ViewChild(MatSort, { read: false }) sortCompanies: MatSort;
+
+  @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
     private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -61,9 +67,14 @@ export class OfficeDetailComponent implements OnInit {
       this.office = response.data.office;
       this.officeCompanies = new MatTableDataSource(response.data.office.companies);
       this.officeCompanies.sort = this.sortCompanies;
+
+      this.cashflow = new MatTableDataSource(response.data.office.cashflow);
+      this.cashflow.sort = this.sortCashflow;
+      this.changeDetector.detectChanges();
       this.loadCompanies();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
+      this.changeDetector.detectChanges();
 
     }, error => {
       this.loadingData = false;

@@ -144,88 +144,39 @@
       </div>
 
     </mat-tab>
-    <!-- <mat-tab label="{{ 'owners' | translate }}">
+    <mat-tab label="{{ 'cash-flow' | translate }}">
       <br>
-      <div *ngIf="companyOwners !== undefined && companyOwners.data.length > 0">
-        <table mat-table [dataSource]="companyOwners" matSort class="basic-table">
-          <ng-container matColumnDef="userName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-          </ng-container>
+      <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
+          <p>{{ 'no-data' | translate }}</p>
+      </div>
+      <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
+        <table mat-table [dataSource]="cashflow" matSort class="basic-table">
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
+              </ng-container>
 
-          <ng-container matColumnDef="userSurname">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'surname' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.userSurname}} </td>
-          </ng-container>
+              <ng-container matColumnDef="creator">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+                  <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+                </ng-container>
 
-          <ng-container matColumnDef="percentage">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'company-share-percentage' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.percentage  }} % </td>
-          </ng-container>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+                <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }} {{element.amount}} &euro;</td>
+              </ng-container>
 
 
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-icon-button matTooltip="{{ 'remove' | translate }}"
-                (click)="openRemoveUserDialog(element.userId)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsOwners"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsOwners;"
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsCashFlow"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsCashFlow;"
             [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
         </table>
       </div>
-      <div *ngIf="addUserFormVisible == true">
-        <hr>
-        <form class="form " #newOwnerformRef="ngForm">
-          <div class="flexLayout">
-            <span>
-              <mat-form-field>
-                <mat-label>{{ 'owner' | translate }}</mat-label>
-                <mat-select [(ngModel)]="newOwner.userId" name="userId" required>
-                  <mat-option *ngFor="let user of allUsers" [value]="user.id">
-                    {{user.name}} {{user.surname }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </span>
-            <span class="spacer"></span>
-            <span>
-              <mat-form-field>
-                <mat-label>{{ 'company-share-percentage' | translate }}</mat-label>
-                <input matInput name="percentage" [(ngModel)]="newOwner.percentage" type="number" required
-                  [max]="maxNewOwnerPercentage">
-                <span matSuffix>%</span>
-              </mat-form-field>
-            </span>
-            <span class="spacer"></span>
-            <span class="spacer"></span>
-            <span class="spacer"></span>
-            <span class="actionButtons">
-              <span class="autocenter">
-                <button mat-raised-button
-                  [disabled]=" newOwnerformRef.valid === false || newOwner.percentage > maxNewOwnerPercentage"
-                  color="primary" class="" (click)="saveCompanyUser()" type="submit">{{ 'add' | translate }}</button>
-              </span>
-              <span class="autocenter">
-                <button mat-raised-button class="" (click)="addUserFormVisible = false"
-                  color="primary">{{ 'cancel' | translate }}</button>
-              </span>
-            </span>
-          </div>
-        </form>
-      </div>
-      <div *ngIf="addUserFormVisible == false">
-        <button mat-raised-button (click)="addUser()" color="primary" class="full-width"
-          [disabled]="maxNewOwnerPercentage <= 0">
-          <mat-icon matListIcon>add</mat-icon>
-          <span> {{ 'add-owner' | translate }}</span>
-        </button>
-      </div>
-    </mat-tab> -->
+    </mat-tab>
   </mat-tab-group>
 </mat-card>

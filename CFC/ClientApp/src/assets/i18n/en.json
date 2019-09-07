@@ -91,6 +91,7 @@
     "description": "Description",
     "add-office": "Add office",
     "remove": "Remove",
+    "restore": "Restore",
     "company-detail": "Company detail",
     "confirm-remove-office": "Are you sure to delete office from this company?",
     "no-data": "No data available",
@@ -118,6 +119,7 @@
     "CANCELED": "Canceled",
     "BLOCKED": "Blocked",
     "actual-money-state": "Actual money state",
-    "destination-type": "Destination type"
+    "destination-type": "Destination type",
+    "cash-flow": "Cash flow"
 
 }

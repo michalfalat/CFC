@@ -24,7 +24,7 @@ export class CompanyDetailComponent implements OnInit {
   public loadingData = false;
   public addUserFormVisible = false;
   public editMode = false;
-
+  public cashflow;
   public newOwner;
   public allUsers: UserDetail[] = [];
 
@@ -37,8 +37,10 @@ export class CompanyDetailComponent implements OnInit {
 
   public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'role', 'percentage', 'actions'];
   public displayedColumnsOffices: string[] = ['name', 'percentage', 'actions'];
+  public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'officeName', 'description', 'amount'];
   @ViewChild(MatSort, { read: false }) sortOwners: MatSort;
   @ViewChild(MatSort, { read: false }) sortOffices: MatSort;
+  @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
@@ -84,6 +86,9 @@ export class CompanyDetailComponent implements OnInit {
 
       this.companyOffices = new MatTableDataSource(response.data.company.offices);
       this.companyOffices.sort = this.sortOffices;
+
+      this.cashflow = new MatTableDataSource(response.data.company.cashflow);
+      this.cashflow.sort = this.sortCashflow;
       this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
@@ -204,6 +209,32 @@ export class CompanyDetailComponent implements OnInit {
           this.removeCompanyOffice(office);
         }
       });
+    }
+  }
+
+  calcAmount(element) {
+    if(element.officeId === null) {
+      return element.amount;
+    } else {
+      const companyOffice = this.company.offices.find(a => a.officeId === element.officeId);
+      if(companyOffice !== undefined) {
+        const percentage = companyOffice.percentage;
+        return element.amount / 100 * percentage;
+
+      }
+    }
+  }
+
+  calcAmountSecondaryData(element) {
+    if(element.officeId === null) {
+      return  '';
+    } else {
+      const companyOffice = this.company.offices.find(a => a.officeId === element.officeId);
+      if(companyOffice !== undefined) {
+        const percentage = companyOffice.percentage;
+        return `(${element.type === 2 ? '' : '-' }${element.amount}€ * ${percentage}%)`;
+
+      }
     }
   }
 

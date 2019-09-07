@@ -91,6 +91,7 @@
     "description": "Popis",
     "add-office": "Pridať pobočku",
     "remove": "Odstrániť",
+    "restore": "Obnoviť",
     "company-detail": "Detail firmy",
     "confirm-remove-office": "Naozaj chcete vymazať pobočku z tejto firmy?",
     "no-data": "Žiadne údaje nie sú k dispozícii",
@@ -118,5 +119,6 @@
     "CANCELED": "Zrušená",
     "BLOCKED": "Blokovaná",
     "actual-money-state": "Stav financií",
-    "destination-type": "Cieľová destinácia"
+    "destination-type": "Cieľová destinácia",
+    "cash-flow": "Tok financií"
 }
