@@ -17,6 +17,7 @@ using System.Text;
 using System;
 using CFC.Data.Enums;
 using AutoMapper;
+using CFC.Data.Constants;
 
 namespace CFC.Controllers
 {
@@ -63,7 +64,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Add([FromBody] OfficeAddModel model)
         {
             if (!ModelState.IsValid)
@@ -82,10 +83,20 @@ namespace CFC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetAll()
         {
-            var offices = await this._officeManager.GetAll();
+            var offices = new List<Office>();
+            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            {
+                offices = await this._officeManager.GetAll();
+            }
+            else
+            {
+                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                offices = await this._officeManager.GetOfficesByOwner(userId);
+
+            }
             var officeModels = this._mapper.Map<List<OfficeViewModel>>(offices);
             foreach (var office in officeModels)
             {
@@ -97,7 +108,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Get(int id)
         {
             var office = await this._officeManager.FindById(id);
@@ -115,7 +126,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Edit([FromBody] OfficeEditModel model)
         {
             if (!ModelState.IsValid)
@@ -138,7 +149,7 @@ namespace CFC.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Remove(int id)
         {
             var office = await this._officeManager.FindById(id);
@@ -151,7 +162,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("Unremove/{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Unremove(int id)
         {
             var office = await this._officeManager.FindById(id);
@@ -164,7 +175,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("{id}/AddCompany")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> AddCompanyToOffice(int id, [FromBody]OfficeAddCompanyModel model)
         {
             //TODO check percentage overflow 
@@ -184,7 +195,7 @@ namespace CFC.Controllers
         }
 
         [HttpDelete("{id}/RemoveCompany/{companyId}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> RemoveCompanyFromOffice(int id, int companyId)
         {
             var office = await this._officeManager.FindById(id);
@@ -202,7 +213,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}/Companies")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetOfficeCompanies(int id)
         {
             var office = await this._officeManager.FindById(id);

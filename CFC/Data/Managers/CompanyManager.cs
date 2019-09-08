@@ -75,13 +75,17 @@ namespace CFC.Data.Managers
             var entity = this._repository.ApplicationUserCompanyRepository.FindByCondition(a => a.CompanyId == company.Id && a.UserId == user.Id).FirstOrDefault();
             if (entity != null)
             {
-                //company.Owners.Remove(entity);
-                //this.Edit(company);
-                //user.Companies.Remove(entity);
-                //this._repository.ApplicationUserRepository.Save();
                 this._repository.ApplicationUserCompanyRepository.Delete(entity);
                 this._repository.ApplicationUserCompanyRepository.Save();
             }
+        }
+
+        public Task<List<Company>> GetCompaniesByOwner(string ownerId)
+        {
+            return this._companyRepository.FindByCondition(c => c.Owners.Select(o => o.UserId).Contains(ownerId) && !c.Obsolete)
+                .Include(s => s.Owners)
+                .Include(s => s.Offices)
+                .ToListAsync();
         }
     }
 }

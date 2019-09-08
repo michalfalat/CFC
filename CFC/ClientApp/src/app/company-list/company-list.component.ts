@@ -5,6 +5,7 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CompanyStatus } from '../models/enums';
 import { LanguageService } from '../services/language.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-company-list',
@@ -21,7 +22,7 @@ export class CompanyListComponent implements OnInit {
 
   constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService,
-     public languageService: LanguageService) { }
+     public languageService: LanguageService, public authService: AuthService) { }
 
   ngOnInit() {
     this.getCompanies();

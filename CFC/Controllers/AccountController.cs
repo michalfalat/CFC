@@ -17,6 +17,7 @@ using System.Text;
 using System;
 using CFC.Data.Enums;
 using AutoMapper;
+using CFC.Data.Constants;
 
 namespace CFC.Controllers
 {
@@ -74,7 +75,7 @@ namespace CFC.Controllers
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
             await this.GenerateRoles();
-            var roleResult = await this._userManager.AddToRoleAsync(user, "Administrator");
+            var roleResult = await this._userManager.AddToRoleAsync(user, Constants.Roles.ADMININISTRATOR);
             if (result.Succeeded && roleResult.Succeeded)
             {
                 return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { password = pwd }));
@@ -216,7 +217,7 @@ namespace CFC.Controllers
 
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> AddUser([FromBody]RegisterRequestViewModel model)
         {
             if (!ModelState.IsValid)
@@ -243,7 +244,7 @@ namespace CFC.Controllers
             };
             var pwd = this._applicationUserManager.GenerateRandomPassword();
             var result = await this._userManager.CreateAsync(user, pwd);
-            var roleResult = await this._userManager.AddToRoleAsync(user, "Owner");
+            var roleResult = await this._userManager.AddToRoleAsync(user, Constants.Roles.OWNER);
             if (result.Succeeded && roleResult.Succeeded)
             {
                 var token = new VerifyUserToken();
@@ -284,6 +285,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("[action]/{id}")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> UserDetail(string id)
         {
 
@@ -305,7 +307,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> EditUser([FromBody]UserEditModel model)
         {
             if (!ModelState.IsValid)
@@ -369,15 +371,9 @@ namespace CFC.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetUsers()
         {
-            //var isAdmin = await this.IsAdmin();
-            //if (!isAdmin)
-            //{
-            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
-            //}
-
             var users = await this._applicationUserManager.GetAll();
             var userModels = this._mapper.Map<List<UserExtendedDetailModel>>(users);
             foreach (var user in users)
@@ -389,14 +385,9 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> BlockUser([FromBody]BlockUserModel model)
         {
-            //var isAdmin = await this.IsAdmin();
-            //if (!isAdmin)
-            //{
-            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
-            //}
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
@@ -415,14 +406,9 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> RemoveUser([FromBody]RemoveUserModel model)
-        {
-            //var isAdmin = await this.IsAdmin();
-            //if (!isAdmin)
-            //{
-            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
-            //}
+        {           
             var existingUser = this._userManager.Users.SingleOrDefault(r => r.Id == model.Id);
             if (existingUser == null)
             {
@@ -484,7 +470,6 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email }));
         }
 
-        //TODO make annotation
         private async Task<bool> IsAdmin()
         {
             var userId = this._userManager.GetUserId(this.HttpContext.User);
@@ -499,7 +484,7 @@ namespace CFC.Controllers
                 return false;
             }
 
-            var isAdmin = await this._userManager.IsInRoleAsync(existingUser, "Administrator");
+            var isAdmin = await this._userManager.IsInRoleAsync(existingUser, Constants.Roles.ADMININISTRATOR);
             if (!isAdmin)
             {
                 return false;
@@ -537,7 +522,7 @@ namespace CFC.Controllers
 
         private async Task GenerateRoles()
         {
-            string[] roleNames = { "Administrator", "Owner" };
+            string[] roleNames = { Constants.Roles.ADMININISTRATOR, Constants.Roles.OWNER };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)

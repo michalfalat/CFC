@@ -31,7 +31,7 @@ export class CompanyFinancialsComponent implements OnInit {
   getRecords() {
     this.recordList = [];
     this.loadingData = true;
-    this.apiService.getMoneyRecords().subscribe(response => {
+    this.apiService.getMoneyRecordsForCompany().subscribe(response => {
       console.log(response);
       this.recordList = new MatTableDataSource(response.data.records);
       this.recordList.sort = this.sort;

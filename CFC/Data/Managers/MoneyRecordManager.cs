@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CFC.Data.Entities;
 using CFC.Data.Enums;
+using CFC.Data.Constants;
 using CFC.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +13,13 @@ namespace CFC.Data.Managers
     public class MoneyRecordManager : IMoneyRecordManager
     {
         private IRepositoryWrapper _repository { get; set; }
-        public MoneyRecordManager(IRepositoryWrapper repository, ICompanyRepository companyRepository)
+        private ICompanyManager _companyManager { get; set; }
+        private IOfficeManager _officeManager { get; set; }
+        public MoneyRecordManager(IRepositoryWrapper repository, ICompanyRepository companyRepository, ICompanyManager companyManager, IOfficeManager officeManager)
         {
             this._repository = repository;
+            this._companyManager = companyManager;
+            this._officeManager = officeManager;
             // this._companyRepository = companyRepository;
         }
         public void Create(MoneyRecord entity)
@@ -40,12 +45,69 @@ namespace CFC.Data.Managers
 
         public Task<List<MoneyRecord>> GetAll()
         {
-            return this._repository.MoneyRecordRepository.FindAll()
-                .Include(s => s.Company)
-                .Include(s => s.Office)
-                .Include(s => s.Creator)
-                .OrderByDescending(s => s.CreatedAt)
-                .ToListAsync();
+            throw new NotImplementedException("Use with type!");
+        }
+
+        public Task<List<MoneyRecord>> GetAll(string type)
+        {
+            switch (type)
+            {
+                case Constants.Constants.RecordType.ALL:
+                    return this._repository.MoneyRecordRepository.FindAll()
+                       .Include(s => s.Company)
+                       .Include(s => s.Office)
+                       .Include(s => s.Creator)
+                       .OrderByDescending(s => s.CreatedAt)
+                       .ToListAsync();
+                case Constants.Constants.RecordType.COMPANY:
+                    return this._repository.MoneyRecordRepository.FindByCondition(r => r.Type == MoneyRecordType.EXPENSE || r.Type == MoneyRecordType.INCOME)
+                       .Include(s => s.Company)
+                       .Include(s => s.Office)
+                       .Include(s => s.Creator)
+                       .OrderByDescending(s => s.CreatedAt)
+                       .ToListAsync();
+                case Constants.Constants.RecordType.PERSONAL:
+                    return this._repository.MoneyRecordRepository.FindByCondition(r => r.Type == MoneyRecordType.DEPOSIT || r.Type == MoneyRecordType.WITHDRAW)
+                       .Include(s => s.Company)
+                       .Include(s => s.Office)
+                       .Include(s => s.Creator)
+                       .OrderByDescending(s => s.CreatedAt)
+                       .ToListAsync();
+                default:
+                    throw new Exception("Invalid record type");
+            }           
+        }
+
+        public async Task<List<MoneyRecord>> GetAllForOwner(string type,string userId)
+        {
+            switch (type)
+            {
+                case Constants.Constants.RecordType.COMPANY:
+                    var companies = await this._companyManager.GetCompaniesByOwner(userId);
+                    var companyIds = companies.Select(c => c.Id).ToList();
+
+                    var offices = await this._officeManager.GetOfficesByOwner(userId);
+                    var officeIds = offices.Select(c => c.Id).ToList();
+
+                    return this._repository.MoneyRecordRepository.FindByCondition(r =>
+                        (r.Type == MoneyRecordType.EXPENSE || r.Type == MoneyRecordType.INCOME) &&
+                        (companyIds.Contains(r.CompanyId.Value) || officeIds.Contains(r.OfficeId.Value))
+                    )
+                       .Include(s => s.Company)
+                       .Include(s => s.Office)
+                       .Include(s => s.Creator)
+                       .OrderByDescending(s => s.CreatedAt)
+                       .ToList();
+                case Constants.Constants.RecordType.PERSONAL:
+                    return this._repository.MoneyRecordRepository.FindByCondition(r => r.CreatorId == userId && (r.Type == MoneyRecordType.DEPOSIT || r.Type == MoneyRecordType.WITHDRAW))
+                       .Include(s => s.Company)
+                       .Include(s => s.Office)
+                       .Include(s => s.Creator)
+                       .OrderByDescending(s => s.CreatedAt)
+                       .ToList();
+                default:
+                    throw new Exception("Invalid record type");
+            }
         }
 
         public void Remove(MoneyRecord entity)
@@ -108,6 +170,32 @@ namespace CFC.Data.Managers
             }
 
             return companyRecordsSumIncomes + companyRecordsSumExpenses + officeRecordsSum;
+        }
+
+        public async Task<bool> CheckValidity(MoneyRecord record)
+        {
+            if(record.CreatorId == null)
+            {
+                return false;
+            }
+            var userCompanies = await this._companyManager.GetCompaniesByOwner(record.CreatorId);
+            if(record.CompanyId != null)
+            {
+                var company = userCompanies.FirstOrDefault(c => c.Id == record.CompanyId);
+                if(company == null)
+                {
+                    return false;
+                }
+
+            } else if(record.OfficeId != null)
+            {
+                var office = userCompanies.SelectMany(c => c.Offices).Where(o => o.OfficeId == record.OfficeId).FirstOrDefault();               
+                if (office == null)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

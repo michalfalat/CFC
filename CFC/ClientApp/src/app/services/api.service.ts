@@ -129,8 +129,8 @@ export class ApiService {
 
 
   // MONEY RECORDS
-  private getMoneyRecordsUrl() {
-    return this.baseUrl + 'api/MoneyRecord';
+  private getMoneyRecordsUrl(type: string) {
+    return this.baseUrl + `api/MoneyRecord/all/${type}`;
   }
 
   private addMoneyRecordUrl() {
@@ -373,7 +373,6 @@ export class ApiService {
   }
 
   editOffice(data: EditOfficeModel) {
-    console.log(data)
     return this.http.post(this.editOfficeUrl(), data, this.headers).pipe(
       catchError(error => {
         console.log(error);
@@ -432,8 +431,16 @@ export class ApiService {
   }
 
 
-  getMoneyRecords(): any {
-    return this.http.get(this.getMoneyRecordsUrl(), this.headers).pipe(
+  getMoneyRecordsForCompany(): any {
+    return this.http.get(this.getMoneyRecordsUrl('company'), this.headers).pipe(
+      catchError(error => {
+        console.log(error);
+        return throwError(error);
+      }));
+  }
+
+  getMoneyRecordsPersonal(): any {
+    return this.http.get(this.getMoneyRecordsUrl('personal'), this.headers).pipe(
       catchError(error => {
         console.log(error);
         return throwError(error);

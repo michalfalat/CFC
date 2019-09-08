@@ -151,6 +151,17 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             component: CompanyFinancialsAddComponent,
             pathMatch: 'full'
           },
+          {
+            path: 'personalRecords',
+            component: PersonalFinancialsComponent,
+            pathMatch: 'full'
+          },
+          {
+            path: 'personalRecords/add',
+            component: PersonalFinancialsComponent,
+            pathMatch: 'full'
+          },
+
           // {
           //   path: 'officcompanyRecordses/:id',
           //   component: CompanyFinancialDetailComponent,
@@ -159,7 +170,47 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
           // <-- The rest of your admin routes
         ]
-      }
+      },
+      {
+        path: 'companies',
+        component: CompanyListComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'companies/:id',
+        component: CompanyDetailComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'offices',
+        component: OfficeListComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'offices/:id',
+        component: OfficeDetailComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'companyRecords',
+        component: CompanyFinancialsComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'companyRecords/add',
+        component: CompanyFinancialsAddComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'personalRecords',
+        component: PersonalFinancialsComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'personalRecords/add',
+        component: PersonalFinancialsComponent,
+        pathMatch: 'full'
+      },
     ]),
 
     TranslateModule.forRoot({

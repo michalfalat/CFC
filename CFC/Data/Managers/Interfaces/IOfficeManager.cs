@@ -10,5 +10,6 @@ namespace CFC.Data.Managers
     {
         void AddCompanyToOffice(CompanyOffice entity, Office office);
         void RemoveCompanyFromOffice(int companyId, int officeId);
+        Task<List<Office>> GetOfficesByOwner(string ownerId);
     }
 }

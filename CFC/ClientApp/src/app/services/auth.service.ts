@@ -5,19 +5,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {  
+export class AuthService {
   private userSubject: BehaviorSubject<UserInfo>;
   public user: Observable<UserInfo>;
 
-  constructor() { 
-    this.userSubject = new BehaviorSubject<UserInfo>(null); 
+  constructor() {
+    this.userSubject = new BehaviorSubject<UserInfo>(null);
     const userData = JSON.parse(localStorage.getItem('auth_user'));
-    if(userData !== null) {      
-      let user = new UserInfo();
+    if (userData !== null) {
+      const user = new UserInfo();
       user.email = userData.email;
       user.role = userData.role;
       this.userSubject.next(user);
-    } 
+    }
     this.user = this.userSubject.asObservable();
   }
 
@@ -25,7 +25,7 @@ export class AuthService {
     return this.getUser() !== null ? true : false;
   }
 
-  public getUser() {   
+  public getUser() {
     return this.userSubject.value;
   }
 
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   public isEnabledFor(role) {
-    if(this.getRole() == role) {
+    if (this.getRole() === role) {
       return true;
     } else {
       return false;
@@ -49,16 +49,24 @@ export class AuthService {
 
   public saveUser(userLoginInfo: UserLoginInfo) {
     localStorage.setItem('auth_user', JSON.stringify(userLoginInfo));
-    let user = new UserInfo();
+    const user = new UserInfo();
     user.email = userLoginInfo.email;
     user.role = userLoginInfo.role;
     this.userSubject.next(user);
   }
-  
+
 
   public logoutUser() {
     this.userSubject.next(null);
     localStorage.removeItem('auth_user');
+  }
+
+  public getPath(path: string) {
+    const role = this.getRole();
+    if (role === 'Administrator') {
+      return `/admin${path}`;
+    }
+    return path;
   }
 
 }

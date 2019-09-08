@@ -9,6 +9,7 @@ import { MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { OfficeStatus } from '../models/enums';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -47,7 +48,8 @@ export class OfficeDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private changeDetector: ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef,
+    public authService: AuthService) {
   }
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class OfficeDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/admin/offices']);
+    this.router.navigate([this.authService.getPath('/offices/')]);
   }
 
   loadOffice() {

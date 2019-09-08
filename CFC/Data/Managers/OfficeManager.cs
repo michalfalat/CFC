@@ -83,6 +83,17 @@ namespace CFC.Data.Managers
             }
         }
 
+        public async Task<List<Office>> GetOfficesByOwner(string ownerId)
+        {
+            var companies = await this._repository.CompanyRepository.FindByCondition(c => c.Owners.Select(o => o.UserId).Contains(ownerId) && !c.Obsolete)
+              .Include(s => s.Owners)
+              .Include(s => s.Offices).ThenInclude(o => o.Office)
+              .ToListAsync();
+
+            var offices = companies.SelectMany(c => c.Offices).Select(o => o.Office).Where(o => !o.Obsolete).ToList();
+            return offices;
+        }
+
 
         //public void AddUserToOffice(ApplicationUserOffice entity, Office office)
         //{

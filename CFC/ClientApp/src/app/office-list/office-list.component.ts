@@ -5,6 +5,7 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { OfficeStatus } from '../models/enums';
 import { LanguageService } from '../services/language.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-office-list',
@@ -22,6 +23,7 @@ export class OfficeListComponent implements OnInit {
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,
+    public authService: AuthService,
      private notifyService: NotifyService, private translateService: TranslateService, private languageService: LanguageService) {
      }
 

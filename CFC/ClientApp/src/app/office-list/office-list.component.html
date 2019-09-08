@@ -59,7 +59,7 @@
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
           <button mat-icon-button matTooltip="{{ 'office-detail' | translate }}"
-            routerLink="{{'/admin/offices/' + element.id }}">
+          routerLink="{{ authService.getPath('/offices/' + element.id) }}">
             <mat-icon>info</mat-icon>
           </button>
           <button mat-icon-button matTooltip="{{ (element.obsolete ? 'restore' : 'remove') | translate }}" (click)="remove(element)">

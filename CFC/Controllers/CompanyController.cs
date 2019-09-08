@@ -17,6 +17,7 @@ using System.Text;
 using System;
 using CFC.Data.Enums;
 using AutoMapper;
+using CFC.Data.Constants;
 
 namespace CFC.Controllers
 {
@@ -63,6 +64,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Add([FromBody] CompanyAddModel model)
         {
             if(!ModelState.IsValid)
@@ -80,10 +82,19 @@ namespace CFC.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetAll()
         {
-            var companies = await this._companyManager.GetAll();
+            var companies = new List<Company>();
+            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            {
+                companies = await this._companyManager.GetAll();
+            } else
+            {
+                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                companies = await this._companyManager.GetCompaniesByOwner(userId);
+
+            }
             var companyModels = this._mapper.Map<List<CompanyViewModel>>(companies);
             foreach (var company in companyModels)
             {
@@ -95,7 +106,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Get(int id)
         {
             var company = await this._companyManager.FindById(id);
@@ -113,7 +124,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}/preview")]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetPreview(int id)
         {
             var company = await this._companyManager.FindById(id);
@@ -127,7 +138,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Edit([FromBody] CompanyEditModel model)
         {
             if (!ModelState.IsValid)
@@ -150,7 +161,7 @@ namespace CFC.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Remove(int id)
         {
             var company = await this._companyManager.FindById(id);
@@ -163,7 +174,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("Unremove/{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Unremove(int id)
         {
             var company = await this._companyManager.FindById(id);
@@ -176,7 +187,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("{id}/AddUser")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> AddUserToCompany(int id, [FromBody]CompanyAddUserModel model)
         {
             //TODO check percentage overflow 
@@ -196,7 +207,7 @@ namespace CFC.Controllers
         }
 
         [HttpDelete("{id}/RemoveUser/{userId}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> RemoveUserFromCompany(int id, string userId)
         {
             var company = await this._companyManager.FindById(id);
@@ -214,7 +225,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}/Users")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> GetCompanyUsers(int id)
         {
             var company = await this._companyManager.FindById(id);

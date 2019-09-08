@@ -12,6 +12,11 @@ namespace CFC.Data.Managers
         Task<List<MoneyRecord>> GetAllForOffice(int officeId);
         decimal SumRecords(List<MoneyRecord> records);
         decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records);
+        Task<bool> CheckValidity(MoneyRecord record);
+
+        Task<List<MoneyRecord>> GetAll(string type);
+
+        Task<List<MoneyRecord>> GetAllForOwner(string type, string userId);
 
     }
 }

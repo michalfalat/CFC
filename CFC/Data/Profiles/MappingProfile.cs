@@ -47,6 +47,7 @@ namespace CFC.Data.Profiles
                 .ForMember(d => d.CompaniesCount, s => s.MapFrom(source => source.Companies.Count));
 
             CreateMap<MoneyRecordAddModel, MoneyRecord>();
+            CreateMap<MoneyRecordExtendedAddModel, MoneyRecord>();
             CreateMap<MoneyRecord, MoneyRecordViewModel>()
                 .ForMember(d => d.CreatorName, s => s.MapFrom(source => $"{source.Creator.Name} {source.Creator.Surname}"))
                 .ForMember(d => d.CompanyName, s => s.MapFrom(source => source.Company.Name))

@@ -60,7 +60,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/' + element.id }}">
+          <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{ authService.getPath('/companies/' + element.id) }}">
             <mat-icon>info</mat-icon>
           </button>
           <button mat-icon-button matTooltip="{{ (element.obsolete ? 'restore' : 'remove') | translate }}" (click)="remove(element)">

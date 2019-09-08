@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { CompanyOwnerAddModel } from '../models/company-models';
 import { CompanyUserRole, CompanyStatus } from '../models/enums';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-company-detail',
@@ -47,7 +48,8 @@ export class CompanyDetailComponent implements OnInit {
     private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public authService: AuthService) {
   }
 
   ngOnInit() {
@@ -73,7 +75,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/admin/companies']);
+    this.router.navigate([this.authService.getPath('/companies')]);
   }
 
   loadCompany() {
@@ -89,6 +91,7 @@ export class CompanyDetailComponent implements OnInit {
 
       this.cashflow = new MatTableDataSource(response.data.company.cashflow);
       this.cashflow.sort = this.sortCashflow;
+      // if(this.au)
       this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;

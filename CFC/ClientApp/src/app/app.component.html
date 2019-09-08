@@ -29,13 +29,33 @@
             <mat-icon matListIcon>compare_arrows</mat-icon>
             <span> {{ 'expenses-incomes' | translate }}</span>
           </button>
+          <button mat-list-item routerLink="/admin/personalRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>attach_money</mat-icon>
+            <span> {{ 'personal-records' | translate }}</span>
+          </button>
 
         </div>
         <div *ngIf="authService.isEnabledFor('Owner')">
-          <!-- OWNBR ROUTES -->
+          <!-- OWNER ROUTES -->
           <button mat-list-item routerLink="/dashboard" [routerLinkActive]="['activeLink']">
             <mat-icon matListIcon>bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/companies" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>dashboard</mat-icon>
+            <span> {{ 'companies' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/offices" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>place</mat-icon>
+            <span> {{ 'offices' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/companyRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>compare_arrows</mat-icon>
+            <span> {{ 'expenses-incomes' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/personalRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon>attach_money</mat-icon>
+            <span> {{ 'personal-records' | translate }}</span>
           </button>
 
         </div>

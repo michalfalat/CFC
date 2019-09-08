@@ -17,6 +17,7 @@ using System.Text;
 using System;
 using CFC.Data.Enums;
 using AutoMapper;
+using CFC.Data.Constants;
 
 namespace CFC.Controllers
 {
@@ -56,7 +57,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Add([FromBody] MoneyRecordAddModel model)
         {
             if (!ModelState.IsValid)
@@ -74,18 +75,53 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetAll()
+        [HttpPost("[action]")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        public async Task<IActionResult> AddExtended([FromBody] MoneyRecordExtendedAddModel model)
         {
-            var records = await this._moneyRecordManager.GetAll();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+            var record = this._mapper.Map<MoneyRecordExtendedAddModel, MoneyRecord>(model);
+            record.Obsolete = false;
+            record.CreatedAt = DateTime.Now;
+            record.EditedAt = DateTime.Now;
+            var validity =  await this._moneyRecordManager.CheckValidity(record);
+            if(validity)
+            {
+                this._moneyRecordManager.Create(record);
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+            } else
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
+            }
+
+
+        }
+
+        [HttpGet("all/{type}")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> GetAll(string type)
+        {
+            var records = new List<MoneyRecord>();
+            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            {
+                records = await this._moneyRecordManager.GetAll(type);
+            }
+            else
+            {
+                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                records = await this._moneyRecordManager.GetAllForOwner(type, userId);
+
+            }
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = recordsModels }));
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Administrator,Owner")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Get(int id)
         {
             var record = await this._moneyRecordManager.FindById(id);
@@ -100,7 +136,7 @@ namespace CFC.Controllers
               
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Remove(int id)
         {
             var record = await this._moneyRecordManager.FindById(id);
@@ -113,7 +149,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("Unremove/{id}")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Unremove(int id)
         {
             var record = await this._moneyRecordManager.FindById(id);
