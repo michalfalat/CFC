@@ -1,27 +1,26 @@
-<mat-card class="form-container full-width">
+<div class="cardList">
+<mat-card class="cardListItem" *ngFor="let company of recordList">
   <div class="flexLayout">
     <span>
-      <h3>{{ 'expenses-incomes' | translate }}</h3>
+      <h3>{{ company.companyName }}</h3>
     </span>
     <span class="spacer"></span>
     <span class="actionButtons">
       <span>
-        <button mat-raised-button (click)="refresh()" color="primary">
+        <button mat-icon-button (click)="refresh()"  matTooltip="{{ 'refresh' | translate }}">
           <mat-icon matListIcon>refresh</mat-icon>
-          <span> {{ 'refresh' | translate }}</span>
         </button>
       </span>
       <span>
-        <button mat-raised-button routerLink="/admin/companyRecords/add" color="primary">
-          <mat-icon matListIcon>add</mat-icon>
-          <span> {{ 'add-expense-income' | translate }}</span>
+        <button mat-icon-button routerLink="{{ authService.getPath('/personalRecords/add/' + company.companyId) }}" matTooltip="{{ 'add-expense-income' | translate }}">
+          <mat-icon mat-icon>add</mat-icon>
         </button>
       </span>
     </span>
   </div>
   <br>
   <div>
-    <table mat-table [dataSource]="recordList" matSort class="basic-table">
+    <table mat-table [dataSource]="company.records" matSort class="basic-table">
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
@@ -32,7 +31,7 @@
           <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
         </ng-container>
 
-      <ng-container matColumnDef="companyName">
+      <!-- <ng-container matColumnDef="companyName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
       </ng-container>
@@ -40,7 +39,7 @@
       <ng-container matColumnDef="officeName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'office-name' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
-      </ng-container>
+      </ng-container> -->
 
 
 
@@ -51,7 +50,7 @@
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
-        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}{{element.amount}} &euro;</td>
+        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 3 , 'green-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}{{element.amount}} &euro;</td>
       </ng-container>
 
 
@@ -72,12 +71,11 @@
       </tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-    <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0" class="centered-info-secondary">
+    <div *ngIf="company.records === undefined || company.records.length == 0" class="centered-info-secondary">
       <br>
       <p>{{ 'no-data' | translate }}</p>
     </div>
     <router-outlet></router-outlet>
   </div>
-
-
 </mat-card>
+</div>

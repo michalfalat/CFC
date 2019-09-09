@@ -35,6 +35,7 @@ import { OfficeListComponent } from './office-list/office-list.component';
 import { CompanyFinancialsComponent } from './company-financials/company-financials.component';
 import { PersonalFinancialsComponent } from './personal-financials/personal-financials.component';
 import { CompanyFinancialsAddComponent } from './company-financials-add/company-financials-add.component';
+import { PersonalFinancialsAddComponent } from './personal-financials-add/personal-financials-add.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -66,6 +67,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     CompanyFinancialsComponent,
     PersonalFinancialsComponent,
     CompanyFinancialsAddComponent,
+    PersonalFinancialsAddComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -157,8 +159,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             pathMatch: 'full'
           },
           {
-            path: 'personalRecords/add',
-            component: PersonalFinancialsComponent,
+            path: 'personalRecords/add/:id',
+            component: PersonalFinancialsAddComponent,
             pathMatch: 'full'
           },
 
@@ -207,8 +209,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         pathMatch: 'full'
       },
       {
-        path: 'personalRecords/add',
-        component: PersonalFinancialsComponent,
+        path: 'personalRecords/add/:id',
+        component: PersonalFinancialsAddComponent,
         pathMatch: 'full'
       },
     ]),

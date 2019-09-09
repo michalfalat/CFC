@@ -30,6 +30,7 @@ namespace CFC.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IApplicationUserManager _applicationUserManager;
         private readonly IMoneyRecordManager _moneyRecordManager;
+        private readonly ICompanyManager _companyManager;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
@@ -43,7 +44,8 @@ namespace CFC.Controllers
             IApplicationUserManager applicationUserManager,
             IConfiguration configuration,
             IMoneyRecordManager moneyRecordManager,
-            IEmailSender emailSender, IMapper mapper)
+            IEmailSender emailSender,
+            ICompanyManager companyManager, IMapper mapper)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
@@ -54,6 +56,7 @@ namespace CFC.Controllers
             this._emailSender = emailSender;
             this._mapper = mapper;
             this._moneyRecordManager = moneyRecordManager;
+            this._companyManager = companyManager;
         }
 
         [HttpPost]
@@ -100,11 +103,12 @@ namespace CFC.Controllers
 
         }
 
-        [HttpGet("all/{type}")]
+        [HttpGet("all/company")]
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
-        public async Task<IActionResult> GetAll(string type)
+        public async Task<IActionResult> GetAllForCompany()
         {
             var records = new List<MoneyRecord>();
+            string type = "company";
             if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
             {
                 records = await this._moneyRecordManager.GetAll(type);
@@ -118,6 +122,62 @@ namespace CFC.Controllers
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = recordsModels }));
+        }
+
+
+
+        [HttpGet("all/personal")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> GetAllPersonal()
+        {
+            var records = new List<MoneyRecord>();
+            string type = "personal";
+            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            {
+                records = await this._moneyRecordManager.GetAll(type);
+                var companies = await this._companyManager.GetAll();
+                var model = new List<MoneyRecordPersonalGroupedViewModel>();
+                foreach (var company in companies)
+                {
+                    var filteredRecords = records.Where(r => r.CompanyId == company.Id).ToList();
+                    var filteredRecordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(filteredRecords);
+                    var item = new MoneyRecordPersonalGroupedViewModel()
+                    {
+                        CompanyId = company.Id,
+                        CompanyName = company.Name,
+                        Records = filteredRecordsModels,
+                        Percentage = null,
+                        Cashflow = null,
+                    };
+                    model.Add(item);
+                }
+
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = model }));
+
+            }
+            else
+            {
+                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                records = await this._moneyRecordManager.GetAllForOwner(type, userId);
+                var companies = await this._companyManager.GetCompaniesByOwner(userId);
+                var model = new List<MoneyRecordPersonalGroupedViewModel>();
+                foreach (var company in companies)
+                {
+                    var filteredRecords = records.Where(r => r.CompanyId == company.Id).ToList();
+                    var filteredRecordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(filteredRecords);
+                    var item = new MoneyRecordPersonalGroupedViewModel()
+                    {
+                        CompanyId = company.Id,
+                        CompanyName = company.Name,
+                        Records = filteredRecordsModels,
+                        Percentage = 15, // TODO
+                        Cashflow = 123, // TODO
+                    };
+                    model.Add(item);
+                }
+
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = model }));
+            }
         }
 
         [HttpGet("{id}")]

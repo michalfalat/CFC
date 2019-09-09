@@ -4,6 +4,7 @@ import { MoneyRecordType } from '../models/enums';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-personal-financials',
@@ -14,11 +15,12 @@ export class PersonalFinancialsComponent implements OnInit {
   public loadingData = false;
   public recordList;
   public moneyRecordType = MoneyRecordType;
-  public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
+  public displayedColumns: string[] = ['createdAt', 'creator', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
 
   constructor(private apiService: ApiService,
-    private notifyService: NotifyService, private translateService: TranslateService) { }
+    private notifyService: NotifyService, private translateService: TranslateService,
+    public authService: AuthService) { }
 
   ngOnInit() {
     this.getRecords();
@@ -33,8 +35,8 @@ export class PersonalFinancialsComponent implements OnInit {
     this.loadingData = true;
     this.apiService.getMoneyRecordsPersonal().subscribe(response => {
       console.log(response);
-      this.recordList = new MatTableDataSource(response.data.records);
-      this.recordList.sort = this.sort;
+      this.recordList = response.data.records;
+      // this.recordList.sort = this.sort;
       this.loadingData = false;
 
     }, error => {
