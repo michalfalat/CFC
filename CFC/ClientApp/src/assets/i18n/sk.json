@@ -121,5 +121,11 @@
     "actual-money-state": "Stav financií",
     "destination-type": "Cieľová destinácia",
     "cash-flow": "Tok financií",
-    "personal-records": "Osobné financie"
+    "personal-records": "Osobné financie",
+    "admin-dashboard": "Prehľad systému [administrator]",
+    "users-count": "Počet používateľov",
+    "offices-count": "Počet pobočiek",
+    "available-cash": "Dostupné financie",
+    "deposits": "Všetky vklady",
+    "withdraws": "Všetky výbery"
 }

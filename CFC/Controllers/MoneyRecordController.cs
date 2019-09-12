@@ -116,7 +116,7 @@ namespace CFC.Controllers
             else
             {
                 var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                records = await this._moneyRecordManager.GetAllForOwner(type, userId);
+                records = await this._moneyRecordManager.GetAllCompanyRecordsForOwner(type, userId);
 
             }
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
@@ -158,7 +158,7 @@ namespace CFC.Controllers
             else
             {
                 var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                records = await this._moneyRecordManager.GetAllForOwner(type, userId);
+                records = await this._moneyRecordManager.GetAllCompanyRecordsForOwner(type, userId);
                 var companies = await this._companyManager.GetCompaniesByOwner(userId);
                 var model = new List<MoneyRecordPersonalGroupedViewModel>();
                 foreach (var company in companies)

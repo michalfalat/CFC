@@ -78,7 +78,7 @@ namespace CFC.Data.Managers
             }           
         }
 
-        public async Task<List<MoneyRecord>> GetAllForOwner(string type,string userId)
+        public async Task<List<MoneyRecord>> GetAllCompanyRecordsForOwner(string type,string userId)
         {
             switch (type)
             {
@@ -143,9 +143,44 @@ namespace CFC.Data.Managers
                  .ToListAsync();
         }
 
+        public Task<List<MoneyRecord>> GetAllPersonalForOwner(string userId)
+        {
+            return this._repository.MoneyRecordRepository.FindByCondition(a => a.CreatorId == userId &&
+            (a.Type == MoneyRecordType.DEPOSIT || a.Type == MoneyRecordType.WITHDRAW))
+                 .Include(a => a.Company)
+                 .Include(a => a.Office).ThenInclude(c => c.Companies)
+                 .Include(a => a.Creator)
+                 .OrderByDescending(s => s.CreatedAt)
+                 .ToListAsync();
+        }
+
+        public Task<List<MoneyRecord>> GetDepositsForOwner(string userId)
+        {
+            return this._repository.MoneyRecordRepository.FindByCondition(a => a.CreatorId == userId &&
+            a.Type == MoneyRecordType.DEPOSIT)
+                 .Include(a => a.Company)
+                 .Include(a => a.Office).ThenInclude(c => c.Companies)
+                 .Include(a => a.Creator)
+                 .OrderByDescending(s => s.CreatedAt)
+                 .ToListAsync();
+        }
+
+        public Task<List<MoneyRecord>> GetWithdrawsForOwner(string userId)
+        {
+            return this._repository.MoneyRecordRepository.FindByCondition(a => a.CreatorId == userId &&
+            a.Type == MoneyRecordType.WITHDRAW)
+                 .Include(a => a.Company)
+                 .Include(a => a.Office).ThenInclude(c => c.Companies)
+                 .Include(a => a.Creator)
+                 .OrderByDescending(s => s.CreatedAt)
+                 .ToListAsync();
+        }
+
         public decimal SumRecords(List<MoneyRecord> records)
         {
-           return records.Sum(a => ((a.Type == MoneyRecordType.INCOME) ? a.Amount : a.Amount * -1));
+            var companyRecordsSumIncomes = records.Where(a => (a.Type == MoneyRecordType.INCOME)).Sum(a => a.Amount);
+            var companyRecordsSumExpenses = records.Where(a => (a.Type == MoneyRecordType.EXPENSE)).Sum(a => (a.Amount * (-1)));
+            return companyRecordsSumIncomes + companyRecordsSumExpenses;
         }
 
         public decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records)
@@ -170,6 +205,19 @@ namespace CFC.Data.Managers
             }
 
             return companyRecordsSumIncomes + companyRecordsSumExpenses + officeRecordsSum;
+        }
+
+        public decimal SumRecordsForCompanyAndUser(int companyId, decimal percentage,  List<MoneyRecord> records)
+        {
+            return this.SumRecordsForCompany(companyId, records) / 100m * percentage;
+        }
+
+
+        public decimal SumRecordsForOwner(List<MoneyRecord> records)
+        {
+            var recordsSumDeposits = records.Where(a => (a.Type == MoneyRecordType.DEPOSIT)).Sum(a => a.Amount);
+            var recordsSumWithdraws = records.Where(a => (a.Type == MoneyRecordType.WITHDRAW)).Sum(a => (a.Amount * (-1)));
+            return recordsSumDeposits + recordsSumWithdraws;
         }
 
         public async Task<bool> CheckValidity(MoneyRecord record)
@@ -197,5 +245,6 @@ namespace CFC.Data.Managers
             }
             return true;
         }
+
     }
 }

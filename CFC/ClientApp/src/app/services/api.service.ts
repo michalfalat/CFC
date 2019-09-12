@@ -138,6 +138,15 @@ export class ApiService {
   }
 
 
+  // DASHBOARDS
+  private getAdminDashbooardUrl() {
+    return this.baseUrl + `api/Dashboard/admin`;
+  }
+
+  private getUserDashbooardUrl() {
+    return this.baseUrl + `api/Dashboard/user`;
+  }
+
 
   constructor(private http: HttpClient,
     private authService: AuthService,
@@ -453,6 +462,14 @@ export class ApiService {
         error = this.checkInternalError(error);
         return throwError(error);
       }));
+  }
+
+  getAdminDashboard(): any {
+    return this.http.get(this.getAdminDashbooardUrl(), this.headers);
+  }
+
+  getUserDashboard(): any {
+    return this.http.get(this.getUserDashbooardUrl(), this.headers);
   }
 
 }

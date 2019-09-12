@@ -121,6 +121,12 @@
     "actual-money-state": "Actual money state",
     "destination-type": "Destination type",
     "cash-flow": "Cash flow",
-    "personal-records": "Personal finance"
+    "personal-records": "Personal finance",
+    "admin-dashboard": "Admin dashboard",
+    "users-count": "Users count",
+    "offices-count": "Offices count",
+    "available-cash": "Cash available",
+    "deposits": "All deposits",
+    "withdraws": "All withdraws"
 
 }

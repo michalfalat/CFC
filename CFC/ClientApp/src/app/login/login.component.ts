@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     private translateService: TranslateService) {
     this.user = new LoginUser();
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate([this.authService.getPath('/dashboard')]);
     }
   }
 

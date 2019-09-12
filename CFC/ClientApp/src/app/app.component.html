@@ -118,7 +118,9 @@
       <footer>
         <div>
           <mat-toolbar class="footer">
-            &copy; Michal Falát {{ getYear()}}
+            <div class="secondary-data">
+                &copy; Michal Falát {{ getYear()}}
+            </div>
             <span class="spacer"></span>
 
             <mat-slide-toggle class="" color="accent" [checked]="darkThemeService.darkModeEnabled === true"
