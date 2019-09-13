@@ -18,8 +18,12 @@
     <div *ngIf="!loadingData" >
       <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong>  </p>
       <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong>  </p>
-      <p> {{ 'available-cash' | translate }}:<strong> {{ data.totalAvailable }}&euro;</strong>  </p>
-      <p> {{ 'deposits' | translate }}:<strong> {{ data.totalDeposit }}&euro;</strong>  </p>
+      <p> {{ 'available-cash' | translate }}:<strong  [ngClass]="{'red-text': data.totalAvailable < 0 , 'green-text': data.totalAvailable > 0  }"> {{ data.totalAvailable }}&euro;</strong>  </p>
+      <p> {{ 'deposits' | translate }}:<strong class="green-text"> {{ data.totalDeposit }}&euro;</strong>  </p>
       <p> {{ 'withdraws' | translate }}:<strong> {{ data.totalWithdraw }}&euro;</strong>  </p>
     </div>
+  </mat-card>
+
+  <mat-card class="form-container">
+    <app-chart-data></app-chart-data>
   </mat-card>

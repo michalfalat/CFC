@@ -45,4 +45,12 @@ export class PersonalFinancialsComponent implements OnInit {
     });
   }
 
+
+  sumCompanyShare(company) {
+    return company.cashflow / 100 * company.percentage;
+  }
+  finalSum(company) {
+    return ( company.cashflow / 100 * company.percentage) + company.totalDeposit + company.totalWithdraw;
+  }
+
 }

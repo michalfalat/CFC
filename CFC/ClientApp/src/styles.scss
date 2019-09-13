@@ -238,3 +238,19 @@ background-color: #90909029;
   font-size: 0.8rem;
   opacity: 0.75;
 }
+
+.sumTable {
+  width: 70%;
+  margin: auto;
+}
+
+.sumTable .sumCell {
+  text-align: right;
+}
+
+.sumTable .sumRow {
+  font-size: 1.2em;
+  font-weight: bold;
+  border-top: 2px solid grey;
+  line-height: 2rem;
+}

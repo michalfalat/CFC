@@ -19,6 +19,29 @@
     </span>
   </div>
   <br>
+  <div class="flexLayout">
+    <table class="sumTable">
+      <tr>
+        <td>{{ 'company-owner-share' | translate }}:</td>
+        <td class="sumCell">
+           <span style="font-size: 0.8em">{{ company.cashflow }}&euro; * {{ company.percentage }}% = </span>
+           <strong [ngClass]="{'red-text': sumCompanyShare(company) < 0, 'green-text': sumCompanyShare(company) > 0 }"> {{ sumCompanyShare(company) }}&euro;</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>{{ 'deposits2' | translate }}:</td>
+        <td class="sumCell green-text"> <strong>+{{ company.totalDeposit }}&euro;</strong> </td>
+      </tr>
+      <tr>
+        <td>{{ 'withdraws2' | translate }}:</td>
+        <td class="sumCell red-text"> <strong>{{ company.totalWithdraw }}&euro;</strong> </td>
+      </tr>
+      <tr class="sumRow">
+        <td>{{ 'available-money' | translate }}:</td>
+        <td class="sumCell" [ngClass]="{'red-text': finalSum(company) < 0, 'green-text': finalSum(company) > 0 }"> <strong>{{ finalSum(company) }}&euro;</strong> </td>
+      </tr>
+    </table>
+  </div>
   <div>
     <table mat-table [dataSource]="company.records" matSort class="basic-table">
       <ng-container matColumnDef="createdAt">

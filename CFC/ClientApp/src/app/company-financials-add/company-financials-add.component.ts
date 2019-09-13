@@ -4,6 +4,7 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MoneyRecordAddModel } from '../models/money-record-models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-company-financials-add',
@@ -21,6 +22,7 @@ export class CompanyFinancialsAddComponent implements OnInit {
     private notifyService: NotifyService,
     private translateService: TranslateService,
     private router: Router,
+    public authService: AuthService,
     private route: ActivatedRoute) {
       this.record = new MoneyRecordAddModel();
       this.record.type = 'income';
@@ -33,7 +35,7 @@ export class CompanyFinancialsAddComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate([`/admin/companyRecords`]);
+    this.router.navigate([this.authService.getPath('/companyRecords')]);
   }
   add() {
     this.loadingData = true;

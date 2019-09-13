@@ -18,5 +18,8 @@ namespace CFC.Data.Models
         public  decimal? Percentage { get; set; }
 
         public decimal? Cashflow { get; set; }
+
+        public decimal TotalDeposit { get; set; }
+        public decimal TotalWithdraw { get; set; }
     }
 }

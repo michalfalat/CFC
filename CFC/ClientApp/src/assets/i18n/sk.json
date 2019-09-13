@@ -127,5 +127,10 @@
     "offices-count": "Počet pobočiek",
     "available-cash": "Dostupné financie",
     "deposits": "Všetky vklady",
-    "withdraws": "Všetky výbery"
+    "withdraws": "Všetky výbery",
+    "deposits2": "Vklady",
+    "withdraws2": "Výbery",
+    "available-money": "Dostupné peniaze",
+    "company-money": "Peniaze firmy",
+    "company-owner-share": "Podiel vo firme"
 }

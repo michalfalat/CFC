@@ -4,6 +4,7 @@ import { MoneyRecordType } from '../models/enums';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-company-financials',
@@ -17,7 +18,7 @@ export class CompanyFinancialsComponent implements OnInit {
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
 
-  constructor(private apiService: ApiService,
+  constructor(private apiService: ApiService, public authService: AuthService,
     private notifyService: NotifyService, private translateService: TranslateService) { }
 
   ngOnInit() {

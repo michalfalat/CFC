@@ -36,6 +36,8 @@ import { CompanyFinancialsComponent } from './company-financials/company-financi
 import { PersonalFinancialsComponent } from './personal-financials/personal-financials.component';
 import { CompanyFinancialsAddComponent } from './company-financials-add/company-financials-add.component';
 import { PersonalFinancialsAddComponent } from './personal-financials-add/personal-financials-add.component';
+import { ChartsModule } from 'ng2-charts';
+import { ChartDataComponent } from './chart-data/chart-data.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -68,6 +70,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     PersonalFinancialsComponent,
     CompanyFinancialsAddComponent,
     PersonalFinancialsAddComponent,
+    ChartDataComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -224,6 +227,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     }),
     BrowserAnimationsModule,
     CustomMaterialModule,
+    ChartsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

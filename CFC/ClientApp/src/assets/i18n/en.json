@@ -127,6 +127,12 @@
     "offices-count": "Offices count",
     "available-cash": "Cash available",
     "deposits": "All deposits",
-    "withdraws": "All withdraws"
+    "withdraws": "All withdraws",
+    "deposits2": "Deposits",
+    "withdraws2": "Withdraws",
+    "available-money": "Available money",
+    "company-money": "Company money",
+    "company-owner-share": "Share in company"
+
 
 }

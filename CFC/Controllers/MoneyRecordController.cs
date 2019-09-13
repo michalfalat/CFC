@@ -165,13 +165,17 @@ namespace CFC.Controllers
                 {
                     var filteredRecords = records.Where(r => r.CompanyId == company.Id).ToList();
                     var filteredRecordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(filteredRecords);
+                    var companyRecords = await this._moneyRecordManager.GetAllForCompany(company.Id);
+                    var owner = company.Owners.FirstOrDefault(a => a.UserId == userId);
                     var item = new MoneyRecordPersonalGroupedViewModel()
                     {
                         CompanyId = company.Id,
                         CompanyName = company.Name,
                         Records = filteredRecordsModels,
-                        Percentage = 15, // TODO
-                        Cashflow = 123, // TODO
+                        Percentage = owner?.Percentage,
+                        Cashflow = this._moneyRecordManager.SumRecordsForCompany(company.Id, companyRecords),
+                        TotalDeposit = filteredRecords.Where(r => r.Type == MoneyRecordType.DEPOSIT).Sum(r => r.Amount),
+                        TotalWithdraw = filteredRecords.Where(r => r.Type == MoneyRecordType.WITHDRAW).Sum(r => r.Amount * (-1)),
                     };
                     model.Add(item);
                 }

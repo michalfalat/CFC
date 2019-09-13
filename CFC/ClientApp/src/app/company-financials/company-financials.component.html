@@ -12,7 +12,7 @@
         </button>
       </span>
       <span>
-        <button mat-raised-button routerLink="/admin/companyRecords/add" color="primary">
+        <button mat-raised-button routerLink="{{ authService.getPath('/companyRecords/add') }}" color="primary">
           <mat-icon matListIcon>add</mat-icon>
           <span> {{ 'add-expense-income' | translate }}</span>
         </button>
