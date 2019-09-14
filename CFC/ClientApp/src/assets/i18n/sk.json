@@ -1,4 +1,11 @@
 {
+
+    "paginator.items-per-page": "Záznamov na stránku",
+    "paginator.next-page": "Ďalšia stránka",
+    "paginator.previous-page": "Predchádzajúca stránka",
+    "paginator.of": "z",
+    "paginator.first-page": "Prvá stránka",
+    "paginator.last-page": "Posledná stránka",
     "login": "Prihlásenie",
     "logout": "Odhlásiť",
     "password": "Heslo",

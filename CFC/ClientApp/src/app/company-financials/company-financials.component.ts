@@ -5,6 +5,7 @@ import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-company-financials',
@@ -17,6 +18,8 @@ export class CompanyFinancialsComponent implements OnInit {
   public moneyRecordType = MoneyRecordType;
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService, public authService: AuthService,
     private notifyService: NotifyService, private translateService: TranslateService) { }
@@ -36,6 +39,7 @@ export class CompanyFinancialsComponent implements OnInit {
       console.log(response);
       this.recordList = new MatTableDataSource(response.data.records);
       this.recordList.sort = this.sort;
+      this.recordList.paginator = this.paginator;
       this.loadingData = false;
 
     }, error => {

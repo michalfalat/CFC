@@ -76,7 +76,7 @@
       <br>
       <p>{{ 'no-data' | translate }}</p>
     </div>
-    <router-outlet></router-outlet>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
   </div>
 
 

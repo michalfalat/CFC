@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
@@ -38,6 +38,8 @@ import { CompanyFinancialsAddComponent } from './company-financials-add/company-
 import { PersonalFinancialsAddComponent } from './personal-financials-add/personal-financials-add.component';
 import { ChartsModule } from 'ng2-charts';
 import { ChartDataComponent } from './chart-data/chart-data.component';
+import { MatPaginatorIntl } from '@angular/material';
+import { PaginatorIntlService } from './custom-translations';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -231,6 +233,15 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: MatPaginatorIntl,
+      useFactory: (translate) => {
+        const service = new PaginatorIntlService();
+        service.injectTranslateService(translate);
+        return service;
+      },
+      deps: [TranslateService]
+    },
     CookieService,
     AuthGuard
   ],

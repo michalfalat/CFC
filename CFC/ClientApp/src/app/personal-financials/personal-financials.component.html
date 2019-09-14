@@ -1,92 +1,97 @@
 <div class="cardList">
-<mat-card class="cardListItem" *ngFor="let company of recordList">
-  <div class="flexLayout">
-    <span>
-      <h3>{{ company.companyName }}</h3>
-    </span>
-    <span class="spacer"></span>
-    <span class="actionButtons">
+  <mat-card class="cardListItem" *ngFor="let company of recordList">
+    <div class="flexLayout">
       <span>
-        <button mat-icon-button (click)="refresh()"  matTooltip="{{ 'refresh' | translate }}">
-          <mat-icon matListIcon>refresh</mat-icon>
-        </button>
+        <h3>{{ company.companyName }}</h3>
       </span>
-      <span>
-        <button mat-icon-button routerLink="{{ authService.getPath('/personalRecords/add/' + company.companyId) }}" matTooltip="{{ 'add-expense-income' | translate }}">
-          <mat-icon mat-icon>add</mat-icon>
-        </button>
+      <span class="spacer"></span>
+      <span class="actionButtons">
+        <span>
+          <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+            <mat-icon matListIcon>refresh</mat-icon>
+          </button>
+        </span>
+        <span>
+          <button mat-icon-button routerLink="{{ authService.getPath('/personalRecords/add/' + company.companyId) }}"
+            matTooltip="{{ 'add-expense-income' | translate }}">
+            <mat-icon mat-icon>add</mat-icon>
+          </button>
+        </span>
       </span>
-    </span>
-  </div>
-  <br>
-  <div class="flexLayout">
-    <table class="sumTable">
-      <tr>
-        <td>{{ 'company-owner-share' | translate }}:</td>
-        <td class="sumCell">
-           <span style="font-size: 0.8em">{{ company.cashflow }}&euro; * {{ company.percentage }}% = </span>
-           <strong [ngClass]="{'red-text': sumCompanyShare(company) < 0, 'green-text': sumCompanyShare(company) > 0 }"> {{ sumCompanyShare(company) }}&euro;</strong>
-        </td>
-      </tr>
-      <tr>
-        <td>{{ 'deposits2' | translate }}:</td>
-        <td class="sumCell green-text"> <strong>+{{ company.totalDeposit }}&euro;</strong> </td>
-      </tr>
-      <tr>
-        <td>{{ 'withdraws2' | translate }}:</td>
-        <td class="sumCell red-text"> <strong>{{ company.totalWithdraw }}&euro;</strong> </td>
-      </tr>
-      <tr class="sumRow">
-        <td>{{ 'available-money' | translate }}:</td>
-        <td class="sumCell" [ngClass]="{'red-text': finalSum(company) < 0, 'green-text': finalSum(company) > 0 }"> <strong>{{ finalSum(company) }}&euro;</strong> </td>
-      </tr>
-    </table>
-  </div>
-  <div>
-    <table mat-table [dataSource]="company.records" matSort class="basic-table">
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell  *matHeaderCellDef> {{ 'date' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
-      </ng-container>
+    </div>
+    <br>
+    <div class="flexLayout" *ngIf="authService.isEnabledFor('Owner')">
+      <table class="sumTable">
+        <tr>
+          <td>{{ 'company-owner-share' | translate }}:</td>
+          <td class="sumCell">
+            <span style="font-size: 0.8em">{{ company.cashflow }}&euro; * {{ company.percentage }}% = </span>
+            <strong [ngClass]="{'red-text': sumCompanyShare(company) < 0, 'green-text': sumCompanyShare(company) > 0 }">
+              {{ sumCompanyShare(company) }}&euro;</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ 'deposits2' | translate }}:</td>
+          <td class="sumCell green-text"> <strong>+{{ company.totalDeposit }}&euro;</strong> </td>
+        </tr>
+        <tr>
+          <td>{{ 'withdraws2' | translate }}:</td>
+          <td class="sumCell red-text"> <strong>{{ company.totalWithdraw }}&euro;</strong> </td>
+        </tr>
+        <tr class="sumRow">
+          <td>{{ 'available-money' | translate }}:</td>
+          <td class="sumCell" [ngClass]="{'red-text': finalSum(company) < 0, 'green-text': finalSum(company) > 0 }">
+            <strong>{{ finalSum(company) }}&euro;</strong> </td>
+        </tr>
+      </table>
+    </div>
+    <div class="">
+      <table mat-table [dataSource]="company.records" matSort class="basic-table">
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef> {{ 'date' | translate }} </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="creator">
-          <th mat-header-cell  *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+        <ng-container matColumnDef="creator">
+          <th mat-header-cell *matHeaderCellDef> {{ 'created-by' | translate }} </th>
           <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
         </ng-container>
 
-      <ng-container matColumnDef="description">
-        <th mat-header-cell  *matHeaderCellDef> {{ 'description' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-      </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> {{ 'description' | translate }} </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="amount">
-        <th mat-header-cell  *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
-        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 3 , 'green-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}{{element.amount}} &euro;</td>
-      </ng-container>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'red-text': element.type === 3 , 'green-text': element.type === 4  }">
+            {{element.type === 4 ? '+' : '-' }}{{element.amount}} &euro;</td>
+        </ng-container>
 
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/' + element.id }}">
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/' + element.id }}">
             <mat-icon>info</mat-icon>
           </button>
           <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}" (click)="remove(element)">
             <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
           </button> -->
-        </td>
-      </ng-container>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}">
-      </tr>
-    </table>
-    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}">
+        </tr>
+      </table>
+      <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+    </div>
     <div *ngIf="company.records === undefined || company.records.length == 0" class="centered-info-secondary">
       <br>
       <p>{{ 'no-data' | translate }}</p>
     </div>
-    <router-outlet></router-outlet>
-  </div>
-</mat-card>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </mat-card>
 </div>

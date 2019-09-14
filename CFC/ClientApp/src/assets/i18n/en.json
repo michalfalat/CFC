@@ -1,4 +1,10 @@
 {
+    "paginator.items-per-page": "Items per page",
+    "paginator.next-page": "Next page",
+    "paginator.previous-page": "Previous page",
+    "paginator.of": "of",
+    "paginator.first-page": "First page",
+    "paginator.last-page": "Last page",
     "login": "Login",
     "logout": "Logout",
     "password": "Password",

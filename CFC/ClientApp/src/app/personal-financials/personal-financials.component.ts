@@ -5,6 +5,7 @@ import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-personal-financials',
@@ -17,6 +18,8 @@ export class PersonalFinancialsComponent implements OnInit {
   public moneyRecordType = MoneyRecordType;
   public displayedColumns: string[] = ['createdAt', 'creator', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService, private translateService: TranslateService,
