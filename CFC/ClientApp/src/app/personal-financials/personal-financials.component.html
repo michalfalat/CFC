@@ -45,34 +45,22 @@
   <div>
     <table mat-table [dataSource]="company.records" matSort class="basic-table">
       <ng-container matColumnDef="createdAt">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
+        <th mat-header-cell  *matHeaderCellDef> {{ 'date' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="creator">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+          <th mat-header-cell  *matHeaderCellDef> {{ 'created-by' | translate }} </th>
           <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
         </ng-container>
 
-      <!-- <ng-container matColumnDef="companyName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="officeName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'office-name' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
-      </ng-container> -->
-
-
-
       <ng-container matColumnDef="description">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+        <th mat-header-cell  *matHeaderCellDef> {{ 'description' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.description}} </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+        <th mat-header-cell  *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
         <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 3 , 'green-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}{{element.amount}} &euro;</td>
       </ng-container>
 

@@ -38,7 +38,12 @@ export class DarkThemeService {
             ticks: { fontColor: 'white' },
             gridLines: { color: 'rgba(255,255,255,0.1)' }
           }]
-        }
+        },
+        plugins: {
+          datalabels: {
+            color: '#fff',
+          },
+        },
       };
     } else {
       overrides = {};

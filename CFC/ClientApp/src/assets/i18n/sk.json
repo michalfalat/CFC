@@ -130,7 +130,15 @@
     "withdraws": "Všetky výbery",
     "deposits2": "Vklady",
     "withdraws2": "Výbery",
-    "available-money": "Dostupné peniaze",
+    "available-money": "Dostupné financie",
     "company-money": "Peniaze firmy",
-    "company-owner-share": "Podiel vo firme"
+    "company-owner-share": "Podiel vo firme",
+    "expenses": "Výdaje",
+    "incomes": "Príjmy",
+    "deposited-by": "Vklad od používateľa",
+    "withdrawed-by": "Výber od používateľa",
+    "group-by": "Zoskupiť podľa",
+    "group-by-day": "Dní",
+    "group-by-month": "Mesiacov",
+    "group-by-year": "Rokov"
 }

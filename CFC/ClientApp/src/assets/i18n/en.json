@@ -132,7 +132,15 @@
     "withdraws2": "Withdraws",
     "available-money": "Available money",
     "company-money": "Company money",
-    "company-owner-share": "Share in company"
+    "company-owner-share": "Share in company",
+    "expenses": "Expenses",
+    "incomes": "Incomes",
+    "deposited-by": "Deposited by",
+    "withdrawed-by": "Withdrawed by",
+    "group-by": "Group by",
+    "group-by-day": "Group by day",
+    "group-by-month": "Group by month",
+    "group-by-year": "Group by year"
 
 
 }

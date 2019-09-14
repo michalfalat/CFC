@@ -212,6 +212,9 @@
         <p>{{ 'no-data' | translate }}</p>
       </div>
       <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
+
+        <app-chart-data [data]="company.cashflow" [type]="'company'" [companyOffices]="company.offices">
+        </app-chart-data>
         <table mat-table [dataSource]="cashflow" matSort class="basic-table">
           <ng-container matColumnDef="createdAt">
             <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
@@ -235,9 +238,20 @@
           <ng-container matColumnDef="amount">
             <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
             <td mat-cell *matCellDef="let element">
-              <span [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}  {{ calcAmount(element) }} &euro;</span>
-              &nbsp;
-              <span style="font-size: 0.8em">{{ calcAmountSecondaryData(element) }}</span>
+              <div *ngIf="element.type === 1 || element.type === 2">
+                <span
+                  [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}
+                  {{ calcAmount(element) }} &euro;</span>
+                &nbsp;
+                <span style="font-size: 0.8em">{{ calcAmountSecondaryData(element) }}</span>
+              </div>
+              <div *ngIf="element.type === 3 || element.type === 4">
+                <span
+                  [ngClass]="{'withdraw-text': element.type === 3 , 'deposit-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}
+                  {{ element.amount }} &euro;</span>
+                  &nbsp;
+                <span style="font-size: 0.8em">( {{ (element.type === 3 ? 'withdrawed-by' : 'deposited-by') | translate }} <strong>{{ element.creatorName }}</strong> )</span>
+              </div>
             </td>
           </ng-container>
 

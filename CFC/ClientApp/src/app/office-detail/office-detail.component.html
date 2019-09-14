@@ -150,6 +150,8 @@
           <p>{{ 'no-data' | translate }}</p>
       </div>
       <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
+          <app-chart-data [data]="office.cashflow" [type]="'office'" >
+            </app-chart-data>
         <table mat-table [dataSource]="cashflow" matSort class="basic-table">
             <ng-container matColumnDef="createdAt">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
