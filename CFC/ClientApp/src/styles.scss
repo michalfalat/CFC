@@ -249,7 +249,7 @@ background-color: #90909029;
 }
 
 .sumTable {
-  width: 70%;
+  width: 100%;
   margin: auto;
 }
 
@@ -261,6 +261,13 @@ background-color: #90909029;
   font-size: 1.2em;
   font-weight: bold;
   border-top: 2px solid grey;
+  line-height: 2rem;
+}
+
+.sumTable .sumRow2 {
+  font-size: 1.2em;
+  font-weight: bold;
+  border-top: 1px solid grey;
   line-height: 2rem;
 }
 

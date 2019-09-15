@@ -22,7 +22,7 @@ export class CompanyListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'identificationNumber', /*'registrationDate'*/'role', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
-  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService,

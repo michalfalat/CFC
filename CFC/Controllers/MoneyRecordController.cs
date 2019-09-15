@@ -173,9 +173,11 @@ namespace CFC.Controllers
                         CompanyName = company.Name,
                         Records = filteredRecordsModels,
                         Percentage = owner?.Percentage,
-                        Cashflow = this._moneyRecordManager.SumRecordsForCompany(company.Id, companyRecords, false),
-                        TotalDeposit = filteredRecords.Where(r => r.Type == MoneyRecordType.DEPOSIT).Sum(r => r.Amount),
-                        TotalWithdraw = filteredRecords.Where(r => r.Type == MoneyRecordType.WITHDRAW).Sum(r => r.Amount * (-1)),
+                        Cashflow = this._moneyRecordManager.SumRecordsForCompany(company.Id, companyRecords),
+                        AllDeposit = this._moneyRecordManager.SumAllDeposits( companyRecords),
+                        AllWithdraw = this._moneyRecordManager.SumAllWithdraws(companyRecords),
+                        PersonalDeposit = filteredRecords.Where(r => r.Type == MoneyRecordType.DEPOSIT).Sum(r => r.Amount),
+                        PersonalWithdraw = filteredRecords.Where(r => r.Type == MoneyRecordType.WITHDRAW).Sum(r => r.Amount * (-1)),
                     };
                     model.Add(item);
                 }

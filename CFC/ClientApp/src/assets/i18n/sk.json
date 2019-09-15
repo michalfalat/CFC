@@ -135,6 +135,8 @@
     "available-cash": "Dostupné financie",
     "deposits": "Všetky vklady",
     "withdraws": "Všetky výbery",
+    "deposit": "Vklad",
+    "withdraw": "Výber",
     "deposits2": "Vklady",
     "withdraws2": "Výbery",
     "available-money": "Dostupné financie",
@@ -151,5 +153,13 @@
     "company-status-info": "Status firmy môže mať nasledujúce hodnoty:\nAktívna - firma funguje bez akýchkoľvek obmedzení.\nZrušená - nieje možné vykonávať osobné vklady a výbery.\nBlokovaná - nieje možné vykonávať osobné vklady a výbery, ani firemnné príjmy a výdaje.",
     "view": "Zobrazenie",
     "table-view": "Tabuľka",
-    "chart-view": "Graf"
+    "chart-view": "Graf",
+    "calculated-amount": "Medzivýpočet",
+    "foreign-deposits": "Cudzie vklady",
+    "personal-deposits": "Osobné vklady",
+    "withdrawed": "Vybraté peniaze",
+    "all-withdraws": "Všetky výbery",
+    "all-deposits": "Všetky vklady",
+    "history": "História",
+    "overview": "Prehľad"
 }

@@ -42,7 +42,7 @@ export class OfficeDetailComponent implements OnInit {
 
   @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
 
-  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,

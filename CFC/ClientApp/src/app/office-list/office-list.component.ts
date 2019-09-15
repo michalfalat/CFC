@@ -22,7 +22,7 @@ export class OfficeListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'status', 'companiesCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
-  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     public authService: AuthService,

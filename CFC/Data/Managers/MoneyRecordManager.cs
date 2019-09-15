@@ -183,13 +183,13 @@ namespace CFC.Data.Managers
             return companyRecordsSumIncomes + companyRecordsSumExpenses;
         }
 
-        public decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records, bool includePersonalDeposits)
+        public decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records)
         {
             var companyRecords = records.Where(r => r.Company != null).ToList();
             var officeRecords = records.Where(r => r.Office != null).ToList();
             var companyRecordsSumIncomes = companyRecords.Where(a => (a.Type == MoneyRecordType.INCOME)).Sum(a => a.Amount);
             var companyRecordsSumExpenses = companyRecords.Where(a => (a.Type == MoneyRecordType.EXPENSE)).Sum(a => (a.Amount * (-1)));
-            var companyRecordsSumDeposits = includePersonalDeposits ?  companyRecords.Where(a => (a.Type == MoneyRecordType.DEPOSIT)).Sum(a => a.Amount) : 0;
+            var companyRecordsSumDeposits = companyRecords.Where(a => (a.Type == MoneyRecordType.DEPOSIT)).Sum(a => a.Amount);
             var companyRecordsSumWithdraws =  companyRecords.Where(a => (a.Type == MoneyRecordType.WITHDRAW)).Sum(a => (a.Amount * (-1)));
             var officeRecordsSum = 0m;
             foreach (var record in officeRecords)
@@ -209,9 +209,27 @@ namespace CFC.Data.Managers
             return companyRecordsSumIncomes + companyRecordsSumExpenses + officeRecordsSum + companyRecordsSumWithdraws + companyRecordsSumDeposits;
         }
 
+        public decimal SumForeignDeposit(List<MoneyRecord> records, string exceptId)
+        {
+            var companyRecords = records.Where(r => r.Company != null).ToList();
+            return companyRecords.Where(a => (a.Type == MoneyRecordType.DEPOSIT && a.CreatorId != exceptId)).Sum(a => a.Amount);
+           
+        }
+        public decimal SumAllDeposits(List<MoneyRecord> records)
+        {
+            var companyRecords = records.Where(r => r.Company != null).ToList();
+            return companyRecords.Where(a => (a.Type == MoneyRecordType.DEPOSIT)).Sum(a => a.Amount);
+        }
+
+        public decimal SumAllWithdraws(List<MoneyRecord> records)
+        {
+            var companyRecords = records.Where(r => r.Company != null).ToList();
+            return companyRecords.Where(a => (a.Type == MoneyRecordType.WITHDRAW)).Sum(a => a.Amount * (-1));
+        }
+
         public decimal SumRecordsForCompanyAndUser(int companyId, decimal percentage,  List<MoneyRecord> records)
         {
-            return this.SumRecordsForCompany(companyId, records, true) / 100m * percentage;
+            return this.SumRecordsForCompany(companyId, records) / 100m * percentage;
         }
 
 

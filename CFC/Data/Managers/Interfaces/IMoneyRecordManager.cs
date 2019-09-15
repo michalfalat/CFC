@@ -11,7 +11,10 @@ namespace CFC.Data.Managers
         Task<List<MoneyRecord>> GetAllForCompany(int companyId);
         Task<List<MoneyRecord>> GetAllForOffice(int officeId);
         decimal SumRecords(List<MoneyRecord> records);
-        decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records, bool includePersonal);
+        decimal SumRecordsForCompany(int companyId, List<MoneyRecord> records);
+        decimal SumForeignDeposit(List<MoneyRecord> records, string exceptId);
+        decimal SumAllWithdraws(List<MoneyRecord> records);
+        decimal SumAllDeposits(List<MoneyRecord> records);
         decimal SumRecordsForOwner(List<MoneyRecord> records);
         decimal SumRecordsForCompanyAndUser(int companyId, decimal percentage, List<MoneyRecord> records);
         Task<bool> CheckValidity(MoneyRecord record);

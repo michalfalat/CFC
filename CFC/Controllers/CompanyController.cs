@@ -105,7 +105,7 @@ namespace CFC.Controllers
                                                 .Where(o => o.UserId == userId)
                                                 .FirstOrDefault();
                 var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
-                company.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records, true);
+                company.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
                 company.CurrentRole = isAdminUser ?  CompanyOwnerRole.EXECUTIVE : currentUserOwner.Role;
             }
 
@@ -132,7 +132,7 @@ namespace CFC.Controllers
             var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
             companyModel.Cashflow = recordsModels;
-            companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records, true);
+            companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
             companyModel.CurrentRole = isAdmin ? CompanyOwnerRole.EXECUTIVE : currentUserOwner.Role;
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));

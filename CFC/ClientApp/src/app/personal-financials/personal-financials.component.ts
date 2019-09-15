@@ -19,7 +19,7 @@ export class PersonalFinancialsComponent implements OnInit {
   public displayedColumns: string[] = ['createdAt', 'creator', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
 
-  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService, private translateService: TranslateService,
@@ -34,10 +34,10 @@ export class PersonalFinancialsComponent implements OnInit {
   }
 
   getRecords() {
-    this.recordList = [];
     this.loadingData = true;
     this.apiService.getMoneyRecordsPersonal().subscribe(response => {
       console.log(response);
+      this.recordList = [];
       this.recordList = response.data.records;
       // this.recordList.sort = this.sort;
       this.loadingData = false;
@@ -50,10 +50,12 @@ export class PersonalFinancialsComponent implements OnInit {
 
 
   sumCompanyShare(company) {
-    return company.cashflow / 100 * company.percentage;
+    return (company.cashflow - company.allDeposit - company.allWithdraw)  / 100 * company.percentage;
   }
+
+
   finalSum(company) {
-    return ( company.cashflow / 100 * company.percentage) + company.totalDeposit + company.totalWithdraw;
+    return this.sumCompanyShare(company) + company.personalDeposit + company.personalWithdraw ;
   }
 
 }

@@ -133,6 +133,8 @@
     "offices-count": "Offices count",
     "available-cash": "Cash available",
     "deposits": "All deposits",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
     "withdraws": "All withdraws",
     "deposits2": "Deposits",
     "withdraws2": "Withdraws",
@@ -150,7 +152,15 @@
     "company-status-info": "Company status can be in these states:\nActive - company works without any restriction.\nCanceled - Deposits and withdraws are disabled.\nBlocked - Deposits, withdraws, incomes and expenses are disabled.",
     "view": "View",
     "table-view": "Table",
-    "chart-view": "Chart"
+    "chart-view": "Chart",
+    "calculated-amount": "Calculated amount",
+    "foreign-deposits": "Foreign deposits",
+    "personal-deposits": "Personal deposits",
+    "withdrawed": "Already withdrawed",
+    "all-withdraws": "All withdraws",
+    "all-deposits": "All deposits",
+    "history": "History",
+    "overview": "Overview"
 
 
 
