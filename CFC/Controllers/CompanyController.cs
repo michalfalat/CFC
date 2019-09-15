@@ -67,7 +67,7 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Add([FromBody] CompanyAddModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
@@ -85,21 +85,28 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetAll()
         {
+
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdminUser = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
             var companies = new List<Company>();
-            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            if (isAdminUser)
             {
                 companies = await this._companyManager.GetAll();
-            } else
+            }
+            else
             {
-                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 companies = await this._companyManager.GetCompaniesByOwner(userId);
-
             }
             var companyModels = this._mapper.Map<List<CompanyViewModel>>(companies);
             foreach (var company in companyModels)
             {
+                var currentUserOwner = companies.Where(c => c.Id == company.Id)
+                                                .FirstOrDefault().Owners
+                                                .Where(o => o.UserId == userId)
+                                                .FirstOrDefault();
                 var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
-                company.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
+                company.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records, true);
+                company.CurrentRole = isAdminUser ?  CompanyOwnerRole.EXECUTIVE : currentUserOwner.Role;
             }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { companies = companyModels }));
@@ -109,16 +116,24 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Get(int id)
         {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
             var company = await this._companyManager.FindById(id);
             if (company == null)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
+            if (isAdmin == false && company.Owners.Select(o => o.UserId).Contains(userId) == false)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.FORBIDDEN));
+            }
+            var currentUserOwner = company.Owners.Where(o => o.UserId == userId).FirstOrDefault();
             var companyModel = this._mapper.Map<CompanyDetailViewModel>(company);
             var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
             companyModel.Cashflow = recordsModels;
-            companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
+            companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records, true);
+            companyModel.CurrentRole = isAdmin ? CompanyOwnerRole.EXECUTIVE : currentUserOwner.Role;
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));
         }
@@ -236,7 +251,7 @@ namespace CFC.Controllers
             var companyOwners = company.Owners.ToList();
 
             var companyOwnersModel = this._mapper.Map<List<CompanyDetailViewModel>>(companyOwners);
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { owners = companyOwnersModel}));
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { owners = companyOwnersModel }));
         }
 
     }

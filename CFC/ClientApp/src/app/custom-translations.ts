@@ -40,6 +40,7 @@ export class PaginatorIntlService extends MatPaginatorIntl {
     this.previousPageLabel = this.translate.instant('paginator.previous-page');
     this.firstPageLabel = this.translate.instant('paginator.first-page');
     this.lastPageLabel = this.translate.instant('paginator.last-page');
+    this.changes.next();
   }
 
 }

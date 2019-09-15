@@ -173,7 +173,7 @@ namespace CFC.Controllers
                         CompanyName = company.Name,
                         Records = filteredRecordsModels,
                         Percentage = owner?.Percentage,
-                        Cashflow = this._moneyRecordManager.SumRecordsForCompany(company.Id, companyRecords),
+                        Cashflow = this._moneyRecordManager.SumRecordsForCompany(company.Id, companyRecords, false),
                         TotalDeposit = filteredRecords.Where(r => r.Type == MoneyRecordType.DEPOSIT).Sum(r => r.Amount),
                         TotalWithdraw = filteredRecords.Where(r => r.Type == MoneyRecordType.WITHDRAW).Sum(r => r.Amount * (-1)),
                     };

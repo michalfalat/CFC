@@ -3,7 +3,7 @@ import { ApiService } from '../services/api.service';
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
-import { CompanyStatus } from '../models/enums';
+import { CompanyStatus, CompanyUserRole } from '../models/enums';
 import { LanguageService } from '../services/language.service';
 import { AuthService } from '../services/auth.service';
 
@@ -17,7 +17,9 @@ export class CompanyListComponent implements OnInit {
   public companyList;
 
   public companyStatus = CompanyStatus;
-  public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
+
+  public companyOwnerRole = CompanyUserRole;
+  public displayedColumns: string[] = ['name', 'identificationNumber', /*'registrationDate'*/'role', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
   @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;

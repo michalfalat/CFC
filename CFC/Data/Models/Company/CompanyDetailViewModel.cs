@@ -24,5 +24,7 @@ namespace CFC.Data.Models
 
         public decimal ActualCash { get; set; }
 
+        public CompanyOwnerRole CurrentRole { get; set; }
+
     }
 }
