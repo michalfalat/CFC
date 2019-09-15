@@ -189,6 +189,8 @@ namespace CFC.Data.Managers
             var officeRecords = records.Where(r => r.Office != null).ToList();
             var companyRecordsSumIncomes = companyRecords.Where(a => (a.Type == MoneyRecordType.INCOME)).Sum(a => a.Amount);
             var companyRecordsSumExpenses = companyRecords.Where(a => (a.Type == MoneyRecordType.EXPENSE)).Sum(a => (a.Amount * (-1)));
+            var companyRecordsSumDeposits = companyRecords.Where(a => (a.Type == MoneyRecordType.DEPOSIT)).Sum(a => a.Amount);
+            var companyRecordsSumWithdraws = companyRecords.Where(a => (a.Type == MoneyRecordType.WITHDRAW)).Sum(a => (a.Amount * (-1)));
             var officeRecordsSum = 0m;
             foreach (var record in officeRecords)
             {
@@ -204,7 +206,7 @@ namespace CFC.Data.Managers
                 }
             }
 
-            return companyRecordsSumIncomes + companyRecordsSumExpenses + officeRecordsSum;
+            return companyRecordsSumIncomes + companyRecordsSumExpenses + officeRecordsSum + companyRecordsSumWithdraws + companyRecordsSumDeposits;
         }
 
         public decimal SumRecordsForCompanyAndUser(int companyId, decimal percentage,  List<MoneyRecord> records)

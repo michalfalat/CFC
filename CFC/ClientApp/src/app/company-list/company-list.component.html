@@ -73,7 +73,11 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.status == 2 || row.obsolete, 'warning-row': row.status == 3 }"></tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-    <router-outlet></router-outlet>
+    <div *ngIf="companyList === undefined || companyList.data == undefined || companyList.data.length == 0" class="centered-info-secondary">
+        <br>
+        <p>{{ 'no-data' | translate }}</p>
+      </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
   </div>
 
 

@@ -19,7 +19,7 @@ export class PersonalFinancialsComponent implements OnInit {
   public displayedColumns: string[] = ['createdAt', 'creator', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService, private translateService: TranslateService,

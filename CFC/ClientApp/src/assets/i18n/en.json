@@ -146,7 +146,12 @@
     "group-by": "Group by",
     "group-by-day": "Group by day",
     "group-by-month": "Group by month",
-    "group-by-year": "Group by year"
+    "group-by-year": "Group by year",
+    "company-status-info": "Company status can be in these states:\nActive - company works without any restriction.\nCanceled - Deposits and withdraws are disabled.\nBlocked - Deposits, withdraws, incomes and expenses are disabled.",
+    "view": "View",
+    "table-view": "Table",
+    "chart-view": "Chart"
+
 
 
 }

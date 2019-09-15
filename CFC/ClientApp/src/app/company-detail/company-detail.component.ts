@@ -26,6 +26,8 @@ export class CompanyDetailComponent implements OnInit {
   public addUserFormVisible = false;
   public editMode = false;
   public cashflow;
+
+  public cashflowView = 'table';
   public newOwner;
   public allUsers: UserDetail[] = [];
 
@@ -216,11 +218,11 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   calcAmount(element) {
-    if(element.officeId === null) {
+    if (element.officeId === null) {
       return element.amount;
     } else {
       const companyOffice = this.company.offices.find(a => a.officeId === element.officeId);
-      if(companyOffice !== undefined) {
+      if (companyOffice !== undefined) {
         const percentage = companyOffice.percentage;
         return element.amount / 100 * percentage;
 
@@ -228,14 +230,15 @@ export class CompanyDetailComponent implements OnInit {
     }
   }
 
+
   calcAmountSecondaryData(element) {
-    if(element.officeId === null) {
-      return  '';
+    if (element.officeId === null) {
+      return '';
     } else {
       const companyOffice = this.company.offices.find(a => a.officeId === element.officeId);
-      if(companyOffice !== undefined) {
+      if (companyOffice !== undefined) {
         const percentage = companyOffice.percentage;
-        return `(${element.type === 2 ? '' : '-' }${element.amount}€ * ${percentage}%)`;
+        return `(${ element.type === 2 ? '' : '-' }${ element.amount }€ * ${ percentage }%)`;
 
       }
     }
@@ -244,7 +247,4 @@ export class CompanyDetailComponent implements OnInit {
   toogleEditMode() {
     this.editMode = !this.editMode;
   }
-
-
-
 }

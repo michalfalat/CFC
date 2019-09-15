@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -22,6 +22,8 @@ export class OfficeListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'description', 'registrationDate', 'status', 'companiesCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
+  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+
   constructor(private apiService: ApiService,
     public authService: AuthService,
      private notifyService: NotifyService, private translateService: TranslateService, private languageService: LanguageService) {
@@ -42,6 +44,7 @@ export class OfficeListComponent implements OnInit {
       console.log(response);
       this.officeList = new MatTableDataSource(response.data.offices);
       this.officeList.sort = this.sort;
+      this.officeList.paginator = this.paginator;
       this.loadingData = false;
 
     }, error => {

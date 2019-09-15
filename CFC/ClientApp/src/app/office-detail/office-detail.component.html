@@ -146,9 +146,6 @@
     </mat-tab>
     <mat-tab label="{{ 'cash-flow' | translate }}">
       <br>
-      <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
-          <p>{{ 'no-data' | translate }}</p>
-      </div>
       <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
           <app-chart-data [data]="office.cashflow" [type]="'office'" >
             </app-chart-data>
@@ -179,6 +176,10 @@
             [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
         </table>
       </div>
+      <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
+          <p>{{ 'no-data' | translate }}</p>
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
     </mat-tab>
   </mat-tab-group>
 </mat-card>

@@ -19,7 +19,7 @@ export class CompanyFinancialsComponent implements OnInit {
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { read: false }) sort: MatSort;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService, public authService: AuthService,
     private notifyService: NotifyService, private translateService: TranslateService) { }

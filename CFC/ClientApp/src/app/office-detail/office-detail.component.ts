@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserDetail } from '../models/user-models';
 import { CompanyOfficeAddModel } from '../models/company-models';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { OfficeStatus } from '../models/enums';
@@ -42,6 +42,8 @@ export class OfficeDetailComponent implements OnInit {
 
   @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
 
+  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
     private translateService: TranslateService,
@@ -72,6 +74,7 @@ export class OfficeDetailComponent implements OnInit {
 
       this.cashflow = new MatTableDataSource(response.data.office.cashflow);
       this.cashflow.sort = this.sortCashflow;
+      this.cashflow.paginator = this.paginator;
       this.changeDetector.detectChanges();
       this.loadCompanies();
       this.calculateMaxPercentageForOwner();

@@ -144,8 +144,12 @@
     "incomes": "Príjmy",
     "deposited-by": "Vklad od používateľa",
     "withdrawed-by": "Výber od používateľa",
-    "group-by": "Zoskupiť podľa",
-    "group-by-day": "Dní",
-    "group-by-month": "Mesiacov",
-    "group-by-year": "Rokov"
+    "group-by": "Zoskupenie",
+    "group-by-day": "Podľa dní",
+    "group-by-month": "Podľa mesiacov",
+    "group-by-year": "Podľa rokov",
+    "company-status-info": "Status firmy môže mať nasledujúce hodnoty:\nAktívna - firma funguje bez akýchkoľvek obmedzení.\nZrušená - nieje možné vykonávať osobné vklady a výbery.\nBlokovaná - nieje možné vykonávať osobné vklady a výbery, ani firemnné príjmy a výdaje.",
+    "view": "Zobrazenie",
+    "table-view": "Tabuľka",
+    "chart-view": "Graf"
 }

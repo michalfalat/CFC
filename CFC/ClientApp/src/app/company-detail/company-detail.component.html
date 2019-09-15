@@ -39,7 +39,9 @@
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
-          <mat-form-field class="full-width">
+          <mat-form-field class="full-width" matTooltip="{{ 'company-status-info' | translate }}">
+            <mat-label> {{ 'status' | translate }}<mat-icon>info</mat-icon>
+            </mat-label>
             <mat-select [(ngModel)]="company.status" name="status" required placeholder="{{ 'status' | translate }}"
               [disabled]="editMode === false">
               <mat-option *ngFor="let status of companyStatuses" [value]="companyStatus[status]">
@@ -212,54 +214,80 @@
         <p>{{ 'no-data' | translate }}</p>
       </div>
       <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
+        <div class="flexLayout">
+          <span class="money-state-container">
+            <span> {{ 'actual-money-state' | translate }}: </span>
+              <span [ngClass]="{'red-text': company.actualCash < 0 , 'green-text': company.actualCash > 0  }"><strong>{{ company.actualCash > 0 ? '+' : '' }}{{company.actualCash}} &euro;</strong></span>
+          </span>
+          <span class="spacer"></span>
+          <span>
+            <mat-form-field>
+              <mat-label>{{ 'view' | translate }}</mat-label>
+              <mat-select [(ngModel)]="cashflowView" name="cashflowView">
+                <mat-option value="table">
+                  {{'table-view' | translate }}
+                </mat-option>
+                <mat-option value="chart">
+                  {{'chart-view' | translate }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </span>
 
-        <app-chart-data [data]="company.cashflow" [type]="'company'" [companyOffices]="company.offices">
-        </app-chart-data>
-        <table mat-table [dataSource]="cashflow" matSort class="basic-table">
-          <ng-container matColumnDef="createdAt">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
-          </ng-container>
+        </div>
+        <div *ngIf="cashflowView === 'chart'">
+          <app-chart-data [data]="company.cashflow" [type]="'company'" [companyOffices]="company.offices">
+          </app-chart-data>
+        </div>
+        <div *ngIf="cashflowView === 'table'">
+          <table mat-table [dataSource]="cashflow" matSort class="basic-table">
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
+              <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
+            </ng-container>
 
-          <ng-container matColumnDef="creator">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
-          </ng-container>
-          <ng-container matColumnDef="officeName">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'office' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.officeName }} </td>
-          </ng-container>
+            <ng-container matColumnDef="creator">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+              <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+            </ng-container>
+            <ng-container matColumnDef="officeName">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'office' | translate }} </th>
+              <td mat-cell *matCellDef="let element"> {{element.officeName }} </td>
+            </ng-container>
 
-          <ng-container matColumnDef="description">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-          </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+              <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+            </ng-container>
 
-          <ng-container matColumnDef="amount">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
-            <td mat-cell *matCellDef="let element">
-              <div *ngIf="element.type === 1 || element.type === 2">
-                <span
-                  [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}
-                  {{ calcAmount(element) }} &euro;</span>
-                &nbsp;
-                <span style="font-size: 0.8em">{{ calcAmountSecondaryData(element) }}</span>
-              </div>
-              <div *ngIf="element.type === 3 || element.type === 4">
-                <span
-                  [ngClass]="{'withdraw-text': element.type === 3 , 'deposit-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}
-                  {{ element.amount }} &euro;</span>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.type === 1 || element.type === 2">
+                  <span
+                    [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}
+                    {{ calcAmount(element) }} &euro;</span>
                   &nbsp;
-                <span style="font-size: 0.8em">( {{ (element.type === 3 ? 'withdrawed-by' : 'deposited-by') | translate }} <strong>{{ element.creatorName }}</strong> )</span>
-              </div>
-            </td>
-          </ng-container>
+                  <span style="font-size: 0.8em">{{ calcAmountSecondaryData(element) }}</span>
+                </div>
+                <div *ngIf="element.type === 3 || element.type === 4">
+                  <span
+                    [ngClass]="{'withdraw-text': element.type === 3 , 'deposit-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}
+                    {{ element.amount }} &euro;</span>
+                  &nbsp;
+                  <span style="font-size: 0.8em">(
+                    {{ (element.type === 3 ? 'withdrawed-by' : 'deposited-by') | translate }}
+                    <strong>{{ element.creatorName }}</strong> )</span>
+                </div>
+              </td>
+            </ng-container>
 
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsCashFlow"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsCashFlow;"
-            [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
-        </table>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsCashFlow"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsCashFlow;"
+              [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+          </table>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>

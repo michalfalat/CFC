@@ -1,6 +1,6 @@
 import { Component, OnInit,  ViewChild } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { MatSort, MatTableDataSource } from '@angular/material';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CompanyStatus } from '../models/enums';
@@ -20,6 +20,8 @@ export class CompanyListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'identificationNumber', 'registrationDate', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
   @ViewChild(MatSort, {read: false}) sort: MatSort;
 
+  @ViewChild(MatPaginator, { read: true }) paginator: MatPaginator;
+
   constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService,
      public languageService: LanguageService, public authService: AuthService) { }
@@ -38,6 +40,7 @@ export class CompanyListComponent implements OnInit {
     this.apiService.getCompanies().subscribe(response => {
       this.companyList = new MatTableDataSource(response.data.companies);
       this.companyList.sort = this.sort;
+      this.companyList.paginator = this.paginator;
       this.loadingData = false;
 
     }, error => {
