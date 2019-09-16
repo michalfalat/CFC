@@ -41,9 +41,9 @@ export class CompanyDetailComponent implements OnInit {
   public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'role', 'percentage', 'actions'];
   public displayedColumnsOffices: string[] = ['name', 'percentage', 'actions'];
   public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'officeName', 'description', 'amount'];
-  @ViewChild(MatSort, { read: false }) sortOwners: MatSort;
-  @ViewChild(MatSort, { read: false }) sortOffices: MatSort;
-  @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
+  @ViewChild(MatSort, { static: false }) sortOwners: MatSort;
+  @ViewChild(MatSort, { static: false }) sortOffices: MatSort;
+  @ViewChild(MatSort, { static: false }) sortCashflow: MatSort;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,

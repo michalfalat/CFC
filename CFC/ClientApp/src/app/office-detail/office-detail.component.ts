@@ -38,11 +38,11 @@ export class OfficeDetailComponent implements OnInit {
   public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'description', 'amount'];
 
 
-  @ViewChild(MatSort, { read: false }) sortCompanies: MatSort;
+  @ViewChild(MatSort, { static: false }) sortCompanies: MatSort;
 
-  @ViewChild(MatSort, { read: false }) sortCashflow: MatSort;
+  @ViewChild(MatSort, { static: false }) sortCashflow: MatSort;
 
-  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,

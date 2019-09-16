@@ -13,7 +13,7 @@ export class UserListComponent implements OnInit {
   public loadingData = true;
   public userList;
   public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];
-  @ViewChild(MatSort, {read: false}) sort: MatSort;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(private apiService: ApiService,  private notifyService: NotifyService, private translateService: TranslateService) { }
 

@@ -17,9 +17,9 @@ export class CompanyFinancialsComponent implements OnInit {
   public recordList;
   public moneyRecordType = MoneyRecordType;
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
-  @ViewChild(MatSort, { read: false }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService, public authService: AuthService,
     private notifyService: NotifyService, private translateService: TranslateService) { }

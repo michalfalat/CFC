@@ -20,9 +20,9 @@ export class CompanyListComponent implements OnInit {
 
   public companyOwnerRole = CompanyUserRole;
   public displayedColumns: string[] = ['name', 'identificationNumber', /*'registrationDate'*/'role', 'status' , 'branchesCount', 'ownersCount', 'actualMoneyState', 'actions'];
-  @ViewChild(MatSort, {read: false}) sort: MatSort;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
-  @ViewChild(MatPaginator, { read: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService,
