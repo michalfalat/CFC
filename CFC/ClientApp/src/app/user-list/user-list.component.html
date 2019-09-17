@@ -71,7 +71,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.blocked == true}"></tr>
     </table>
-    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
     <router-outlet></router-outlet>
   </div>
 

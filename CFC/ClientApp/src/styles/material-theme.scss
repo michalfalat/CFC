@@ -1,10 +1,9 @@
 @import '~@angular/material/theming';
 
 @include mat-core();
-
-$primary: mat-palette($mat-indigo);
-$accent: mat-palette($mat-pink, A200, A100, A400);
-$warn: mat-palette($mat-red);
+$primary: mat-palette($mat-light-blue, 700, 300, 900);
+$accent: mat-palette($mat-blue);
+$warn: mat-palette($mat-deep-orange);
 $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
@@ -12,10 +11,10 @@ $theme: mat-light-theme($primary, $accent, $warn);
 // Our dark theme
 .dark-theme {
   //color: $light-primary-text;
-  background-color: #222121;
-  $dark-primary: mat-palette($mat-blue-grey);
-  $dark-accent: mat-palette($mat-amber, A400, A100, A700);
-  $dark-warn: mat-palette($mat-red);
+  background-color: #2c2c2c;
+  $dark-primary: mat-palette($mat-blue, 800, 400, 900);
+  $dark-accent: mat-palette($mat-blue-gray, A400, A100, A700);
+  $dark-warn: mat-palette($mat-deep-orange);
   $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
   @include angular-material-theme($dark-theme);
@@ -24,6 +23,10 @@ $theme: mat-light-theme($primary, $accent, $warn);
 .dark-theme .footer {
     background-color: #424242 !important;
     color: white;
+}
+
+.dark-theme .mainSection {
+  background-color: #282828;
 }
 
 @-webkit-keyframes autofillDark {
@@ -39,7 +42,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
   -webkit-animation-fill-mode: both !important;
 }
 
-.dark-theme .sidebarLogo {  
+.dark-theme .sidebarLogo {
   max-width: 50px;
   filter: invert(1);
 }
