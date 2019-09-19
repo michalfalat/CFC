@@ -38,7 +38,7 @@ import { CompanyFinancialsAddComponent } from './company-financials-add/company-
 import { PersonalFinancialsAddComponent } from './personal-financials-add/personal-financials-add.component';
 import { ChartsModule } from 'ng2-charts';
 import { ChartDataComponent } from './chart-data/chart-data.component';
-import { MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlService } from './custom-translations';
 
 // AoT requires an exported function for factories
