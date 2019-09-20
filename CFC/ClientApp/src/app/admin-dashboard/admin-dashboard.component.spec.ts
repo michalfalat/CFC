@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { getBaseUrl } from 'src/main';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 describe('AdminDashboardComponent', () => {
@@ -22,6 +23,7 @@ describe('AdminDashboardComponent', () => {
         FormsModule,
         RouterTestingModule,
         HttpClientModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] }

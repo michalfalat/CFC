@@ -4,6 +4,7 @@ import { AboutComponent } from './about.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomMaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AboutComponent', () => {
   let component: AboutComponent;
@@ -15,6 +16,7 @@ describe('AboutComponent', () => {
       imports: [
         TranslateModule.forRoot(),
          CustomMaterialModule,
+         NoopAnimationsModule,
         FormsModule ]
     })
     .compileComponents();
