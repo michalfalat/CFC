@@ -5,7 +5,7 @@ import { CustomMaterialModule } from '../material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
 import { CookieService } from 'ngx-cookie-service';
@@ -21,7 +21,7 @@ describe('ChartDataComponent', () => {
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         HttpClientModule,
         ChartsModule,
         BrowserAnimationsModule,

@@ -4,7 +4,7 @@ import { DashboardComponent } from './dashboard.component';
 import { CustomMaterialModule } from '../material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,7 +24,7 @@ describe('DashboardComponent', () => {
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         HttpClientModule,
         ChartsModule,
         BrowserAnimationsModule,

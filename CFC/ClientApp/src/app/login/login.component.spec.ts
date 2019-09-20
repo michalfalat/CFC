@@ -4,7 +4,7 @@ import { LoginComponent } from './login.component';
 import { CustomMaterialModule } from '../material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         HttpClientModule,
         ChartsModule,
         BrowserAnimationsModule,

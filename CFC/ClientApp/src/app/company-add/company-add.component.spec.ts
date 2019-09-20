@@ -4,8 +4,7 @@ import { CompanyAddComponent } from './company-add.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomMaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
-import { AppModule } from '../app.module';
-import { RouterModule, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -20,7 +19,7 @@ describe('CompanyAddComponent', () => {
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         HttpClientModule,
         BrowserAnimationsModule,
       ],

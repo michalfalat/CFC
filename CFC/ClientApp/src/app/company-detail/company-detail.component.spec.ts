@@ -4,7 +4,7 @@ import { CompanyDetailComponent } from './company-detail.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomMaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartDataComponent } from '../chart-data/chart-data.component';
@@ -21,7 +21,7 @@ describe('CompanyDetailComponent', () => {
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule,
         HttpClientModule,
         ChartsModule,
         BrowserAnimationsModule,
