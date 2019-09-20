@@ -40,10 +40,10 @@ export class UserDetailComponent implements OnInit {
       form.resetForm();
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
       this.passwordChangeForm = new PasswordChangeModel();
       form.resetForm();
+      this.notifyService.processError(error);
     });
 
   }
@@ -54,9 +54,8 @@ export class UserDetailComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      console.log(error);
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
   }
 
@@ -75,8 +74,8 @@ export class UserDetailComponent implements OnInit {
       this.getUser();
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
 
 

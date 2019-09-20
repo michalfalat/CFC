@@ -45,7 +45,7 @@ export class CompanyFinancialsComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.processError(error);
     });
   }
 

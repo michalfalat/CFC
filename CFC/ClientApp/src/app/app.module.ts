@@ -40,6 +40,7 @@ import { ChartsModule } from 'ng2-charts';
 import { ChartDataComponent } from './chart-data/chart-data.component';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlService } from './custom-translations';
+import { IconSnackBarComponent } from './snackbar-container';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -73,6 +74,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     CompanyFinancialsAddComponent,
     PersonalFinancialsAddComponent,
     ChartDataComponent,
+    IconSnackBarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -227,9 +229,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    BrowserAnimationsModule,
     CustomMaterialModule,
     ChartsModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -246,6 +248,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AuthGuard
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [ConfirmDialogComponent, IconSnackBarComponent],
 })
 export class AppModule { }

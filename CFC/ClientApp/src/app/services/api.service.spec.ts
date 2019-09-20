@@ -1,11 +1,13 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { ApiService } from './api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ApiService]
+      providers: [ApiService, { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] }],
+      imports: [ HttpClientModule]
     });
   });
 

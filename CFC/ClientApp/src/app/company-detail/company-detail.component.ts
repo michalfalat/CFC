@@ -101,8 +101,7 @@ export class CompanyDetailComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
   loadUsers() {
@@ -112,8 +111,7 @@ export class CompanyDetailComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -126,8 +124,7 @@ export class CompanyDetailComponent implements OnInit {
       this.loadCompany();
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -148,7 +145,7 @@ export class CompanyDetailComponent implements OnInit {
     }, error => {
       console.log(error);
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
   removeCompanyOffice(office) {
@@ -160,7 +157,7 @@ export class CompanyDetailComponent implements OnInit {
     }, error => {
       console.log(error);
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -183,9 +180,8 @@ export class CompanyDetailComponent implements OnInit {
       this.loadCompany();
       this.addUserFormVisible = false;
     }, error => {
-      console.log(error);
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
 
   }

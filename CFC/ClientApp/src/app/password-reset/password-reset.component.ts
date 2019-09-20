@@ -30,10 +30,9 @@ export class PasswordResetComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      this.router.navigate(['/']);
-      console.log(error);
       this.loadingData = false;
+      this.router.navigate(['/']);
+      this.notifyService.processError(error);
     });
 
   }
@@ -58,9 +57,8 @@ export class PasswordResetComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      console.log(error);
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
 
   }

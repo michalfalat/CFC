@@ -28,7 +28,7 @@ export class UserVerifyComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
       this.router.navigate(['/login']);
     });
   }
@@ -47,8 +47,8 @@ export class UserVerifyComponent implements OnInit {
     this.router.navigate(['/login']);
 
   }, error => {
-    this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
     this.loadingData = false;
+    this.notifyService.processError(error);
   });
 
   }

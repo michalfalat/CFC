@@ -49,7 +49,7 @@ export class CompanyListComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.processError(error);
     });
   }
 
@@ -65,7 +65,7 @@ export class CompanyListComponent implements OnInit {
       }
      this.getCompanies();
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.processError(error);
       this.loadingData = false;
     });
   }

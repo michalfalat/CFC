@@ -38,9 +38,8 @@ export class UserEditComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
-      console.log(error);
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
   }
 
@@ -59,8 +58,8 @@ export class UserEditComponent implements OnInit {
       this.goBack();
 
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
   }
 

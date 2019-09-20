@@ -50,8 +50,7 @@ export class OfficeAddComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 

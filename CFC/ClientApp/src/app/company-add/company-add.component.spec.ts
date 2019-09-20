@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CompanyAddComponent } from './company-add.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CustomMaterialModule } from '../material.module';
+import { FormsModule } from '@angular/forms';
+import { AppModule } from '../app.module';
+import { RouterModule, Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CompanyAddComponent', () => {
   let component: CompanyAddComponent;
@@ -8,7 +15,18 @@ describe('CompanyAddComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CompanyAddComponent ]
+      declarations: [ CompanyAddComponent ],
+      imports: [
+        TranslateModule.forRoot(),
+        CustomMaterialModule,
+        FormsModule,
+        RouterModule.forRoot([]),
+        HttpClientModule,
+        BrowserAnimationsModule,
+      ],
+      providers: [
+        { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] }
+      ]
     })
     .compileComponents();
   }));

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AboutComponent } from './about.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { CustomMaterialModule } from '../material.module';
+import { FormsModule } from '@angular/forms';
 
 describe('AboutComponent', () => {
   let component: AboutComponent;
@@ -8,7 +11,11 @@ describe('AboutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AboutComponent ]
+      declarations: [ AboutComponent ],
+      imports: [
+        TranslateModule.forRoot(),
+         CustomMaterialModule,
+        FormsModule ]
     })
     .compileComponents();
   }));

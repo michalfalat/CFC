@@ -2,7 +2,7 @@
 
 @include mat-core();
 $primary: mat-palette($mat-light-blue, 700, 300, 900);
-$accent: mat-palette($mat-blue);
+$accent: mat-palette($mat-blue-gray, A400, A100, A700);
 $warn: mat-palette($mat-deep-orange);
 $theme: mat-light-theme($primary, $accent, $warn);
 
@@ -49,4 +49,9 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
 .dark-theme .card-panel img {
   filter: invert(1);
+}
+
+
+.footer, .mainSection, .mat-card, .mat-drawer, .mat-table, .mat-paginator {
+  transition: 0.25s background-color linear, 0.3s color linear !important;
 }

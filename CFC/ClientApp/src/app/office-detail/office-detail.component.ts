@@ -85,8 +85,7 @@ export class OfficeDetailComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
   loadCompanies() {
@@ -96,8 +95,7 @@ export class OfficeDetailComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -115,8 +113,7 @@ export class OfficeDetailComponent implements OnInit {
       this.loadOffice();
     }, error => {
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -134,7 +131,7 @@ export class OfficeDetailComponent implements OnInit {
     }, error => {
       console.log(error);
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
   }
 
@@ -159,7 +156,7 @@ export class OfficeDetailComponent implements OnInit {
     }, error => {
       console.log(error);
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel.value));
+      this.notifyService.processError(error);
     });
 
   }

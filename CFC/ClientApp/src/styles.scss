@@ -65,6 +65,10 @@
     flex-direction: column;
   }
 
+  mat-icon.transparent {
+    opacity: 0.75;
+  }
+
   @-webkit-keyframes autofill {
     to {
         // color: white;
@@ -97,6 +101,7 @@ input:-webkit-autofill {
 
   .notification-info {
     background-color: #2a9e51;
+    color: rgba(255, 255, 255, 0.836)
   }
 
   .notification-info  .mat-simple-snackbar-action  {
@@ -193,7 +198,8 @@ background-color: #90909029;
 
 tr.mat-row:hover {
  background-color: #80808029;
- transition: 0.05s all ease-in-out;
+ transition: 0.15s all linear;
+ cursor: pointer;
 }
 
 .header {

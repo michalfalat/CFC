@@ -1,11 +1,13 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { DarkThemeService } from './dark-theme.service';
+import { CookieService } from 'ngx-cookie-service';
+import { ThemeService } from 'ng2-charts';
 
 describe('DarkThemeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DarkThemeService]
+      providers: [DarkThemeService, CookieService, ThemeService]
     });
   });
 

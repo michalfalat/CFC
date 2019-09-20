@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -16,7 +17,7 @@ export class UserListComponent implements OnInit {
   public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
-  constructor(private apiService: ApiService,  private notifyService: NotifyService, private translateService: TranslateService) { }
+  constructor(private apiService: ApiService,  private notifyService: NotifyService, private translateService: TranslateService, private router: Router) { }
 
   ngOnInit() {
     this.getUsers();
@@ -40,6 +41,10 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  goToDetail(id){
+    this.router.navigate(['/admin/users/edit/' + id ]);
+  }
+
   blockUser(element) {
     const id = element.id;
     const block  = element.blocked ? false : true;
@@ -52,8 +57,8 @@ export class UserListComponent implements OnInit {
       }
      this.getUsers();
     }, error => {
-      this.notifyService.error(this.translateService.instant('user-blocked'));
       this.loadingData = false;
+      this.notifyService.error(this.translateService.instant('user-blocked'));
     });
   }
 

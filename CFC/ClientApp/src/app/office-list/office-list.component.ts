@@ -51,7 +51,7 @@ export class OfficeListComponent implements OnInit {
 
     }, error => {
       this.loadingData = false;
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
+      this.notifyService.processError(error);
     });
   }
 
@@ -67,8 +67,8 @@ export class OfficeListComponent implements OnInit {
       }
      this.getOffices();
     }, error => {
-      this.notifyService.error(this.translateService.instant(error.error.errorLabel));
       this.loadingData = false;
+      this.notifyService.processError(error);
     });
   }
 
