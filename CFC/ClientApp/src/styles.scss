@@ -292,3 +292,23 @@ tr.mat-row:hover {
   font-size: 1.5em;
   padding-left: 15px;
 }
+
+mat-icon[matPrefix] {
+  font-size: 1em !important;
+  margin-right: 5px;
+}
+
+.mat-form-field-disabled mat-icon[matPrefix]{
+  color: rgba(0, 0, 0, 0.48);
+}
+
+.side-wallpaper {
+  position:absolute;
+  background-image: url(/assets/abstract.jpg);
+  background-size: cover;
+  background-position-x: 450px;
+  height: 100%;
+  width: 100%;
+  transition: 0.2s -webkit-filter linear;
+  z-index: -1;
+}

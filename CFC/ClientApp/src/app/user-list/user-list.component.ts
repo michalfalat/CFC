@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-list',
@@ -16,6 +17,8 @@ export class UserListComponent implements OnInit {
   public userList;
   public displayedColumns: string[] = ['name', 'surname', 'email', 'role', 'emailConfirmed', 'phoneNumber', 'actions'];
   @ViewChild(MatSort, {static: false}) sort: MatSort;
+
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private apiService: ApiService,  private notifyService: NotifyService, private translateService: TranslateService, private router: Router) { }
 
@@ -33,6 +36,7 @@ export class UserListComponent implements OnInit {
     this.apiService.getUserList().subscribe(response => {
       this.userList = new MatTableDataSource(response.data);
       this.userList.sort = this.sort;
+      this.userList.paginator = this.paginator;
       this.loadingData = false;
 
     }, error => {

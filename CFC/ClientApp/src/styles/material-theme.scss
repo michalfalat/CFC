@@ -51,7 +51,11 @@ $theme: mat-light-theme($primary, $accent, $warn);
   filter: invert(1);
 }
 
+.dark-theme .side-wallpaper {
+  filter: invert(0.8);
+}
+
 
 .footer, .mainSection, .mat-card, .mat-drawer, .mat-table, .mat-paginator {
-  transition: 0.25s background-color linear, 0.3s color linear !important;
+  transition: 0.2s background-color linear, 0.2s color linear !important;
 }

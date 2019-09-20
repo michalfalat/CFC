@@ -1,6 +1,7 @@
 <body [ngClass]="{'dark-theme': darkThemeService.darkModeEnabled }">
   <mat-sidenav-container class="sidenav-sidebar" autosize fullscreen>
-    <mat-sidenav #sidenav mode="side" [(opened)]="openedSidebar" [fixedInViewport]="true">
+    <mat-sidenav #sidenav mode="side" [(opened)]="openedSidebar" [fixedInViewport]="true" >
+      <div class="side-wallpaper"></div>
       <mat-action-list>
         <button mat-list-item routerLink="/" color="">
           <img src="~/../../assets/logo.png" alt="" class="sidebarLogo">
@@ -10,27 +11,27 @@
         <div *ngIf="authService.isEnabledFor('Administrator')">
           <!-- ADMIN ROUTES -->
           <button mat-list-item routerLink="/admin/dashboard" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>bar_chart</mat-icon>
+            <mat-icon matListIcon class="transparent">bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/admin/users" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>supervised_user_circle</mat-icon>
+            <mat-icon matListIcon class="transparent">supervised_user_circle</mat-icon>
             <span> {{ 'users' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/admin/companies" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>dashboard</mat-icon>
+            <mat-icon matListIcon class="transparent">dashboard</mat-icon>
             <span> {{ 'companies' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/admin/offices" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>place</mat-icon>
+            <mat-icon matListIcon class="transparent">place</mat-icon>
             <span> {{ 'offices' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/admin/companyRecords" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>compare_arrows</mat-icon>
+            <mat-icon matListIcon class="transparent">compare_arrows</mat-icon>
             <span> {{ 'expenses-incomes' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/admin/personalRecords" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>attach_money</mat-icon>
+            <mat-icon matListIcon class="transparent">attach_money</mat-icon>
             <span> {{ 'personal-records' | translate }}</span>
           </button>
 
@@ -38,29 +39,29 @@
         <div *ngIf="authService.isEnabledFor('Owner')">
           <!-- OWNER ROUTES -->
           <button mat-list-item routerLink="/dashboard" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>bar_chart</mat-icon>
+            <mat-icon matListIcon class="transparent">bar_chart</mat-icon>
             <span> {{ 'dashboard' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/companies" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>dashboard</mat-icon>
+            <mat-icon matListIcon class="transparent">dashboard</mat-icon>
             <span> {{ 'companies' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/offices" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>place</mat-icon>
+            <mat-icon matListIcon class="transparent">place</mat-icon>
             <span> {{ 'offices' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/companyRecords" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>compare_arrows</mat-icon>
+            <mat-icon matListIcon class="transparent">compare_arrows</mat-icon>
             <span> {{ 'expenses-incomes' | translate }}</span>
           </button>
           <button mat-list-item routerLink="/personalRecords" [routerLinkActive]="['activeLink']">
-            <mat-icon matListIcon>attach_money</mat-icon>
+            <mat-icon matListIcon class="transparent">attach_money</mat-icon>
             <span> {{ 'personal-records' | translate }}</span>
           </button>
 
         </div>
         <button mat-list-item routerLink="/about" [routerLinkActive]="['activeLink']">
-          <mat-icon matListIcon>info</mat-icon>
+          <mat-icon matListIcon class="transparent">info</mat-icon>
           <span> {{'about' | translate }}</span>
         </button>
       </mat-action-list>

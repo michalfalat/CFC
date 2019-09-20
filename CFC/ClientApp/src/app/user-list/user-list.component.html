@@ -22,19 +22,14 @@
   <br>
   <div>
     <table mat-table [dataSource]="userList" matSort class="basic-table">
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
-
-      <!-- Weight Column -->
       <ng-container matColumnDef="surname">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'surname' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
       </ng-container>
-
-      <!-- Symbol Column -->
       <ng-container matColumnDef="email">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'email' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.email}} </td>
@@ -60,10 +55,10 @@
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
           <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}"  routerLink="{{'/admin/users/edit/' + element.id }}" >
-            <mat-icon>info</mat-icon>
+            <mat-icon class="transparent">info</mat-icon>
           </button>
-          <button mat-icon-button [ngClass]="{'red-text': element.blocked === false , 'green-text': element.blocked === true }" matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}" (click)="$event.stopPropagation();blockUser(element)">
-            <mat-icon> {{ element.blocked === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
+          <button mat-icon-button matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}" (click)="$event.stopPropagation();blockUser(element)">
+            <mat-icon class="transparent"> {{ element.blocked === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -72,8 +67,10 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.blocked == true}" (click)="goToDetail(row.id)"></tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
-    <router-outlet></router-outlet>
+    <div *ngIf="userList === undefined || userList.data == undefined || userList.data.length == 0" class="centered-info-secondary">
+        <br>
+        <p>{{ 'no-data' | translate }}</p>
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
   </div>
-
-
 </mat-card>
