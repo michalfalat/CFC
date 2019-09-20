@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartsModule } from 'ng2-charts';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -24,7 +24,7 @@ describe('ChartDataComponent', () => {
         RouterTestingModule,
         HttpClientModule,
         ChartsModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] },

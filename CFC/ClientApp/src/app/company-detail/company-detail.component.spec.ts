@@ -6,7 +6,7 @@ import { CustomMaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartDataComponent } from '../chart-data/chart-data.component';
 import { ChartsModule } from 'ng2-charts';
 
@@ -24,7 +24,7 @@ describe('CompanyDetailComponent', () => {
         RouterTestingModule,
         HttpClientModule,
         ChartsModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] }

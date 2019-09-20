@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 
 describe('PersonalFinancialsComponent', () => {
@@ -24,7 +24,7 @@ describe('PersonalFinancialsComponent', () => {
         RouterTestingModule,
         HttpClientModule,
         ChartsModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] },
