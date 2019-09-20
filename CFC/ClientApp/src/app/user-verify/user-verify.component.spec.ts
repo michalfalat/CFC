@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginComponent } from '../login/login.component';
 
 describe('UserVerifyComponent', () => {
   let component: UserVerifyComponent;
@@ -16,12 +17,14 @@ describe('UserVerifyComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserVerifyComponent ],
+      declarations: [ UserVerifyComponent, LoginComponent ],
       imports: [
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes(
+          [{path: 'login', component: LoginComponent}]
+        ),
         HttpClientModule,
         ChartsModule,
         NoopAnimationsModule,
