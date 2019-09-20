@@ -122,7 +122,7 @@ export class ChartDataComponent implements OnInit {
   };
   public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
-  // public barChartLegend = true;
+  public barChartLegend = true;
   public barChartPlugins = [pluginDataLabels];
 
 
