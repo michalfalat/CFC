@@ -41,6 +41,7 @@ import { ChartDataComponent } from './chart-data/chart-data.component';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlService } from './custom-translations';
 import { IconSnackBarComponent } from './snackbar-container';
+import { PercentageDialogComponent } from './percentage-dialog/percentage-dialog.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -75,6 +76,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     PersonalFinancialsAddComponent,
     ChartDataComponent,
     IconSnackBarComponent,
+    PercentageDialogComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -248,6 +250,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AuthGuard
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmDialogComponent, IconSnackBarComponent],
+  entryComponents: [ConfirmDialogComponent, IconSnackBarComponent, PercentageDialogComponent],
 })
 export class AppModule { }

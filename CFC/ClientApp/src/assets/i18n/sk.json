@@ -14,6 +14,7 @@
     "add-user": "Pridať používateľa",
     "add-new-user" : "Pridať nového používateľa",
     "add": "Pridať",
+    "save": "Uložiť",
     "profile": "Profil",
     "name": "Meno",
     "surname": "Priezvisko",
@@ -88,9 +89,11 @@
     "add-company": "Pridať firmu",
     "owner": "Štatutár",
     "add-owner": "Pridať štatutára",
+    "edit-owner": "Upraviť štatutára",
     "owners": "Štatutári",
     "branches": "Pobočky",
     "company-share-percentage": "Podiel firmy",
+    "max-percentage": "Dostupný podiel",
     "company": "Firma",
     "confirm-remove-owner": "Naozaj chcete vymazať štatutára z tejto firmy?",
     "no": "Nie",
@@ -166,5 +169,6 @@
     "all-withdraws": "Všetky výbery",
     "all-deposits": "Všetky vklady",
     "history": "História",
-    "overview": "Prehľad"
+    "overview": "Prehľad",
+    "percentage-owner-not-filled-warning": "Podiel pre štatutárov nie je správne vyplnený. Nepridelený podiel: "
 }

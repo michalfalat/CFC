@@ -126,6 +126,22 @@ input:-webkit-autofill {
     color: white
   }
 
+  .warning-container {
+    height: 50px;
+    background-color: #eac47299;
+    border: 1px solid #bd9f38;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+  }
+
+  .warning-container mat-icon {
+    margin-right: 5px;
+  }
+
 
   .error-label {
     color:rgb(214, 68, 68);

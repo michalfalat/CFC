@@ -199,7 +199,32 @@ namespace CFC.Controllers
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { record = recordModel }));
         }
-              
+
+        [HttpPost("[action]")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> Edit([FromBody] MoneyRecordEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+
+            var record = await this._moneyRecordManager.FindById(model.RecordId);
+            if (record == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            record.Amount = model.Amount;
+            record.CompanyId = model.CompanyId;
+            record.OfficeId = model.OfficeId;
+            record.Type = model.Type;
+            record.CreatedAt = model.Created;
+            record.Description = model.Description;
+            this._moneyRecordManager.Edit(record);
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]

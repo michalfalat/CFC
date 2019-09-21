@@ -70,6 +70,12 @@ namespace CFC.Data.Managers
             this.Edit(company);
         }
 
+        public void EditUserInCompany(ApplicationUserCompany entity)
+        {
+            this._repository.ApplicationUserCompanyRepository.Update(entity);
+            this._repository.ApplicationUserCompanyRepository.Save();
+        }
+
         public void RemoveUserFromCompany(ApplicationUser user, Company company)
         {
             var entity = this._repository.ApplicationUserCompanyRepository.FindByCondition(a => a.CompanyId == company.Id && a.UserId == user.Id).FirstOrDefault();
@@ -86,6 +92,11 @@ namespace CFC.Data.Managers
                 .Include(s => s.Owners)
                 .Include(s => s.Offices)
                 .ToListAsync();
+        }
+
+        public decimal SumCompanyPercentage(Company company)
+        {
+            return company.Owners.Sum(o => o.Percentage);
         }
     }
 }

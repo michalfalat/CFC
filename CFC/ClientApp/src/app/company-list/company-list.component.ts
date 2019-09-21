@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CompanyStatus, CompanyUserRole } from '../models/enums';
 import { LanguageService } from '../services/language.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-list',
@@ -28,7 +29,7 @@ export class CompanyListComponent implements OnInit {
 
   constructor(private apiService: ApiService,
      private notifyService: NotifyService, private translateService: TranslateService,
-     public languageService: LanguageService, public authService: AuthService) { }
+     public languageService: LanguageService, public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.getCompanies();
@@ -37,6 +38,11 @@ export class CompanyListComponent implements OnInit {
   refresh() {
     this.getCompanies();
   }
+
+  goToDetail(id) {
+    this.router.navigate([this.authService.getPath('/companies/' + id) ]);
+  }
+
 
   getCompanies() {
     this.companyList = [];

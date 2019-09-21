@@ -8,9 +8,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { PercentageDialogComponent } from '../percentage-dialog/percentage-dialog.component';
 import { CompanyOwnerAddModel } from '../models/company-models';
 import { CompanyUserRole, CompanyStatus } from '../models/enums';
 import { AuthService } from '../services/auth.service';
+import { PercentageEntryData, PercentageSaveData } from '../models/percentage-models';
 
 @Component({
   selector: 'app-company-detail',
@@ -24,13 +26,13 @@ export class CompanyDetailComponent implements OnInit {
   public companyOwners;
   public companyOffices;
   public loadingData = false;
-  public addUserFormVisible = false;
   public editMode = false;
   public cashflow;
+  public percentageNotFilledWarning = false;
 
   public cashflowView = 'table';
   public newOwner;
-  public allUsers: UserDetail[] = [];
+  public allOwners: UserDetail[] = [];
 
   public companyUserRole = CompanyUserRole;
 
@@ -94,7 +96,6 @@ export class CompanyDetailComponent implements OnInit {
 
       this.cashflow = new MatTableDataSource(response.data.company.cashflow);
       this.cashflow.sort = this.sortCashflow;
-      // if(this.au)
       this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
@@ -106,7 +107,7 @@ export class CompanyDetailComponent implements OnInit {
   }
   loadUsers() {
     this.apiService.getUserList().subscribe(response => {
-      this.allUsers = response.data.filter(u => u.role === 'Owner' && this.company.owners.map(c => c.userId).includes(u.id) === false);
+      this.allOwners = response.data.filter(u => u.role === 'Owner');
       this.loadingData = false;
 
     }, error => {
@@ -129,7 +130,8 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   addUser() {
-    this.addUserFormVisible = true;
+    // this.addUserFormVisible = true;
+    this.openOwnerPercentageDialog(undefined);
   }
 
   addOffice() {
@@ -168,27 +170,96 @@ export class CompanyDetailComponent implements OnInit {
     });
     this.maxNewOwnerPercentage = 100 - totalPercentageSum;
     this.newOwner.percentage = this.maxNewOwnerPercentage;
+    if (this.maxNewOwnerPercentage > 0) {
+      this.percentageNotFilledWarning = true;
+    } else {
+      this.percentageNotFilledWarning = false;
+    }
   }
 
-  saveCompanyUser() {
+  addCompanyUser() {
     this.loadingData = true;
     this.newOwner.companyId = this.companyId;
     this.apiService.addUserToCompany(this.newOwner).subscribe(response => {
-      console.log(response);
-      this.loadingData = false;
       this.newOwner = new CompanyOwnerAddModel();
       this.loadCompany();
-      this.addUserFormVisible = false;
     }, error => {
       this.loadingData = false;
       this.notifyService.processError(error);
+    });
+  }
+
+  editCompanyUser() {
+    this.loadingData = true;
+    this.newOwner.companyId = this.companyId;
+    this.apiService.editUserInCompany(this.newOwner).subscribe(response => {
+      this.loadCompany();
+    }, error => {
+      this.loadingData = false;
+      this.notifyService.processError(error);
+    });
+  }
+
+  openOwnerPercentageDialog(element: any): void {
+    const entryData = new PercentageSaveData();
+    let isEdit = false;
+    let headerText = 'add-owner';
+    let maxPercentage = this.maxNewOwnerPercentage;
+    let owners = this.allOwners.filter( u => this.company.owners.map(c => c.userId).includes(u.id) === false)
+                                .map(({ id, name, surname }) => ({ text: name + ' ' + surname, id: id }));
+    if (element !== undefined) {
+      entryData.selectedInput = element.userId;
+      entryData.selectedType = element.role;
+      entryData.percentage = element.percentage;
+      isEdit = true;
+      headerText = 'edit-owner';
+      owners = [ { text: element.userName + ' ' + element.userSurname, id: element.userId}];
+      maxPercentage += element.percentage;
+    }
+    const data: PercentageEntryData =  {
+      headerText: headerText,
+      inputText: 'owner',
+      typeText: 'role',
+      percentageText: 'company-share-percentage',
+      maxPercentage: maxPercentage,
+      possibleData: owners,
+      possibleTypes: [
+        {
+          text: 'EXECUTIVE',
+          id: 1
+        },
+        {
+          text: 'COMPANION',
+          id: 2
+        }
+      ],
+      entryData: entryData,
+      isEdit: isEdit,
+    };
+    const dialogRef = this.dialog.open(PercentageDialogComponent, {
+      data: data,
+      position: { top: '80px' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== false) {
+        this.newOwner.userId = result.selectedInput;
+        this.newOwner.percentage = result.percentage;
+        this.newOwner.role = result.selectedType;
+        if (result.isEdit === true) {
+          this.editCompanyUser();
+        } else {
+          this.addCompanyUser();
+        }
+      }
     });
 
   }
 
   openRemoveUserDialog(userId): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: this.translateService.instant('confirm-remove-owner')
+      data: this.translateService.instant('confirm-remove-owner'),
+      position: { top: '80px' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -203,7 +274,8 @@ export class CompanyDetailComponent implements OnInit {
       this.removeCompanyOffice(office);
     } else {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: this.translateService.instant('confirm-remove-office')
+        data: this.translateService.instant('confirm-remove-office'),
+        position: { top: '80px' }
       });
 
       dialogRef.afterClosed().subscribe(result => {

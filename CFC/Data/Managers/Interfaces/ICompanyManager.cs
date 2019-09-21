@@ -10,6 +10,8 @@ namespace CFC.Data.Managers
     {
         void AddUserToCompany(ApplicationUserCompany entity, Company company);
         void RemoveUserFromCompany(ApplicationUser user, Company company);
+        void EditUserInCompany(ApplicationUserCompany entity);
         Task<List<Company>> GetCompaniesByOwner(string ownerId);
+        decimal SumCompanyPercentage(Company company);
     }
 }

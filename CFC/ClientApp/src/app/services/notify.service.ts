@@ -12,7 +12,7 @@ export class NotifyService {
 
   info(message: string, action: string = 'OK', duration = 5000) {
     this.snackBar.openFromComponent(IconSnackBarComponent, {
-      duration: 300000,
+      duration: duration,
       verticalPosition: 'top',
       panelClass: ['notification-info'],
       data: {

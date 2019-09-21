@@ -45,7 +45,7 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  goToDetail(id){
+  goToDetail(id) {
     this.router.navigate(['/admin/users/edit/' + id ]);
   }
 

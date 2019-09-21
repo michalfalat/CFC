@@ -13,6 +13,7 @@
     "add-user": "Add user",
     "add-new-user" : "Add new user",
     "add": "Add",
+    "save": "Save",
     "profile": "Profile",
     "name": "Name",
     "surname": "Surname",
@@ -87,9 +88,11 @@
     "add-company": "Add company",
     "owner": "Owner",
     "add-owner": "Add owner",
+    "edit-owner": "Edit owner",
     "owners": "Owners",
     "branches": "Branches",
     "company-share-percentage": "Company share percentage",
+    "max-percentage": "Max percentage",
     "company": "Company",
     "confirm-remove-owner": "Are you sure to delete user from this company?",
     "no": "No",
@@ -165,7 +168,8 @@
     "all-withdraws": "All withdraws",
     "all-deposits": "All deposits",
     "history": "History",
-    "overview": "Overview"
+    "overview": "Overview",
+    "percentage-owner-not-filled-warning": "Percentage for owners is not fully covered. Percentage remaining:"
 
 
 

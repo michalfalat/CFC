@@ -54,7 +54,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}"  routerLink="{{'/admin/users/edit/' + element.id }}" >
+          <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}"  (click)="goToDetail(element.id)" >
             <mat-icon class="transparent">info</mat-icon>
           </button>
           <button mat-icon-button matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}" (click)="$event.stopPropagation();blockUser(element)">

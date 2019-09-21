@@ -202,7 +202,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("{id}/AddUser")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> AddUserToCompany(int id, [FromBody]CompanyAddUserModel model)
         {
             //TODO check percentage overflow 
@@ -215,14 +215,45 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
+            var sum = this._companyManager.SumCompanyPercentage(company) + model.Percentage;
+            if (sum > 100)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
+            }
 
             var userCompany = this._mapper.Map<CompanyAddUserModel, ApplicationUserCompany>(model);
             this._companyManager.AddUserToCompany(userCompany, company);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
+        [HttpPost("{id}/EditUser")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> EditUserInCompany(int id, [FromBody]CompanyEditUserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+            var company = await this._companyManager.FindById(id);
+            if (company == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }          
+
+            var user = company.Owners.FirstOrDefault(a => a.UserId == model.UserId);
+            var sum = this._companyManager.SumCompanyPercentage(company) + model.Percentage - user.Percentage;
+            if (sum > 100)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
+            }
+            user.Percentage = model.Percentage;
+            user.Role = model.Role;
+            this._companyManager.EditUserInCompany(user);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
         [HttpDelete("{id}/RemoveUser/{userId}")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> RemoveUserFromCompany(int id, string userId)
         {
             var company = await this._companyManager.FindById(id);
@@ -240,7 +271,7 @@ namespace CFC.Controllers
         }
 
         [HttpGet("{id}/Users")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetCompanyUsers(int id)
         {
             var company = await this._companyManager.FindById(id);

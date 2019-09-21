@@ -94,6 +94,9 @@ export class ApiService {
   private addUserToCompanyUrl(id) {
     return this.baseUrl + `api/Company/${id}/AddUser`;
   }
+  private editUserInCompanyUrl(id) {
+    return this.baseUrl + `api/Company/${id}/EditUser`;
+  }
   private removeUserFromCompanyUrl(id, userId) {
     return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
   }
@@ -359,6 +362,14 @@ export class ApiService {
 
   addUserToCompany(owner: CompanyOwnerAddModel): any {
     return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
+
+  editUserInCompany(owner: CompanyOwnerAddModel): any {
+    return this.http.post(this.editUserInCompanyUrl(owner.companyId), owner,  this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
