@@ -1,12 +1,12 @@
 export enum OfficeStatus {
-  UNKNOWN = 0,
+  // UNKNOWN = 0,
   ACTIVE = 1,
   CANCELED = 2,
   BLOCKED = 3
 }
 
 export enum CompanyStatus {
-  UNKNOWN = 0,
+  // UNKNOWN = 0,
   ACTIVE = 1,
   CANCELED = 2,
   BLOCKED = 3
@@ -15,6 +15,8 @@ export enum CompanyStatus {
 export enum MoneyRecordType {
   EXPENSE = 1,
   INCOME = 2,
+  WITHDRAW = 3,
+  DEPOSIT = 4
 }
 
 export enum CompanyUserRole {

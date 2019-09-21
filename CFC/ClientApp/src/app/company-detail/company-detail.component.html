@@ -7,14 +7,24 @@
       </button>
     </span>
     <span>
-      <span class="header"> {{ 'company' | translate }} {{ company?.name }} </span>
+      <span class="header"> {{ 'company' | translate }} <strong>{{ company?.name }}</strong> </span>
     </span>
     <span class="spacer"></span>
+    <span>
+      <span class="money-state-container">
+        <span> {{ 'actual-money-state' | translate }}: </span>
+        <span
+          [ngClass]="{'red-text': company?.actualCash < 0 , 'green-text': company?.actualCash > 0  }"><strong>{{ company?.actualCash > 0 ? '+' : '' }}{{company?.actualCash}}
+            &euro;</strong></span>
+      </span>
+    </span>
   </div>
   <div *ngIf="percentageNotFilledWarning" class="warning-container">
-    <mat-icon>info</mat-icon> {{ 'percentage-owner-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewOwnerPercentage }}% </strong>
+    <mat-icon class="transparent">info</mat-icon>
+    {{ 'percentage-owner-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewOwnerPercentage }}% </strong>
   </div>
-  <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
+  <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab"
+    (selectedIndexChange)="setDataSource($event)">
     <mat-tab label="{{ 'info' | translate}}">
       <div class="flexLayout">
         <span class="spacer"></span>
@@ -41,8 +51,8 @@
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
-          <mat-form-field class="full-width" matTooltip="{{ 'company-status-info' | translate }}">
-            <mat-label> {{ 'status' | translate }}<mat-icon>info</mat-icon>
+          <mat-form-field class="full-width">
+            <mat-label> {{ 'status' | translate }}
             </mat-label>
             <mat-select [(ngModel)]="company.status" name="status" required placeholder="{{ 'status' | translate }}"
               [disabled]="editMode === false">
@@ -50,6 +60,7 @@
                 {{ status | translate }}
               </mat-option>
             </mat-select>
+          <span matSuffix  matTooltip="{{ 'company-status-info' | translate }}">&nbsp;<mat-icon class="transparent2">help</mat-icon></span>
           </mat-form-field>
           <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
             class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
@@ -82,7 +93,8 @@
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
                 (click)="openRemoveOfficeDialog(element)">
-                <mat-icon class="transparent"> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}</mat-icon>
+                <mat-icon class="transparent"> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}
+                </mat-icon>
               </button>
             </td>
           </ng-container>
@@ -162,37 +174,79 @@
     </mat-tab>
     <mat-tab label="{{ 'cash-flow' | translate }}">
       <br>
-      <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
-        <p>{{ 'no-data' | translate }}</p>
-      </div>
-      <div *ngIf="cashflow !== undefined && cashflow.data.length > 0">
-        <div class="flexLayout">
-          <span class="money-state-container">
-            <span> {{ 'actual-money-state' | translate }}: </span>
-              <span [ngClass]="{'red-text': company.actualCash < 0 , 'green-text': company.actualCash > 0  }"><strong>{{ company.actualCash > 0 ? '+' : '' }}{{company.actualCash}} &euro;</strong></span>
-          </span>
-          <span class="spacer"></span>
-          <span>
-            <mat-form-field>
-              <mat-label>{{ 'view' | translate }}</mat-label>
-              <mat-select [(ngModel)]="cashflowView" name="cashflowView">
-                <mat-option value="table">
-                  {{'table-view' | translate }}
-                </mat-option>
-                <mat-option value="chart">
-                  {{'chart-view' | translate }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </span>
+      <div class="flexLayout filter-inputs">
 
-        </div>
-        <div *ngIf="cashflowView === 'chart'">
-          <app-chart-data [data]="company.cashflow" [type]="'company'" [companyOffices]="company.offices">
+        <span>
+          <mat-form-field class="date-filter-picker">
+            <input matInput [matDatepicker]="pickerFrom" (focus)="pickerFrom.open()" [(ngModel)]="filterFrom"
+              (dateChange)="filter()" placeholder="{{ 'from' | translate}}">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field class="date-filter-picker">
+            <input matInput [matDatepicker]="pickerTo" (focus)="pickerTo.open()" placeholder="{{ 'to' | translate}}"
+              (dateChange)="filter()" [(ngModel)]="filterTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field class="">
+            <mat-select name="filterType" placeholder="{{ 'type' | translate }}" [(ngModel)]="filterType"
+              (selectionChange)="filter()">
+              <mat-option value="all">
+                {{ 'all' | translate }}
+              </mat-option>
+              <mat-option value="company">
+                {{ 'company-records-filter' | translate }}
+              </mat-option>
+              <mat-option value="personal">
+                {{ 'personal-records-filter' | translate }}
+              </mat-option>
+              <mat-option *ngFor="let type of moneyRecordTypes" [value]="moneyRecordType[type]">
+                {{type | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field>
+            <input matInput placeholder="{{ 'keyword' | translate }}" name="keyword-filter" [(ngModel)]="filterKeyword"
+              (keyup)="filter()">
+          </mat-form-field>
+        </span>
+        <span style="padding-top: 15px;">
+          <button mat-icon-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()"
+            class="header">
+            <mat-icon class="transparent">close</mat-icon>
+          </button>
+        </span>
+
+        <span class="spacer"></span>
+        <span>
+          <mat-form-field>
+            <mat-label>{{ 'view' | translate }}</mat-label>
+            <mat-select [(ngModel)]="cashflowView" name="cashflowView">
+              <mat-option value="table">
+                {{'table-view' | translate }}
+              </mat-option>
+              <mat-option value="chart">
+                {{'chart-view' | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
+      </div>
+
+      <div *ngIf="cashflow !== undefined ">
+        <div *ngIf="cashflowView === 'chart' && recreatedChart">
+          <app-chart-data [data]="filteredCashflow" [type]="'company'" [companyOffices]="company.offices">
           </app-chart-data>
         </div>
         <div *ngIf="cashflowView === 'table'">
-          <table mat-table [dataSource]="cashflow" matSort class="basic-table">
+          <table mat-table [dataSource]="cashflow" #sortColMoney="matSort" matSort class="basic-table">
             <ng-container matColumnDef="createdAt">
               <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
               <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
@@ -213,7 +267,7 @@
             </ng-container>
 
             <ng-container matColumnDef="amount">
-              <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+              <th mat-header-cell *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
               <td mat-cell *matCellDef="let element">
                 <div *ngIf="element.type === 1 || element.type === 2">
                   <span
@@ -233,12 +287,15 @@
                 </div>
               </td>
             </ng-container>
-
-
             <tr mat-header-row *matHeaderRowDef="displayedColumnsCashFlow"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumnsCashFlow;"
               [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
           </table>
+          <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
+            <br>
+            <p>{{ 'no-data' | translate }}</p>
+          </div>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
         </div>
       </div>
     </mat-tab>

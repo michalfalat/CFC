@@ -174,5 +174,16 @@
     "history": "História",
     "overview": "Prehľad",
     "percentage-owner-not-filled-warning": "Podiel pre štatutárov nie je správne vyplnený. Nepridelený podiel: ",
-    "percentage-company-not-filled-warning": "Podiel pre firmy nie je správne vyplnený. Nepridelený podiel: "
+    "percentage-company-not-filled-warning": "Podiel pre firmy nie je správne vyplnený. Nepridelený podiel: ",
+    "clear-filters": "Vyčistiť filter",
+    "all": "Všetky",
+    "company-records-filter": "Príjmy a výdaje",
+    "personal-records-filter": "Vklady a výbery",
+    "EXPENSE": "Výdaj",
+    "INCOME": "Príjem",
+    "DEPOSIT": "Vklad",
+    "WITHDRAW": "Výber",
+    "from": "Od",
+    "to": "Do",
+    "keyword": "Kľúčové slovo"
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MoneyRecordType } from '../models/enums';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,7 +15,6 @@ import {MatPaginator} from '@angular/material/paginator';
 export class CompanyFinancialsComponent implements OnInit {
   public loadingData = false;
   public recordList;
-  public moneyRecordType = MoneyRecordType;
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 

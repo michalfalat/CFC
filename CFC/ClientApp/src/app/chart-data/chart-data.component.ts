@@ -58,7 +58,8 @@ export class ChartDataComponent implements OnInit {
       position: 'bottom',
       labels: {
         fontColor: this.themeService.darkModeEnabled ? 'white' : '',
-      }
+      },
+      onClick: (e) => e.stopPropagation()
     },
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.

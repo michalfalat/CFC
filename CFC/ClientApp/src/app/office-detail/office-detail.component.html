@@ -7,12 +7,12 @@
       </button>
     </span>
     <span>
-      <span class="header"> {{ 'office' | translate }} {{ office?.name }} </span>
+      <span class="header"> {{ 'office' | translate }} <strong>{{ office?.name }}</strong> </span>
     </span>
     <span class="spacer"></span>
   </div>
   <div *ngIf="percentageNotFilledWarning" class="warning-container">
-      <mat-icon>info</mat-icon> {{ 'percentage-company-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewCompanyPercentage }}% </strong>
+      <mat-icon class="transparent">info</mat-icon> {{ 'percentage-company-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewCompanyPercentage }}% </strong>
     </div>
   <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
     <mat-tab label="{{ 'info' | translate }}">

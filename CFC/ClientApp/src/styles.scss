@@ -68,6 +68,9 @@
   mat-icon.transparent {
     opacity: 0.75;
   }
+  mat-icon.transparent2 {
+    opacity: 0.5;
+  }
 
   @-webkit-keyframes autofill {
     to {
@@ -328,4 +331,16 @@ mat-icon[matPrefix] {
   width: 100%;
   transition: 0.2s -webkit-filter linear;
   z-index: -1;
+}
+
+.filter-inputs span {
+  margin-right: 10px;
+}
+
+.filter-inputs span:last-of-type {
+  margin-right: 0px;
+}
+
+.date-filter-picker {
+  max-width: 110px;
 }

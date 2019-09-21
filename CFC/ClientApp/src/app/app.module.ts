@@ -42,6 +42,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlService } from './custom-translations';
 import { IconSnackBarComponent } from './snackbar-container';
 import { PercentageDialogComponent } from './percentage-dialog/percentage-dialog.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -246,6 +247,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       },
       deps: [TranslateService]
     },
+    {provide: MAT_DATE_LOCALE, useValue: 'sk'},
     CookieService,
     AuthGuard
   ],

@@ -173,7 +173,18 @@
     "history": "History",
     "overview": "Overview",
     "percentage-owner-not-filled-warning": "Percentage for owners is not fully covered. Percentage remaining:",
-    "percentage-company-not-filled-warning": "Percentage share for companies is not fully covered. Percentage remaining:"
+    "percentage-company-not-filled-warning": "Percentage share for companies is not fully covered. Percentage remaining:",
+    "clear-filters": "Clear filters",
+    "all": "All",
+    "company-records-filter": "Expenses and incomes",
+    "personal-records-filter": "Deposits and withdraws",
+    "EXPENSE": "Expense",
+    "INCOME": "Income",
+    "DEPOSIT": "Deposit",
+    "WITHDRAW": "Withdraw",
+    "from": "From",
+    "to": "To",
+    "keyword": "Keyword"
 
 
 

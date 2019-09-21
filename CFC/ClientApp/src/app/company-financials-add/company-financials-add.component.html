@@ -60,7 +60,7 @@
       <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }" placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required
         type="number">
 
-      <span matSuffix>&nbsp;&euro;</span>
+      <span matSuffix >&nbsp;&euro;</span>
     </mat-form-field>
 
     <button mat-raised-button color="primary" class="main-button" (click)="add()"

@@ -13,6 +13,8 @@ import { CompanyOwnerAddModel } from '../models/company-models';
 import { CompanyUserRole, CompanyStatus } from '../models/enums';
 import { AuthService } from '../services/auth.service';
 import { PercentageEntryData, PercentageSaveData } from '../models/percentage-models';
+import { MoneyRecordType } from '../models/enums';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-company-detail',
@@ -41,12 +43,32 @@ export class CompanyDetailComponent implements OnInit {
 
   public maxNewOwnerPercentage = 100;
 
+  public moneyRecordTypes = Object.keys(MoneyRecordType).filter(s => Number.isNaN(Number(s)));
+
+  public moneyRecordType = MoneyRecordType;
+
+  public filteredCashflow;
+
+  public recreatedChart = true;
+
   public displayedColumnsOwners: string[] = ['userName', 'userSurname', 'role', 'percentage', 'actions'];
   public displayedColumnsOffices: string[] = ['name', 'percentage', 'actions'];
   public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'officeName', 'description', 'amount'];
   @ViewChild(MatSort, { static: false }) sortOwners: MatSort;
   @ViewChild(MatSort, { static: false }) sortOffices: MatSort;
-  @ViewChild(MatSort, { static: false }) sortCashflow: MatSort;
+  // @ViewChild(MatSort, { static: false }) sortCashflow: MatSort;
+  @ViewChild('sortColMoney', { static: false }) sortCashflow: MatSort;
+
+  @ViewChild(MatPaginator, { static: false }) paginatorCashflow: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginatorCompanyOwners: MatPaginator;
+
+
+  // filters
+
+  public filterFrom = null;
+  public filterTo = null;
+  public filterType = 'all';
+  public filterKeyword = null;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
@@ -84,8 +106,8 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   loadCompany() {
+    this.loadingData = true;
     this.apiService.getCompany(this.companyId).subscribe(response => {
-      console.log(response);
       this.company = response.data.company;
       this.companyOwners = new MatTableDataSource(response.data.company.owners);
       this.companyOwners.sort = this.sortOwners;
@@ -96,6 +118,8 @@ export class CompanyDetailComponent implements OnInit {
 
       this.cashflow = new MatTableDataSource(response.data.company.cashflow);
       this.cashflow.sort = this.sortCashflow;
+      this.cashflow.paginator = this.paginatorCashflow;
+      this.filteredCashflow = response.data.company.cashflow;
       this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
@@ -136,6 +160,49 @@ export class CompanyDetailComponent implements OnInit {
 
   addOffice() {
     this.router.navigate([this.authService.getPath('/offices')]);
+  }
+
+  filter() {
+    this.recreatedChart = false;
+    let records = this.company.cashflow;
+    if (this.filterFrom !== null) {
+      records = records.filter(a => new Date(a.createdAt) > new Date(this.filterFrom));
+    }
+    if (this.filterTo !== null) {
+      records = records.filter(a => new Date(a.createdAt) <= new Date(this.filterTo));
+    }
+    if (this.filterKeyword !== null) {
+      const keyWord = this.filterKeyword.toLowerCase();
+      records = records.filter(a => a.description.toLowerCase().includes(keyWord) ||
+                                    a.creatorName.toLowerCase().includes(keyWord) ||
+                                    (a.officeName !== null && a.officeName.toLowerCase().includes(keyWord)) ||
+                                    a.amount.toString().toLowerCase().includes(keyWord));
+    }
+    if (this.filterType !== 'all') {
+      if (this.filterType === 'company') {
+        records = records.filter(a => a.type === 1 || a.type === 2);
+      } else if (this.filterType === 'personal') {
+        records = records.filter(a => a.type === 3 || a.type === 4);
+      } else {
+        records = records.filter(a => a.type === this.filterType);
+      }
+    }
+    console.log(records);
+    this.filteredCashflow = records;
+    this.cashflow = new MatTableDataSource(records);
+    this.cashflow.sort = this.sortCashflow;
+    this.cashflow.paginator = this.paginatorCashflow;
+    setTimeout(() => {
+      this.recreatedChart = true;
+    }, 100);
+  }
+
+  clearFilters() {
+    this.filterFrom = null;
+    this.filterTo = null;
+    this.filterType = 'all';
+    this.filterKeyword = null;
+    this.filter();
   }
 
   removeCompanyUser(userId) {
@@ -205,18 +272,18 @@ export class CompanyDetailComponent implements OnInit {
     let isEdit = false;
     let headerText = 'add-owner';
     let maxPercentage = this.maxNewOwnerPercentage;
-    let owners = this.allOwners.filter( u => this.company.owners.map(c => c.userId).includes(u.id) === false)
-                                .map(({ id, name, surname }) => ({ text: name + ' ' + surname, id: id }));
+    let owners = this.allOwners.filter(u => this.company.owners.map(c => c.userId).includes(u.id) === false)
+      .map(({ id, name, surname }) => ({ text: name + ' ' + surname, id: id }));
     if (element !== undefined) {
       entryData.selectedInput = element.userId;
       entryData.selectedType = element.role;
       entryData.percentage = element.percentage;
       isEdit = true;
       headerText = 'edit-owner';
-      owners = [ { text: element.userName + ' ' + element.userSurname, id: element.userId}];
+      owners = [{ text: element.userName + ' ' + element.userSurname, id: element.userId }];
       maxPercentage += element.percentage;
     }
-    const data: PercentageEntryData =  {
+    const data: PercentageEntryData = {
       headerText: headerText,
       inputText: 'owner',
       typeText: 'role',
@@ -310,6 +377,20 @@ export class CompanyDetailComponent implements OnInit {
 
       }
     }
+  }
+
+  setDataSource(indexNumber) {
+    setTimeout(() => {
+      switch (indexNumber) {
+        case 2:
+          this.companyOwners.sort = this.sortOwners;
+          !this.companyOwners.paginator ? this.companyOwners.paginator = this.paginatorCompanyOwners : null;
+          break;
+        case 3:
+          this.cashflow.sort = this.sortCashflow;
+          this.cashflow.paginator = this.paginatorCashflow;
+      }
+    }, 100);
   }
 
   toogleEditMode() {
