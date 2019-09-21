@@ -18,6 +18,19 @@
           </button>
         </span>
       </span>
+      <span class="actionButtonsResponsive">
+          <span>
+            <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+              <mat-icon matListIcon>refresh</mat-icon>
+            </button>
+          </span>
+          <span>
+            <button mat-icon-button [routerLink]="authService.getPath('/personalRecords/add')"
+              matTooltip="{{ 'add-deposit-withdraw' | translate }}">
+              <mat-icon matListIcon>add</mat-icon>
+            </button>
+          </span>
+        </span>
     </div>
     <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
       <mat-tab label="{{ 'overview' | translate}}">
@@ -75,7 +88,7 @@
       <mat-tab label="{{ 'history' | translate}}">
         <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
         <br>
-        <div class="">
+        <div class="table-container">
           <table mat-table [dataSource]="company.records" matSort class="basic-table">
             <ng-container matColumnDef="createdAt">
               <th mat-header-cell *matHeaderCellDef> {{ 'date' | translate }} </th>

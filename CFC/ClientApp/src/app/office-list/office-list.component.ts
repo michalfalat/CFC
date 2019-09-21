@@ -30,7 +30,7 @@ export class OfficeListComponent implements OnInit {
   constructor(private apiService: ApiService,
     public authService: AuthService,
     private router: Router,
-     private notifyService: NotifyService, private translateService: TranslateService, private languageService: LanguageService) {
+     private notifyService: NotifyService, private translateService: TranslateService, public languageService: LanguageService) {
      }
 
   ngOnInit() {

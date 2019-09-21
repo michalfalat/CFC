@@ -212,10 +212,15 @@ background-color: #90909029;
   max-height: 200px;
   opacity: 0.75;
 }
+.table-container {
+  overflow-x: auto;
+}
 .basic-table {
   width: 100%;
-  overflow-x: auto;
-  display: -webkit-inline-box;
+}
+
+.wide-table {
+  min-width: 750px;
 }
 
 tr.mat-row:hover {
@@ -232,6 +237,9 @@ tr.mat-row:hover {
 }
 .actionButtons {
   align-self: center;
+}
+.actionButtonsResponsive {
+  display: none;
 }
 
 .actionButtons span {
@@ -345,4 +353,23 @@ mat-icon[matPrefix] {
 
 .date-filter-picker {
   max-width: 110px;
+}
+
+
+@media screen and (max-width: 1000px) {
+  .actionButtons {
+    display: none;
+  }
+
+  .actionButtonsResponsive {
+    display: block;
+  }
+
+  .card-panel .left {
+    width: 100%
+  }
+
+  .card-panel .right {
+    width: 100%;
+  }
 }

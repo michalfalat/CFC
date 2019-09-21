@@ -26,10 +26,13 @@ export class AppComponent {
       this.selectedLanguage = this.languageService.getLanguage();
       this.authService.user.subscribe((user) => {
         this.userData = user;
-      })
+      });
       this.translateService.onLangChange.subscribe(() => {
         this.selectedLanguage = this.languageService.getLanguage();
-      })
+      });
+      if (this.windowWidth() < 800) {
+        this.openedSidebar = false;
+      }
 
   }
 

@@ -18,19 +18,32 @@
         </button>
       </span>
     </span>
+    <span class="actionButtonsResponsive">
+      <span>
+        <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+          <mat-icon matListIcon>refresh</mat-icon>
+        </button>
+      </span>
+      <span>
+        <button mat-icon-button [routerLink]="authService.getPath('/companyRecords/add')"
+          matTooltip="{{ 'add-expense-income' | translate }}">
+          <mat-icon matListIcon>add</mat-icon>
+        </button>
+      </span>
+    </span>
   </div>
   <br>
-  <div>
-    <table mat-table [dataSource]="recordList" matSort class="basic-table">
+  <div class="table-container">
+    <table mat-table [dataSource]="recordList" matSort class="basic-table wide-table">
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="creator">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
-        </ng-container>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+      </ng-container>
 
       <ng-container matColumnDef="companyName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
@@ -51,7 +64,9 @@
 
       <ng-container matColumnDef="amount">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
-        <td mat-cell *matCellDef="let element" [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}{{element.amount}} &euro;</td>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">
+          {{element.type === 2 ? '+' : '-' }}{{element.amount}} &euro;</td>
       </ng-container>
 
 
@@ -71,13 +86,12 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}">
       </tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
-    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-    <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0" class="centered-info-secondary">
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+    <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0"
+      class="centered-info-secondary">
       <br>
       <p>{{ 'no-data' | translate }}</p>
     </div>
   </div>
-
-
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
 </mat-card>
