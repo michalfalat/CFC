@@ -214,6 +214,8 @@ background-color: #90909029;
 }
 .basic-table {
   width: 100%;
+  overflow-x: auto;
+  display: -webkit-inline-box;
 }
 
 tr.mat-row:hover {

@@ -97,7 +97,7 @@
       </div>
       <div>
         <div>
-          <button mat-raised-button (click)="openOfficeCompanyPercentageDialog()" color="primary" class="full-width"
+          <button mat-raised-button (click)="openOfficeCompanyPercentageDialog(undefined)" color="primary" class="full-width"
             [disabled]="maxNewCompanyPercentage <= 0">
             <mat-icon matListIcon>add</mat-icon>
             <span> {{ 'add-company' | translate }}</span>

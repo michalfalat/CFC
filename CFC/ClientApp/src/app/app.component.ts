@@ -60,4 +60,14 @@ export class AppComponent {
   public getYear() {
     return new Date().getFullYear();
   }
+
+  public windowWidth() {
+    return window.innerWidth;
+  }
+
+  public closeSidenav() {
+    if(this.windowWidth() < 800) {
+      this.openedSidebar = false;
+    }
+  }
 }

@@ -1,8 +1,8 @@
 <body [ngClass]="{'dark-theme': darkThemeService.darkModeEnabled }">
   <mat-sidenav-container class="sidenav-sidebar" autosize fullscreen>
-    <mat-sidenav #sidenav mode="side" [(opened)]="openedSidebar" [fixedInViewport]="true" >
+    <mat-sidenav #sidenav [mode]="windowWidth() < 800 ? 'over' : 'side'" [(opened)]="openedSidebar" [fixedInViewport]="true" >
       <div class="side-wallpaper"></div>
-      <mat-action-list>
+      <mat-action-list (click)="closeSidenav()">
         <button mat-list-item routerLink="/" color="">
           <img src="~/../../assets/logo.png" alt="" class="sidebarLogo">
           &nbsp;Financial Control System
