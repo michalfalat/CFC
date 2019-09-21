@@ -64,7 +64,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Add([FromBody] OfficeAddModel model)
         {
             if (!ModelState.IsValid)
@@ -175,10 +175,33 @@ namespace CFC.Controllers
         }
 
         [HttpPost("{id}/AddCompany")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> AddCompanyToOffice(int id, [FromBody]OfficeAddCompanyModel model)
         {
-            //TODO check percentage overflow 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            }
+            var office = await this._officeManager.FindById(id);
+            if (office == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            var sum = this._officeManager.SumOfficePercentage(office) + model.Percentage;
+            if (sum > 100)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
+            }
+
+            var userOffice = this._mapper.Map<CompanyOffice>(model);
+            this._officeManager.AddCompanyToOffice(userOffice, office);
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
+        [HttpPost("{id}/EditCompany")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> EditUserInCompany(int id, [FromBody]OfficeEditCompanyModel model)
+        {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
@@ -189,13 +212,19 @@ namespace CFC.Controllers
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
 
-            var userOffice = this._mapper.Map<CompanyOffice>(model);
-            this._officeManager.AddCompanyToOffice(userOffice, office);
+            var company = office.Companies.FirstOrDefault(a => a.CompanyId == model.CompanyId);
+            var sum = this._officeManager.SumOfficePercentage(office) + model.Percentage - company.Percentage;
+            if (sum > 100)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_SUCEEDED));
+            }
+            company.Percentage = model.Percentage;
+            this._officeManager.EditCompanyInOffice(company);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
         [HttpDelete("{id}/RemoveCompany/{companyId}")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> RemoveCompanyFromOffice(int id, int companyId)
         {
             var office = await this._officeManager.FindById(id);

@@ -10,6 +10,8 @@ namespace CFC.Data.Managers
     {
         void AddCompanyToOffice(CompanyOffice entity, Office office);
         void RemoveCompanyFromOffice(int companyId, int officeId);
+        void EditCompanyInOffice(CompanyOffice entity);
         Task<List<Office>> GetOfficesByOwner(string ownerId);
+        decimal SumOfficePercentage(Office office);
     }
 }

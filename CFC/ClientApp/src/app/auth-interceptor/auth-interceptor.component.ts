@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -43,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
       } else if (error.status === 500) {
         this.notifyService.error(this.translateService.instant('INTERNAL_SERVER_ERROR'));
       }
-      return of(error);
+      return throwError(error);
     }) as any);
   }
 

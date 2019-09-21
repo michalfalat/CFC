@@ -94,6 +94,17 @@ namespace CFC.Data.Managers
             return offices;
         }
 
+        public decimal SumOfficePercentage(Office office)
+        {
+            return office.Companies.Sum(c => c.Percentage);
+        }
+
+        public void EditCompanyInOffice(CompanyOffice entity)
+        {
+            this._repository.CompanyOfficeRepository.Update(entity);
+            this._repository.CompanyOfficeRepository.Save();
+        }
+
 
         //public void AddUserToOffice(ApplicationUserOffice entity, Office office)
         //{

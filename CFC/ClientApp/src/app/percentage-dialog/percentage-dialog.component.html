@@ -9,7 +9,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field class="full-width" *ngIf="data.typeText !== null">
       <mat-label>{{ data.typeText | translate }}</mat-label>
       <mat-select [(ngModel)]="newParticipant.selectedType" name="selectedType" required>
 
@@ -29,8 +29,8 @@
 </div>
 <div>
   <div class="flexLayout">
-    <span style="margin: auto;color: #8c8c8c;">{{ 'max-percentage' | translate }}: <strong
-        style="color:black;">{{ data.maxPercentage }}%</strong> </span>
+    <span style="margin: auto;color: #8c8c8c;">{{ 'max-percentage' | translate }}: <strong (click)="newParticipant.percentage = data.maxPercentage"
+        style="color:black; cursor:pointer;">{{ data.maxPercentage }}%</strong> </span>
     <span class="spacer"></span>
     <span>
       <button mat-button (click)="onNoClick()">{{'cancel' | translate }}</button>

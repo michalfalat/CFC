@@ -6,6 +6,7 @@
     "paginator.of": "z",
     "paginator.first-page": "Prvá stránka",
     "paginator.last-page": "Posledná stránka",
+    "NOT_SUCEEDED": "Vyskytol sa problém. Operácia nebola vykonaná. Kontaktuje administrátora",
     "login": "Prihlásenie",
     "logout": "Odhlásiť",
     "password": "Heslo",
@@ -87,6 +88,7 @@
     "owners-count": "Počet štatutárov",
     "status": "Status",
     "add-company": "Pridať firmu",
+    "edit-company": "Upraviť firmu",
     "owner": "Štatutár",
     "add-owner": "Pridať štatutára",
     "edit-owner": "Upraviť štatutára",
@@ -108,6 +110,7 @@
     "office-blocked": "Pobočka bola zablokovaná",
     "office-unblocked": "Pobočka bola odblokovaná",
     "confirm-remove-office": "Naozaj chcete vymazať pobočku z tejto firmy?",
+    "confirm-remove-company":"Naozaj chcete vymazať firmu z tejto pobočky?",
     "no-data": "Žiadne údaje nie sú k dispozícii",
     "block": "Zablokovať",
     "offices": "Pobočky",
@@ -170,5 +173,6 @@
     "all-deposits": "Všetky vklady",
     "history": "História",
     "overview": "Prehľad",
-    "percentage-owner-not-filled-warning": "Podiel pre štatutárov nie je správne vyplnený. Nepridelený podiel: "
+    "percentage-owner-not-filled-warning": "Podiel pre štatutárov nie je správne vyplnený. Nepridelený podiel: ",
+    "percentage-company-not-filled-warning": "Podiel pre firmy nie je správne vyplnený. Nepridelený podiel: "
 }

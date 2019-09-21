@@ -82,7 +82,7 @@
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
                 (click)="openRemoveOfficeDialog(element)">
-                <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}</mat-icon>
+                <mat-icon class="transparent"> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -135,11 +135,11 @@
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button matTooltip="{{ 'edit' | translate }}"
                 (click)="openOwnerPercentageDialog(element)">
-                <mat-icon>edit</mat-icon>
+                <mat-icon class="transparent">edit</mat-icon>
               </button>
               <button mat-icon-button matTooltip="{{ 'remove' | translate }}"
                 (click)="openRemoveUserDialog(element.userId)">
-                <mat-icon>delete</mat-icon>
+                <mat-icon class="transparent">delete</mat-icon>
               </button>
             </td>
           </ng-container>

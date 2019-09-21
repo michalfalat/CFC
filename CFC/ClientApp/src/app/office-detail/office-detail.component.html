@@ -10,8 +10,10 @@
       <span class="header"> {{ 'office' | translate }} {{ office?.name }} </span>
     </span>
     <span class="spacer"></span>
-
   </div>
+  <div *ngIf="percentageNotFilledWarning" class="warning-container">
+      <mat-icon>info</mat-icon> {{ 'percentage-company-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewCompanyPercentage }}% </strong>
+    </div>
   <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
     <mat-tab label="{{ 'info' | translate }}">
       <div class="flexLayout">
@@ -52,7 +54,6 @@
       </div>
     </mat-tab>
     <mat-tab label="{{ 'companies' | translate}}">
-      <br>
       <div *ngIf="officeCompanies !== undefined && officeCompanies.data.length > 0">
         <table mat-table [dataSource]="officeCompanies" matSort class="basic-table">
           <ng-container matColumnDef="companyName">
@@ -60,10 +61,10 @@
             <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
           </ng-container>
 
-          <ng-container matColumnDef="companyIdentificationNumber">
+          <!-- <ng-container matColumnDef="companyIdentificationNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'identification-number' | translate }} </th>
             <td mat-cell *matCellDef="let element"> {{element.companyIdentificationNumber}} </td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="percentage">
             <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'percentage' | translate }} </th>
@@ -74,6 +75,10 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
             <td mat-cell *matCellDef="let element">
+                <button mat-icon-button matTooltip="{{ 'edit' | translate }}"
+                (click)="openOfficeCompanyPercentageDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
               <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
                 (click)="openRemoveCompanyDialog(element)">
                 <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}</mat-icon>
@@ -91,50 +96,8 @@
         <p>{{ 'no-data' | translate }}</p>
       </div>
       <div>
-        <br>
-        <div *ngIf="addCompanyFormVisible == true">
-          <hr>
-          <form class="form" #newCompanyformRef="ngForm">
-            <div class="flexLayout">
-              <span>
-                <mat-form-field>
-                  <mat-label>{{ 'company' | translate }}</mat-label>
-                  <mat-select [(ngModel)]="newOfficeCompany.companyId" name="companyId" required>
-                    <mat-option *ngFor="let company of companies" [value]="company.id">
-                      {{company.name}} {{ company.identificationNumber }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </span>
-              <span class="spacer"></span>
-              <span>
-                <mat-form-field>
-                  <mat-label>{{ 'company-share-percentage' | translate }}</mat-label>
-                  <input matInput name="percentage" [(ngModel)]="newOfficeCompany.percentage" type="number" required
-                    [max]="maxNewCompanyPercentage">
-                  <span matSuffix>%</span>
-                </mat-form-field>
-              </span>
-              <span class="spacer"></span>
-              <span class="spacer"></span>
-              <span class="spacer"></span>
-              <span class="actionButtons">
-                <span class="autocenter">
-                  <button mat-raised-button
-                    [disabled]=" newCompanyformRef.valid === false || newOfficeCompany.percentage > maxNewCompanyPercentage"
-                    color="primary" class="" (click)="saveOfficeCompany()"
-                    type="submit">{{ 'add' | translate }}</button>
-                </span>
-                <span class="autocenter">
-                  <button mat-raised-button class="" (click)="addCompanyFormVisible = false"
-                    color="primary">{{ 'cancel' | translate }}</button>
-                </span>
-              </span>
-            </div>
-          </form>
-        </div>
-        <div *ngIf="addCompanyFormVisible == false">
-          <button mat-raised-button (click)="addCompany()" color="primary" class="full-width"
+        <div>
+          <button mat-raised-button (click)="openOfficeCompanyPercentageDialog()" color="primary" class="full-width"
             [disabled]="maxNewCompanyPercentage <= 0">
             <mat-icon matListIcon>add</mat-icon>
             <span> {{ 'add-company' | translate }}</span>

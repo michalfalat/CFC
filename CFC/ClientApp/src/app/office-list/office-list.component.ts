@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { OfficeStatus } from '../models/enums';
 import { LanguageService } from '../services/language.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-office-list',
@@ -28,6 +29,7 @@ export class OfficeListComponent implements OnInit {
 
   constructor(private apiService: ApiService,
     public authService: AuthService,
+    private router: Router,
      private notifyService: NotifyService, private translateService: TranslateService, private languageService: LanguageService) {
      }
 
@@ -37,6 +39,10 @@ export class OfficeListComponent implements OnInit {
 
   refresh() {
     this.getOffices();
+  }
+
+  goToDetail(id) {
+    this.router.navigate([this.authService.getPath('/offices/' + id) ]);
   }
 
   getOffices() {

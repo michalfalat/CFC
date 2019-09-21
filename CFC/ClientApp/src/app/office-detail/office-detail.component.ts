@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { OfficeStatus } from '../models/enums';
 import { AuthService } from '../services/auth.service';
+import { PercentageSaveData, PercentageEntryData } from '../models/percentage-models';
+import { PercentageDialogComponent } from '../percentage-dialog/percentage-dialog.component';
 
 
 @Component({
@@ -28,7 +30,6 @@ export class OfficeDetailComponent implements OnInit {
 
   public cashflow;
   public loadingData = false;
-  public addCompanyFormVisible = false;
   public editMode = false;
 
   public maxNewCompanyPercentage;
@@ -36,7 +37,9 @@ export class OfficeDetailComponent implements OnInit {
   public officeStatuses = Object.keys(OfficeStatus).filter(s => Number.isNaN(Number(s)));
   public officeStatus = OfficeStatus;
 
-  public displayedColumnsCompanies: string[] = ['companyName', 'companyIdentificationNumber', 'percentage', 'actions'];
+  public percentageNotFilledWarning = false;
+
+  public displayedColumnsCompanies: string[] = ['companyName', 'percentage', 'actions'];
   public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'description', 'amount'];
 
 
@@ -90,7 +93,7 @@ export class OfficeDetailComponent implements OnInit {
   }
   loadCompanies() {
     this.apiService.getCompanies().subscribe(response => {
-      this.companies = response.data.companies.filter(u => this.office.companies.map(c => c.companyId).includes(u.id) === false);
+      this.companies = response.data.companies;
       this.loadingData = false;
 
     }, error => {
@@ -98,11 +101,6 @@ export class OfficeDetailComponent implements OnInit {
       this.notifyService.processError(error);
     });
   }
-
-  addCompany() {
-    this.addCompanyFormVisible = true;
-  }
-
 
   editOffice() {
     this.office.officeId = this.officeId;
@@ -142,17 +140,19 @@ export class OfficeDetailComponent implements OnInit {
     });
     this.maxNewCompanyPercentage = 100 - totalPercentageSum;
     this.newOfficeCompany.percentage = this.maxNewCompanyPercentage;
+    if (this.maxNewCompanyPercentage > 0) {
+      this.percentageNotFilledWarning = true;
+    } else {
+      this.percentageNotFilledWarning = false;
+    }
   }
 
   saveOfficeCompany() {
     this.loadingData = true;
     this.newOfficeCompany.officeId = this.officeId;
     this.apiService.addCompanyToOffice(this.newOfficeCompany).subscribe(response => {
-      console.log(response);
-      this.loadingData = false;
       this.newOfficeCompany = new CompanyOfficeAddModel();
       this.loadOffice();
-      this.addCompanyFormVisible = false;
     }, error => {
       console.log(error);
       this.loadingData = false;
@@ -161,10 +161,71 @@ export class OfficeDetailComponent implements OnInit {
 
   }
 
+  editOfficeCompany() {
+    this.loadingData = true;
+    this.newOfficeCompany.officeId = this.officeId;
+    this.apiService.editCompanyInOffice(this.newOfficeCompany).subscribe(response => {
+      this.newOfficeCompany = new CompanyOfficeAddModel();
+      this.loadOffice();
+    }, error => {
+      console.log(error);
+      this.loadingData = false;
+      this.notifyService.processError(error);
+    });
+
+  }
+
+  openOfficeCompanyPercentageDialog(element: any): void {
+    const entryData = new PercentageSaveData();
+    let isEdit = false;
+    let headerText = 'add-company';
+    let maxPercentage = this.maxNewCompanyPercentage;
+    let companies = this.companies.filter(u => this.office.companies.map(c => c.companyId).includes(u.id) === false)
+                                .map(({ id, name }) => ({ text: name, id: id }));
+    if (element !== undefined) {
+      entryData.selectedInput = element.companyId;
+      // entryData.selectedType = element.role;
+      entryData.percentage = element.percentage;
+      isEdit = true;
+      headerText = 'edit-company';
+      companies = [ { text: element.companyName , id: element.companyId}];
+      maxPercentage += element.percentage;
+    }
+    const data: PercentageEntryData =  {
+      headerText: headerText,
+      inputText: 'company',
+      typeText: null,
+      percentageText: 'company-share-percentage',
+      maxPercentage: maxPercentage,
+      possibleData: companies,
+      possibleTypes: [],
+      entryData: entryData,
+      isEdit: isEdit,
+    };
+    const dialogRef = this.dialog.open(PercentageDialogComponent, {
+      data: data,
+      position: { top: '80px' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== false) {
+        this.newOfficeCompany.companyId = result.selectedInput;
+        this.newOfficeCompany.percentage = result.percentage;
+        if (result.isEdit === true) {
+          this.editOfficeCompany();
+        } else {
+          this.saveOfficeCompany();
+        }
+      }
+    });
+
+  }
+
 
   openRemoveCompanyDialog(office): void {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        data: this.translateService.instant('confirm-remove-company')
+        data: this.translateService.instant('confirm-remove-company'),
+        position: { top: '80px' }
       });
 
       dialogRef.afterClosed().subscribe(result => {

@@ -125,6 +125,10 @@ export class ApiService {
   private addOfficeToCompanyUrl(id) {
     return this.baseUrl + `api/Office/${id}/AddCompany`;
   }
+  private editOfficeCompanyUrl(id) {
+    return this.baseUrl + `api/Office/${id}/EditCompany`;
+  }
+
 
   private removeCompanyFromOfficeUrl(id, companyId) {
     return this.baseUrl + `api/Office/${id}/RemoveCompany/${companyId}`;
@@ -402,6 +406,13 @@ export class ApiService {
 
   addCompanyToOffice(company: CompanyOfficeAddModel): any {
     return this.http.post(this.addOfficeToCompanyUrl(company.officeId), company,  this.headers).pipe(
+      catchError(error => {
+        error = this.checkInternalError(error);
+        return throwError(error);
+      }));
+  }
+  editCompanyInOffice(company: CompanyOfficeAddModel): any {
+    return this.http.post(this.editOfficeCompanyUrl(company.officeId), company,  this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);

@@ -135,7 +135,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   addOffice() {
-    this.router.navigate([`/admin/companies/${ this.companyId }/addOffice`]);
+    this.router.navigate([this.authService.getPath('/offices')]);
   }
 
   removeCompanyUser(userId) {
@@ -253,7 +253,6 @@ export class CompanyDetailComponent implements OnInit {
         }
       }
     });
-
   }
 
   openRemoveUserDialog(userId): void {

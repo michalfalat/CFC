@@ -5,6 +5,7 @@
     "paginator.of": "of",
     "paginator.first-page": "First page",
     "paginator.last-page": "Last page",
+    "NOT_SUCEEDED": "Something happend. Contact your administrator",
     "login": "Login",
     "logout": "Logout",
     "password": "Password",
@@ -86,6 +87,7 @@
     "owners-count": "No. of owners",
     "status": "Status",
     "add-company": "Add company",
+    "edit-company": "Edit company",
     "owner": "Owner",
     "add-owner": "Add owner",
     "edit-owner": "Edit owner",
@@ -95,6 +97,7 @@
     "max-percentage": "Max percentage",
     "company": "Company",
     "confirm-remove-owner": "Are you sure to delete user from this company?",
+    "confirm-remove-company":"Are you sure to delete company from this office?",
     "no": "No",
     "yes": "Yes",
     "description": "Description",
@@ -169,7 +172,8 @@
     "all-deposits": "All deposits",
     "history": "History",
     "overview": "Overview",
-    "percentage-owner-not-filled-warning": "Percentage for owners is not fully covered. Percentage remaining:"
+    "percentage-owner-not-filled-warning": "Percentage for owners is not fully covered. Percentage remaining:",
+    "percentage-company-not-filled-warning": "Percentage share for companies is not fully covered. Percentage remaining:"
 
 
 
