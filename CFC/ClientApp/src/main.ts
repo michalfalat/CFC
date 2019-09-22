@@ -6,6 +6,7 @@ import { environment } from './environments/environment';
 import 'hammerjs';
 
 export function getBaseUrl() {
+  // return environment.endpointUrl;
   return document.getElementsByTagName('base')[0].href;
 }
 

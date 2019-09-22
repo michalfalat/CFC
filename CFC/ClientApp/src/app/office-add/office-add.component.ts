@@ -4,6 +4,7 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OfficeAddModel } from '../models/company-models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-office-add',
@@ -21,6 +22,7 @@ export class OfficeAddComponent implements OnInit {
     private notifyService: NotifyService,
     private translateService: TranslateService,
     private router: Router,
+    private authService: AuthService,
     private route: ActivatedRoute) {
     this.office = new OfficeAddModel();
 
@@ -39,7 +41,7 @@ export class OfficeAddComponent implements OnInit {
   ngOnInit() {
   }
   goBack() {
-    this.router.navigate([`/admin/offices`]);
+    this.router.navigate([this.authService.getPath(`/offices`)]);
   }
   add() {
     this.loadingData = true;

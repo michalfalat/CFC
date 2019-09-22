@@ -64,9 +64,11 @@ namespace CFC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Add([FromBody] CompanyAddModel model)
         {
+
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
@@ -77,6 +79,15 @@ namespace CFC.Controllers
             company.Status = CompanyStatus.ACTIVE;
 
             this._companyManager.Create(company);
+
+            var userCompany = new ApplicationUserCompany()
+            {
+                CompanyId = company.Id,
+                Percentage = 100,
+                Role = CompanyOwnerRole.EXECUTIVE,
+                UserId = userId,
+            };
+            this._companyManager.AddUserToCompany(userCompany, company);
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
@@ -176,7 +187,7 @@ namespace CFC.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Remove(int id)
         {
             var company = await this._companyManager.FindById(id);
@@ -189,7 +200,7 @@ namespace CFC.Controllers
         }
 
         [HttpPost("Unremove/{id}")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Unremove(int id)
         {
             var company = await this._companyManager.FindById(id);

@@ -416,4 +416,11 @@ mat-icon[matPrefix] {
   flex-direction: column;
   align-items: center;
 }
+
+.card-panel {
+  height: 240px;
+}
+.card-panel img {
+  max-height: 100px;
+}
 }

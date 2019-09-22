@@ -63,9 +63,18 @@
                 <span style="font-size: 0.8em; font-weight: normal;">
                   (({{company.cashflow}}&euro; - {{company.allDeposit}}&euro; + {{company.allWithdraw * (-1) }}&euro;) *
                   {{ company.percentage }}%) = </span>
+              </td>
+            </tr>
+            <tr class="sumRow2">
+              <td></td>
+              <td class="sumCell">
                 <strong
                   [ngClass]="{'red-text': company.cashflow < 0, 'green-text': company.cashflow > 0 }">{{ sumCompanyShare(company) }}&euro;</strong>
               </td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td></td>
             </tr>
 
             <tr>

@@ -71,11 +71,13 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
             }
-           
+
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var office = this._mapper.Map<OfficeAddModel, Office>(model);
             office.Obsolete = false;
             office.RegistrationDate = DateTimeOffset.UtcNow;
             office.Status = OfficeStatus.ACTIVE;
+            office.CreatorId = userId;
 
             this._officeManager.Create(office);
 

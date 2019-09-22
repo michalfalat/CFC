@@ -24,6 +24,9 @@ export class NotifyService {
 
   warning(message: string, action: string = 'OK', duration = 10000) {
     this.snackBar.openFromComponent(IconSnackBarComponent, {
+      duration: duration,
+      verticalPosition: 'top',
+      panelClass: ['notification-warning'],
       data: {
         message: message,
         icon: 'info'
@@ -45,7 +48,22 @@ export class NotifyService {
   }
 
   processError(error: any, duration = 10000) {
-    const errorLabel = this.getSafe(() => error.error.errorLabel.value);
+    console.log(error);
+    let errorLabel = '';
+    switch (error.status) {
+      case 401:
+        errorLabel = 'NOT_AUTHORIZED';
+        break;
+      case 403:
+        errorLabel = 'NOT_AUTHORIZED';
+        break;
+      case 500:
+        errorLabel = 'INTERNAL_SERVER_ERROR';
+        break;
+      default:
+        errorLabel = this.getSafe(() => error.error.errorLabel.value);
+        break;
+    }
     const translatedError = this.translateService.instant(errorLabel);
     this.snackBar.open(translatedError, 'OK', {
       duration: duration,

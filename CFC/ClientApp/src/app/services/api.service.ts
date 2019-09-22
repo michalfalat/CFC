@@ -14,6 +14,10 @@ import { EditOfficeModel } from '../models/office-models';
 export class ApiService {
   private headers;
 
+  private authDataUrl() {
+    return this.baseUrl + 'api/Account/AuthData';
+  }
+
   private addUserUrl() {
     return this.baseUrl + 'api/Account/AddUser';
   }
@@ -175,6 +179,12 @@ export class ApiService {
     } else {
       return error;
     }
+  }
+
+  loadAuthData(token): any {
+    const headers = new HttpHeaders();
+    headers.append('Authorization', `Bearer ${token}`);
+    return this.http.post(this.authDataUrl(), null, { headers });
   }
 
   addUser(model: AddUser): any {

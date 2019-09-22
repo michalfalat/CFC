@@ -53,7 +53,6 @@ export class CompanyFinancialsAddComponent implements OnInit {
   loadCompanies() {
     this.loadingData = true;
     this.apiService.getCompanies().subscribe(response => {
-      console.log(response);
       this.companies = response.data.companies;
       this.loadingData = false;
 
@@ -66,7 +65,6 @@ export class CompanyFinancialsAddComponent implements OnInit {
   loadOffices() {
     this.loadingData = true;
     this.apiService.getOffices().subscribe(response => {
-      console.log(response);
       this.offices = response.data.offices;
       this.loadingData = false;
 

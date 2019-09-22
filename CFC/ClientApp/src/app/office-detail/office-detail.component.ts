@@ -38,7 +38,7 @@ export class OfficeDetailComponent implements OnInit {
   public officeStatus = OfficeStatus;
 
   public percentageNotFilledWarning = false;
-  public cashflowView = 'table';
+  public cashflowView;
   public recreatedChart = true;
   public filteredCashflow;
 
@@ -75,7 +75,6 @@ export class OfficeDetailComponent implements OnInit {
     this.officeId = this.route.snapshot.params.id;
     this.newOfficeCompany = new CompanyOfficeAddModel();
     this.loadOffice();
-    console.log(this.officeStatuses);
   }
 
   goBack() {
@@ -96,6 +95,7 @@ export class OfficeDetailComponent implements OnInit {
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
       this.changeDetector.detectChanges();
+      this.cashflowView = 'table';
 
     }, error => {
       this.loadingData = false;

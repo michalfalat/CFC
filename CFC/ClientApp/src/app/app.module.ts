@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -43,6 +43,8 @@ import { PaginatorIntlService } from './custom-translations';
 import { IconSnackBarComponent } from './snackbar-container';
 import { PercentageDialogComponent } from './percentage-dialog/percentage-dialog.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { AuthService } from './services/auth.service';
+import { ApiService } from './services/api.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -189,6 +191,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         pathMatch: 'full'
       },
       {
+        path: 'companies/add',
+        component: CompanyAddComponent,
+        pathMatch: 'full'
+      },
+      {
         path: 'companies/:id',
         component: CompanyDetailComponent,
         pathMatch: 'full'
@@ -196,6 +203,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       {
         path: 'offices',
         component: OfficeListComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'offices/add',
+        component: OfficeAddComponent,
         pathMatch: 'full'
       },
       {
@@ -247,11 +259,16 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       },
       deps: [TranslateService]
     },
-    {provide: MAT_DATE_LOCALE, useValue: 'sk'},
+    { provide: MAT_DATE_LOCALE, useValue: 'sk'},
+    { provide: APP_INITIALIZER, useFactory: authData, deps: [AuthService, ApiService], multi: true },
     CookieService,
     AuthGuard
   ],
   bootstrap: [AppComponent],
   entryComponents: [ConfirmDialogComponent, IconSnackBarComponent, PercentageDialogComponent],
 })
-export class AppModule { }
+export class AppModule {
+}
+export function authData(provider: AuthService, apiService: ApiService) {
+  return () => provider.loadAuthData(apiService);
+}

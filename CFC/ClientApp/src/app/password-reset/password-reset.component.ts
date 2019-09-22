@@ -24,7 +24,6 @@ export class PasswordResetComponent implements OnInit {
 
   ngOnInit() {
     this.tokenLink  = this.route.snapshot.params.token;
-    console.log(this.tokenLink);
     this.apiService.requestPasswordToken(this.tokenLink).subscribe((response) => {
       this.formData.token = response.data.token;
       this.loadingData = false;
@@ -35,9 +34,6 @@ export class PasswordResetComponent implements OnInit {
       this.notifyService.processError(error);
     });
 
-  }
-  log(data) {
-    console.log(data);
   }
 
   reset() {

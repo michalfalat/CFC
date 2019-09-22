@@ -27,8 +27,9 @@
     (selectedIndexChange)="setDataSource($event)">
     <mat-tab label="{{ 'info' | translate}}">
       <div class="flexLayout">
+        <br>
         <span class="spacer"></span>
-        <span>
+        <span *ngIf="company?.currentRole === 1">
           <button mat-button (click)="toogleEditMode()" class="showOnHover"
             matTooltip="{{ (editMode ? 'cancel' : 'edit') | translate }}">
             <mat-icon class="">{{ editMode ? 'close' : 'edit' }}</mat-icon>
@@ -63,8 +64,10 @@
             <span matSuffix matTooltip="{{ 'company-status-info' | translate }}">&nbsp;<mat-icon class="transparent2">
                 help</mat-icon></span>
           </mat-form-field>
-          <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
-            class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
+          <div *ngIf="company?.currentRole === 1">
+            <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
+              class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
+          </div>
         </form>
       </div>
     </mat-tab>
@@ -76,27 +79,19 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name2' | translate }} </th>
             <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
           </ng-container>
-
-
-          <!-- <ng-container matColumnDef="registrationDate">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'registration-date' | translate }} </th>
-            <td mat-cell *matCellDef="let element"> {{element.registrationDate | date: 'dd/MM/yyyy' }} </td>
-          </ng-container> -->
-
           <ng-container matColumnDef="percentage">
             <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'percentage' | translate }} </th>
             <td mat-cell *matCellDef="let element"> {{element.percentage }} % </td>
           </ng-container>
-
-
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
             <td mat-cell *matCellDef="let element">
-              <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
-                (click)="openRemoveOfficeDialog(element)">
-                <mat-icon class="transparent"> {{ element.obsolete === true ? 'settings_backup_restore' : 'delete'}}
-                </mat-icon>
-              </button>
+              <div *ngIf="company?.currentRole === 1">
+                <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+                  (click)="openRemoveOfficeDialog(element)">
+                  <mat-icon class="transparent">delete</mat-icon>
+                </button>
+              </div>
             </td>
           </ng-container>
 
@@ -109,7 +104,7 @@
       <div *ngIf="companyOffices === undefined || companyOffices.data.length == 0" class="centered-info-secondary">
         <p>{{ 'no-data' | translate }}</p>
       </div>
-      <div>
+      <div *ngIf="company?.currentRole === 1">
         <br>
         <button mat-raised-button (click)="addOffice()" color="primary" class="full-width">
           <mat-icon matListIcon>add</mat-icon>
@@ -146,14 +141,16 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
             <td mat-cell *matCellDef="let element">
-              <button mat-icon-button matTooltip="{{ 'edit' | translate }}"
-                (click)="openOwnerPercentageDialog(element)">
-                <mat-icon class="transparent">edit</mat-icon>
-              </button>
-              <button mat-icon-button matTooltip="{{ 'remove' | translate }}"
-                (click)="openRemoveUserDialog(element.userId)">
-                <mat-icon class="transparent">delete</mat-icon>
-              </button>
+              <div *ngIf="company?.currentRole === 1">
+                <button mat-icon-button matTooltip="{{ 'edit' | translate }}"
+                  (click)="openOwnerPercentageDialog(element)">
+                  <mat-icon class="transparent">edit</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="{{ 'remove' | translate }}"
+                  (click)="openRemoveUserDialog(element.userId)">
+                  <mat-icon class="transparent">delete</mat-icon>
+                </button>
+              </div>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumnsOwners"></tr>
@@ -166,11 +163,13 @@
         <br>
       </div>
       <div>
-        <button mat-raised-button (click)="addUser()" color="primary" class="full-width"
-          [disabled]="maxNewOwnerPercentage <= 0">
-          <mat-icon matListIcon>add</mat-icon>
-          <span> {{ 'add-owner' | translate }}</span>
-        </button>
+        <div *ngIf="company?.currentRole === 1">
+          <button mat-raised-button (click)="addUser()" color="primary" class="full-width"
+            [disabled]="maxNewOwnerPercentage <= 0">
+            <mat-icon matListIcon>add</mat-icon>
+            <span> {{ 'add-owner' | translate }}</span>
+          </button>
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="{{ 'cash-flow' | translate }}">

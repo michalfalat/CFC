@@ -24,6 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req).pipe(catchError((error, caught) => {
         if (error.status === 401) {
           this.notifyService.error(this.translateService.instant('NOT_AUTHORIZED'));
+          console.log('redirecting to login page');
           this.router.navigate(['/login']);
         } else if (error.status === 500) {
           this.notifyService.error(this.translateService.instant('INTERNAL_SERVER_ERROR'));
@@ -39,6 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req1).pipe(catchError((error, caught) => {
       if (error.status === 401 || error.status === 403) {
         this.notifyService.error(this.translateService.instant('NOT_AUTHORIZED'));
+        console.log('redirecting to login page');
         this.router.navigate(['/login']);
       } else if (error.status === 500) {
         this.notifyService.error(this.translateService.instant('INTERNAL_SERVER_ERROR'));

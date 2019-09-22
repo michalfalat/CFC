@@ -4,6 +4,7 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { CompanyAddModel } from '../models/company-models';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-company-add',
@@ -18,6 +19,7 @@ export class CompanyAddComponent implements OnInit {
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
     private translateService: TranslateService,
+    private authService: AuthService,
     private router: Router) {
     this.company = new CompanyAddModel();
   }
@@ -25,7 +27,7 @@ export class CompanyAddComponent implements OnInit {
   ngOnInit() {
   }
   goBack() {
-    this.router.navigate(['/admin/companies']);
+    this.router.navigate([this.authService.getPath('/companies')]);
   }
   add() {
     this.loadingData = true;

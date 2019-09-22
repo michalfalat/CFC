@@ -127,11 +127,9 @@ export class ChartDataComponent implements OnInit {
   public barChartPlugins = [pluginDataLabels];
 
 
-
   constructor(private translateService: TranslateService, private themeService: DarkThemeService) { }
 
   ngOnInit() {
-    console.log(this.data);
     this.depositLabel = this.translateService.instant('deposits2');
     this.withdrawLabel = this.translateService.instant('withdraws2');
     this.expenseLabel = this.translateService.instant('expenses');
@@ -160,7 +158,6 @@ export class ChartDataComponent implements OnInit {
       default:
         break;
     }
-    console.log(groupedData);
     const expensesArray = [];
     const incomesArray = [];
     const withdrawsArray = [];
@@ -183,9 +180,7 @@ export class ChartDataComponent implements OnInit {
       { data: withdrawsArray, label: this.withdrawLabel, backgroundColor: '#c18443', hoverBackgroundColor: '#c18443bb', stack: '1' },
       { data: incomesArray, label: this.incomeLabel, backgroundColor: '#69b148', hoverBackgroundColor: '#69b148bb', stack: '2' },
       { data: depositsArray, label: this.depositLabel, backgroundColor: '#96b148', hoverBackgroundColor: '#96b148bb', stack: '2' }
-    ]
-    console.log(groupedData);
-
+    ];
   }
 
   calcAmount(element) {
@@ -197,12 +192,10 @@ export class ChartDataComponent implements OnInit {
         if (companyOffice !== undefined) {
           const percentage = companyOffice.percentage;
           return element.amount / 100 * percentage;
-
         }
       }
     } else {
       return element.amount;
     }
   }
-
 }

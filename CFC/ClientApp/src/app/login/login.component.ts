@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log(this.user);
     this.errorLogin = false;
     this.loadingData = true;
     this.apiService.loginUser(this.user).subscribe(response => {
@@ -42,13 +41,11 @@ export class LoginComponent implements OnInit {
       loginUser.token = response.data.token;
       loginUser.role = response.data.role;
       this.authService.saveUser(loginUser);
-      this.router.navigate(['/dashboard']);
+      this.router.navigate([this.authService.getPath('/dashboard')]);
 
     }, error => {
       this.errorLogin = true;
       this.loadingData = false;
-      console.log(error);
-      this.notifyService.warning(this.translateService.instant(error.error.errorLabel.value));
     });
   }
 

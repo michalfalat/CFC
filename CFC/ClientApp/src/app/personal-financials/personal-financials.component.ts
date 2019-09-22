@@ -34,7 +34,6 @@ export class PersonalFinancialsComponent implements OnInit {
   getRecords() {
     this.loadingData = true;
     this.apiService.getMoneyRecordsPersonal().subscribe(response => {
-      console.log(response);
       this.recordList = [];
       this.recordList = response.data.records;
       // this.recordList.sort = this.sort;
@@ -48,12 +47,12 @@ export class PersonalFinancialsComponent implements OnInit {
 
 
   sumCompanyShare(company) {
-    return (company.cashflow - company.allDeposit - company.allWithdraw)  / 100 * company.percentage;
+    return Number((company.cashflow - company.allDeposit - company.allWithdraw)  / 100 * company.percentage).toFixed(2);
   }
 
 
   finalSum(company) {
-    return this.sumCompanyShare(company) + company.personalDeposit + company.personalWithdraw ;
+    return Number(Number(this.sumCompanyShare(company)) + company.personalDeposit + company.personalWithdraw).toFixed(2);
   }
 
 }

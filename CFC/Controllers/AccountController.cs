@@ -370,6 +370,27 @@ namespace CFC.Controllers
 
         }
 
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AuthData()
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
+            //}
+
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                var user = await this._applicationUserManager.FindById(userId);
+                var email = user.Email;
+                var role = await this._userManager.GetRolesAsync(user);
+                return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email, role })) ;
+            }
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
         [HttpGet("[action]")]
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> GetUsers()

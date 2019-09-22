@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq;
 
 namespace CFC.Data.Managers
 {
@@ -91,7 +92,11 @@ namespace CFC.Data.Managers
               .ToListAsync();
 
             var offices = companies.SelectMany(c => c.Offices).Select(o => o.Office).Where(o => !o.Obsolete).ToList();
-            return offices;
+            var userOffices = await this._repository.OfficeRepository.FindByCondition(o => o.CreatorId == ownerId && !o.Obsolete).Include(o => o.Companies).ToListAsync();
+            var finalOffices = new List<Office>();
+            finalOffices.AddRange(offices);
+            finalOffices.AddRange(userOffices);
+            return finalOffices.DistinctBy(o => o.Id).ToList();
         }
 
         public decimal SumOfficePercentage(Office office)

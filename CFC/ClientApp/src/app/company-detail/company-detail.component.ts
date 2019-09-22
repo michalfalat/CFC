@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,7 +21,7 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './company-detail.component.html',
   styleUrls: ['./company-detail.component.scss'],
 })
-export class CompanyDetailComponent implements OnInit {
+export class CompanyDetailComponent implements OnInit, AfterContentInit {
   public selectedTab = 0;
   public companyId;
   public company;
@@ -32,7 +32,7 @@ export class CompanyDetailComponent implements OnInit {
   public cashflow;
   public percentageNotFilledWarning = false;
 
-  public cashflowView = 'table';
+  public cashflowView;
   public newOwner;
   public allOwners: UserDetail[] = [];
 
@@ -101,6 +101,9 @@ export class CompanyDetailComponent implements OnInit {
     this.loadCompany();
   }
 
+  ngAfterContentInit() {
+  }
+
   goBack() {
     this.router.navigate([this.authService.getPath('/companies')]);
   }
@@ -123,6 +126,7 @@ export class CompanyDetailComponent implements OnInit {
       this.loadUsers();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
+      this.cashflowView = 'table';
 
     }, error => {
       this.loadingData = false;
@@ -187,7 +191,6 @@ export class CompanyDetailComponent implements OnInit {
         records = records.filter(a => a.type === this.filterType);
       }
     }
-    console.log(records);
     this.filteredCashflow = records;
     this.cashflow = new MatTableDataSource(records);
     this.cashflow.sort = this.sortCashflow;
@@ -208,11 +211,9 @@ export class CompanyDetailComponent implements OnInit {
   removeCompanyUser(userId) {
     this.loadingData = true;
     this.apiService.removeUserFromCompany(this.companyId, userId).subscribe(response => {
-      console.log(response);
       this.loadingData = false;
       this.loadCompany();
     }, error => {
-      console.log(error);
       this.loadingData = false;
       this.notifyService.processError(error);
     });
@@ -220,11 +221,9 @@ export class CompanyDetailComponent implements OnInit {
   removeCompanyOffice(office) {
     this.loadingData = true;
     this.apiService.removeOfficeFromCompany(office.officeId, this.companyId).subscribe(response => {
-      console.log(response);
       this.loadingData = false;
       this.loadCompany();
     }, error => {
-      console.log(error);
       this.loadingData = false;
       this.notifyService.processError(error);
     });
@@ -335,7 +334,6 @@ export class CompanyDetailComponent implements OnInit {
     });
   }
   openRemoveOfficeDialog(office): void {
-    console.log(office);
     if (office.obsolete) {
       this.removeCompanyOffice(office);
     } else {

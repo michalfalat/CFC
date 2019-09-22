@@ -49,7 +49,6 @@ export class OfficeListComponent implements OnInit {
     this.officeList = [];
     this.loadingData = true;
     this.apiService.getOffices().subscribe(response => {
-      console.log(response);
       this.officeList = new MatTableDataSource(response.data.offices);
       this.officeList.sort = this.sort;
       this.officeList.paginator = this.paginator;

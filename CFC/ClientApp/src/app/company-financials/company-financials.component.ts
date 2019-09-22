@@ -44,7 +44,6 @@ export class CompanyFinancialsComponent implements OnInit {
     this.recordList = [];
     this.loadingData = true;
     this.apiService.getMoneyRecordsForCompany().subscribe(response => {
-      console.log(response);
       this.recordList = new MatTableDataSource(response.data.records);
       this.recordList.sort = this.sort;
       this.recordList.paginator = this.paginator;

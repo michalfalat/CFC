@@ -27,7 +27,6 @@ export class AdminDashboardComponent implements OnInit {
     this.loadingData = true;
     this.apiService.getAdminDashboard().subscribe(response => {
       this.data = response.data.data;
-      console.log(response);
       this.loadingData = false;
 
     }, error => {

@@ -11,7 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
 export class DashboardComponent implements OnInit {
 
   public loadingData = true;
-
   public data;
   constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) { }
 
@@ -27,7 +26,6 @@ export class DashboardComponent implements OnInit {
     this.loadingData = true;
     this.apiService.getUserDashboard().subscribe(response => {
       this.data = response.data.data;
-      console.log(response);
       this.loadingData = false;
 
     }, error => {
