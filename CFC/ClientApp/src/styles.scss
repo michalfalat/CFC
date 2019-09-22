@@ -91,14 +91,18 @@ input:-webkit-autofill {
   .mainSection {
     display: flex;
     flex-direction: column;
-    min-height: calc(100% - 70px);
+    min-height: calc(100% - 64px);
     background-color: #efefef;
   }
 
   .footer {
     background-color: white;
+    bottom: 0px;
+    position: static;
     color: rgba(0, 0, 0, 0.87);
     font-size: 1rem;
+    max-height: 64px;
+    height: 64px;
   }
 
 
@@ -372,4 +376,44 @@ mat-icon[matPrefix] {
   .card-panel .right {
     width: 100%;
   }
+
+  .filter-inputs  {
+    display: inline-block;
+  }
+
+  .filter-inputs .date-filter-picker {
+    max-width: calc(50% - 5px);
+  }
+
+  .filter-inputs .mat-form-field {
+    width: 100%;
+}
+
+.filter-inputs span {
+  margin-right: 0px;
+}
+
+.filter-inputs .last-input {
+  width: calc(100% - 24px);
+}
+
+.filter-inputs span:first-of-type {
+  margin-right: 10px !important;
+}
+.filter-inputs button {
+  margin-right: 0px !important;
+  min-width: 24px;
+  width: 24px;
+  width: 24px;
+  padding: 0px;
+}
+
+.filter-inputs button span {
+  margin-right: 0px;
+}
+
+.flexLayout.headerContainer {
+  flex-direction: column;
+  align-items: center;
+}
 }

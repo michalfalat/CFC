@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
         } else if (error.status === 500) {
           this.notifyService.error(this.translateService.instant('INTERNAL_SERVER_ERROR'));
         }
-        return of(error);
+        return throwError(error);
       }) as any);
     }
 

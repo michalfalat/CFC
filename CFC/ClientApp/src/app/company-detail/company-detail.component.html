@@ -1,12 +1,12 @@
 <mat-card class="form-container full-width enableHover">
-  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-  <div class="flexLayout">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout headerContainer">
     <span>
-      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-    </span>
-    <span>
+      <span>
+        <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </span>
       <span class="header"> {{ 'company' | translate }} <strong>{{ company?.name }}</strong> </span>
     </span>
     <span class="spacer"></span>
@@ -60,7 +60,8 @@
                 {{ status | translate }}
               </mat-option>
             </mat-select>
-          <span matSuffix  matTooltip="{{ 'company-status-info' | translate }}">&nbsp;<mat-icon class="transparent2">help</mat-icon></span>
+            <span matSuffix matTooltip="{{ 'company-status-info' | translate }}">&nbsp;<mat-icon class="transparent2">
+                help</mat-icon></span>
           </mat-form-field>
           <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
             class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
@@ -212,7 +213,7 @@
           </mat-form-field>
         </span>
         <span>
-          <mat-form-field>
+          <mat-form-field class="last-input">
             <input matInput placeholder="{{ 'keyword' | translate }}" name="keyword-filter" [(ngModel)]="filterKeyword"
               (keyup)="filter()">
           </mat-form-field>
@@ -242,7 +243,7 @@
 
       <div *ngIf="cashflow !== undefined ">
         <div *ngIf="cashflowView === 'chart' && recreatedChart">
-          <app-chart-data [data]="filteredCashflow" [type]="'company'" [companyOffices]="company.offices">
+          <app-chart-data [data]="filteredCashflow.reverse()" [type]="'company'" [companyOffices]="company.offices">
           </app-chart-data>
         </div>
         <div *ngIf="cashflowView === 'table'">

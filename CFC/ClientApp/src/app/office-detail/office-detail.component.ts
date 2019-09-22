@@ -38,6 +38,9 @@ export class OfficeDetailComponent implements OnInit {
   public officeStatus = OfficeStatus;
 
   public percentageNotFilledWarning = false;
+  public cashflowView = 'table';
+  public recreatedChart = true;
+  public filteredCashflow;
 
   public displayedColumnsCompanies: string[] = ['companyName', 'percentage', 'actions'];
   public displayedColumnsCashFlow: string[] = ['createdAt', 'creator', 'description', 'amount'];
@@ -48,6 +51,15 @@ export class OfficeDetailComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) sortCashflow: MatSort;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginatorCashflow: MatPaginator;
+
+
+  // filters
+
+  public filterFrom = null;
+  public filterTo = null;
+  public filterType = 'all';
+  public filterKeyword = null;
 
   constructor(private apiService: ApiService,
     private notifyService: NotifyService,
@@ -72,7 +84,6 @@ export class OfficeDetailComponent implements OnInit {
 
   loadOffice() {
     this.apiService.getOffice(this.officeId).subscribe(response => {
-      console.log(response);
       this.office = response.data.office;
       this.officeCompanies = new MatTableDataSource(response.data.office.companies);
       this.officeCompanies.sort = this.sortCompanies;
@@ -80,7 +91,7 @@ export class OfficeDetailComponent implements OnInit {
       this.cashflow = new MatTableDataSource(response.data.office.cashflow);
       this.cashflow.sort = this.sortCashflow;
       this.cashflow.paginator = this.paginator;
-      this.changeDetector.detectChanges();
+      this.filteredCashflow = response.data.office.cashflow;
       this.loadCompanies();
       this.calculateMaxPercentageForOwner();
       this.loadingData = false;
@@ -115,19 +126,47 @@ export class OfficeDetailComponent implements OnInit {
     });
   }
 
-  // addOffice() {
-  //   this.router.navigate([`/admin/companies/${ this.companyId }/addOffice`]);
-  // }
+  filter() {
+    this.recreatedChart = false;
+    let records = this.office.cashflow;
+    if (this.filterFrom !== null) {
+      records = records.filter(a => new Date(a.createdAt) > new Date(this.filterFrom));
+    }
+    if (this.filterTo !== null) {
+      records = records.filter(a => new Date(a.createdAt) <= new Date(this.filterTo));
+    }
+    if (this.filterKeyword !== null) {
+      const keyWord = this.filterKeyword.toLowerCase();
+      records = records.filter(a => a.description.toLowerCase().includes(keyWord) ||
+                                    a.creatorName.toLowerCase().includes(keyWord) ||
+                                    a.amount.toString().toLowerCase().includes(keyWord));
+    }
+    if (this.filterType !== 'all') {
+        records = records.filter(a => a.type === Number(this.filterType));
+    }
+    this.filteredCashflow = records;
+    this.cashflow = new MatTableDataSource(records);
+    this.cashflow.sort = this.sortCashflow;
+    this.cashflow.paginator = this.paginatorCashflow;
+    setTimeout(() => {
+      this.recreatedChart = true;
+    }, 100);
+  }
 
+  clearFilters() {
+    this.filterFrom = null;
+    this.filterTo = null;
+    this.filterType = 'all';
+    this.filterKeyword = null;
+    this.filter();
+  }
 
   removeCompanyOffice(element) {
     this.loadingData = true;
     this.apiService.removeOfficeFromCompany(this.officeId, element.companyId).subscribe(response => {
-      console.log(response);
       this.loadingData = false;
       this.loadOffice();
     }, error => {
-      console.log(error);
       this.loadingData = false;
       this.notifyService.processError(error);
     });
@@ -154,7 +193,6 @@ export class OfficeDetailComponent implements OnInit {
       this.newOfficeCompany = new CompanyOfficeAddModel();
       this.loadOffice();
     }, error => {
-      console.log(error);
       this.loadingData = false;
       this.notifyService.processError(error);
     });
@@ -168,7 +206,6 @@ export class OfficeDetailComponent implements OnInit {
       this.newOfficeCompany = new CompanyOfficeAddModel();
       this.loadOffice();
     }, error => {
-      console.log(error);
       this.loadingData = false;
       this.notifyService.processError(error);
     });

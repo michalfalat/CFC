@@ -1,5 +1,5 @@
 <mat-card class="form-container  bigger-width">
-  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
   <div class="flexLayout">
     <span>
       <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">

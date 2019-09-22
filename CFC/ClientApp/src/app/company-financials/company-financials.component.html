@@ -33,6 +33,52 @@
     </span>
   </div>
   <br>
+  <div class="flexLayout filter-inputs">
+    <span>
+      <mat-form-field class="date-filter-picker">
+        <input matInput [matDatepicker]="pickerFrom" (focus)="pickerFrom.open()" [(ngModel)]="filterFrom"
+          (dateChange)="filter()" placeholder="{{ 'from' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="date-filter-picker">
+        <input matInput [matDatepicker]="pickerTo" (focus)="pickerTo.open()" placeholder="{{ 'to' | translate}}"
+          (dateChange)="filter()" [(ngModel)]="filterTo">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="">
+        <mat-select name="filterType" placeholder="{{ 'type' | translate }}" [(ngModel)]="filterType"
+          (selectionChange)="filter()">
+          <mat-option value="all">
+            {{ 'all' | translate }}
+          </mat-option>
+          <mat-option value="1">
+            {{ 'EXPENSE' | translate }}
+          </mat-option>
+          <mat-option value="2">
+            {{ 'INCOME' | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="last-input">
+        <input matInput placeholder="{{ 'keyword' | translate }}" name="keyword-filter" [(ngModel)]="filterKeyword"
+          (keyup)="filter()">
+      </mat-form-field>
+    </span>
+    <span style="padding-top: 15px;">
+      <button mat-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()" >
+        <mat-icon class="transparent">close</mat-icon>
+      </button>
+    </span>
+  </div>
+  <br>
   <div class="table-container">
     <table mat-table [dataSource]="recordList" matSort class="basic-table wide-table">
       <ng-container matColumnDef="createdAt">

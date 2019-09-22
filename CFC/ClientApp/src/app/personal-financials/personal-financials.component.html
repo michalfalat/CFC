@@ -34,7 +34,7 @@
     </div>
     <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
       <mat-tab label="{{ 'overview' | translate}}">
-        <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+        <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
         <br>
         <div class="flexLayout" *ngIf="authService.isEnabledFor('Owner')">
           <table class="sumTable">
@@ -86,7 +86,7 @@
         </div>
       </mat-tab>
       <mat-tab label="{{ 'history' | translate}}">
-        <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+        <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
         <br>
         <div class="table-container">
           <table mat-table [dataSource]="company.records" matSort class="basic-table">

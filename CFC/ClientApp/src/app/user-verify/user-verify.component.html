@@ -1,5 +1,5 @@
 <mat-card class="form-container  bigger-width">
-  <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
   <h3>{{ 'welcome-to-system' | translate }}, {{ formData.email }}</h3>
   <p>{{ 'create-password-text' | translate }}</p>
   <form class="form" #formRef="ngForm">

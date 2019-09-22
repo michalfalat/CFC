@@ -1,29 +1,34 @@
 <mat-card class="form-container">
-    <div class="flexLayout">
+  <div class="flexLayout">
+    <span>
+      <h3>{{ 'dashboard' | translate }}</h3>
+    </span>
+    <span class="spacer"></span>
+    <span class="actionButtons">
       <span>
-        <h3>{{ 'dashboard' | translate }}</h3>
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
       </span>
-      <span class="spacer"></span>
-      <span class="actionButtons">
-        <span>
-          <button mat-raised-button (click)="refresh()" color="primary">
-            <mat-icon matListIcon>refresh</mat-icon>
-            <span> {{ 'refresh' | translate }}</span>
-          </button>
-        </span>
+    </span>
+    <span class="actionButtonsResponsive">
+      <span>
+        <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+          <mat-icon matListIcon>refresh</mat-icon>
+        </button>
       </span>
-    </div>
-    <br>
-    <mat-progress-bar *ngIf="loadingData" mode="indeterminate"></mat-progress-bar>
-    <div *ngIf="!loadingData" >
-      <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong>  </p>
-      <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong>  </p>
-      <p> {{ 'available-cash' | translate }}:<strong  [ngClass]="{'red-text': data.totalAvailable < 0 , 'green-text': data.totalAvailable > 0  }"> {{ data.totalAvailable }}&euro;</strong>  </p>
-      <p> {{ 'deposits' | translate }}:<strong class="green-text"> {{ data.totalDeposit }}&euro;</strong>  </p>
-      <p> {{ 'withdraws' | translate }}:<strong> {{ data.totalWithdraw }}&euro;</strong>  </p>
-    </div>
-  </mat-card>
-
-  <mat-card class="form-container">
-    <app-chart-data></app-chart-data>
-  </mat-card>
+    </span>
+  </div>
+  <br>
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div *ngIf="!loadingData">
+    <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong> </p>
+    <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong> </p>
+    <p> {{ 'available-cash' | translate }}:<strong
+        [ngClass]="{'red-text': data.totalAvailable < 0 , 'green-text': data.totalAvailable > 0  }">
+        {{ data.totalAvailable }}&euro;</strong> </p>
+    <p> {{ 'deposits' | translate }}:<strong class="green-text"> {{ data.totalDeposit }}&euro;</strong> </p>
+    <p> {{ 'withdraws' | translate }}:<strong> {{ data.totalWithdraw }}&euro;</strong> </p>
+  </div>
+</mat-card>

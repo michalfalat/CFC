@@ -15,6 +15,15 @@ import {MatPaginator} from '@angular/material/paginator';
 export class CompanyFinancialsComponent implements OnInit {
   public loadingData = false;
   public recordList;
+  public filteredCashflow;
+  public allRecords;
+
+  // filters
+
+  public filterFrom = null;
+  public filterTo = null;
+  public filterType = 'all';
+  public filterKeyword = null;
   public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -39,12 +48,47 @@ export class CompanyFinancialsComponent implements OnInit {
       this.recordList = new MatTableDataSource(response.data.records);
       this.recordList.sort = this.sort;
       this.recordList.paginator = this.paginator;
+      this.filteredCashflow = response.data.records;
+      this.allRecords = response.data.records;
       this.loadingData = false;
 
     }, error => {
       this.loadingData = false;
       this.notifyService.processError(error);
     });
+  }
+
+  filter() {
+    let records = this.allRecords;
+    if (this.filterFrom !== null) {
+      records = records.filter(a => new Date(a.createdAt) > new Date(this.filterFrom));
+    }
+    if (this.filterTo !== null) {
+      records = records.filter(a => new Date(a.createdAt) <= new Date(this.filterTo));
+    }
+    if (this.filterKeyword !== null) {
+      const keyWord = this.filterKeyword.toLowerCase();
+      records = records.filter(a => a.description.toLowerCase().includes(keyWord) ||
+                                    a.creatorName.toLowerCase().includes(keyWord) ||
+                                    (a.companyName !== null && a.companyName.toLowerCase().includes(keyWord)) ||
+                                    (a.officeName !== null && a.officeName.toLowerCase().includes(keyWord)) ||
+                                    a.amount.toString().toLowerCase().includes(keyWord));
+    }
+    if (this.filterType !== 'all') {
+        records = records.filter(a => a.type === Number(this.filterType));
+    }
+    this.filteredCashflow = records;
+    this.recordList = new MatTableDataSource(records);
+    this.recordList.sort = this.sort;
+    this.recordList.paginator = this.paginator;
+  }
+
+  clearFilters() {
+    this.filterFrom = null;
+    this.filterTo = null;
+    this.filterType = 'all';
+    this.filterKeyword = null;
+    this.filter();
   }
 
   // remove(element) {
