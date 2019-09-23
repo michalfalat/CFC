@@ -38,8 +38,6 @@ export class PersonalFinancialsComponent implements OnInit {
 
   getRecords() {
     this.loadingData = true;
-    const scrollPosition = window.scrollY;
-    console.log(scrollPosition);
     this.apiService.getMoneyRecordsPersonal().subscribe(response => {
       this.recordList = response.data.records;
       this.loadingData = false;

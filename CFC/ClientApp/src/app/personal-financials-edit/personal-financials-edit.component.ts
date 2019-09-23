@@ -38,7 +38,6 @@ export class PersonalFinancialsEditComponent implements OnInit, AfterContentInit
 
   loadRecord() {
     this.apiService.getMoneyRecord(this.recordId).subscribe(response => {
-      console.log(response.data);
       this.record = response.data.record;
       this.record.recordId = response.data.record.id;
       this.record.created =  response.data.record.createdAt;
@@ -54,7 +53,6 @@ export class PersonalFinancialsEditComponent implements OnInit, AfterContentInit
 
   loadCompanyPreview() {
     this.apiService.getCompanyPreview(this.record.companyId).subscribe(response => {
-      console.log(response.data);
       this.loadingData = false;
       this.companyName = response.data.company.name;
 

@@ -40,7 +40,6 @@ export class UserListComponent implements OnInit {
       this.loadingData = false;
 
     }, error => {
-      console.log('error');
       this.loadingData = false;
     });
   }

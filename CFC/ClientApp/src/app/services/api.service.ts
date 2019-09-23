@@ -30,7 +30,7 @@ export class ApiService {
     return this.baseUrl + 'api/Account/UserDetail';
   }
   private userInfoUrl2(id: string) {
-    return this.baseUrl + `api/Account/UserDetail/${id}`;
+    return this.baseUrl + `api/Account/UserDetail/${ id }`;
   }
 
   private requestPasswordResetEmailUrl() {
@@ -70,7 +70,7 @@ export class ApiService {
   }
 
   private getVerifyTokenUrl(token) {
-    return this.baseUrl + `api/Account/GetVerifyToken/${token}`;
+    return this.baseUrl + `api/Account/GetVerifyToken/${ token }`;
   }
 
   // COMPANY
@@ -84,25 +84,25 @@ export class ApiService {
     return this.baseUrl + 'api/Company/Edit';
   }
   private removeCompanyUrl(id) {
-    return this.baseUrl + `api/Company/${id}`;
+    return this.baseUrl + `api/Company/${ id }`;
   }
   private unremoveCompanyUrl(id) {
-    return this.baseUrl + `api/Company/Unremove/${id}`;
+    return this.baseUrl + `api/Company/Unremove/${ id }`;
   }
   private getCompanyUrl(id) {
-    return this.baseUrl + `api/Company/${id}`;
+    return this.baseUrl + `api/Company/${ id }`;
   }
   private getCompanyPreviewUrl(id) {
-    return this.baseUrl + `api/Company/${id}/Preview`;
+    return this.baseUrl + `api/Company/${ id }/Preview`;
   }
   private addUserToCompanyUrl(id) {
-    return this.baseUrl + `api/Company/${id}/AddUser`;
+    return this.baseUrl + `api/Company/${ id }/AddUser`;
   }
   private editUserInCompanyUrl(id) {
-    return this.baseUrl + `api/Company/${id}/EditUser`;
+    return this.baseUrl + `api/Company/${ id }/EditUser`;
   }
   private removeUserFromCompanyUrl(id, userId) {
-    return this.baseUrl + `api/Company/${id}/RemoveUser/${userId}`;
+    return this.baseUrl + `api/Company/${ id }/RemoveUser/${ userId }`;
   }
 
 
@@ -118,30 +118,30 @@ export class ApiService {
     return this.baseUrl + 'api/Office/Edit';
   }
   private removeOfficeUrl(id) {
-    return this.baseUrl + `api/Office/${id}`;
+    return this.baseUrl + `api/Office/${ id }`;
   }
   private unremoveOfficeUrl(id) {
-    return this.baseUrl + `api/Office/Unremove/${id}`;
+    return this.baseUrl + `api/Office/Unremove/${ id }`;
   }
   private getOfficeUrl(id) {
-    return this.baseUrl + `api/Office/${id}`;
+    return this.baseUrl + `api/Office/${ id }`;
   }
   private addOfficeToCompanyUrl(id) {
-    return this.baseUrl + `api/Office/${id}/AddCompany`;
+    return this.baseUrl + `api/Office/${ id }/AddCompany`;
   }
   private editOfficeCompanyUrl(id) {
-    return this.baseUrl + `api/Office/${id}/EditCompany`;
+    return this.baseUrl + `api/Office/${ id }/EditCompany`;
   }
 
 
   private removeCompanyFromOfficeUrl(id, companyId) {
-    return this.baseUrl + `api/Office/${id}/RemoveCompany/${companyId}`;
+    return this.baseUrl + `api/Office/${ id }/RemoveCompany/${ companyId }`;
   }
 
 
   // MONEY RECORDS
   private getMoneyRecordsUrl(type: string) {
-    return this.baseUrl + `api/MoneyRecord/all/${type}`;
+    return this.baseUrl + `api/MoneyRecord/all/${ type }`;
   }
 
   private addMoneyRecordUrl() {
@@ -153,11 +153,11 @@ export class ApiService {
   }
 
   private removeMoneyRecordUrl(id) {
-    return this.baseUrl + `api/MoneyRecord/${id}`;
+    return this.baseUrl + `api/MoneyRecord/${ id }`;
   }
 
   private getMoneyRecordUrl(id) {
-    return this.baseUrl + `api/MoneyRecord/${id}`;
+    return this.baseUrl + `api/MoneyRecord/${ id }`;
   }
 
 
@@ -173,21 +173,21 @@ export class ApiService {
 
   constructor(private http: HttpClient,
     private authService: AuthService,
-      @Inject('BASE_URL') private baseUrl: string) {
-   this.headers = new HttpHeaders();
-   this.headers.append('Content-Type', 'application/json');
-  // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
+    @Inject('BASE_URL') private baseUrl: string) {
+    this.headers = new HttpHeaders();
+    this.headers.append('Content-Type', 'application/json');
+    // this.headers.append('Authorization', 'Bearer ' + this.authService.getToken());
   }
 
   checkInternalError(error) {
     if (error.status === 500) {
       const ERROR_INT = {
-        errorLabel : {
+        errorLabel: {
           value: 'INTERNAL_SERVER_ERROR'
         }
       };
       error.error = ERROR_INT;
-      console.log(`INTERNAL ERROR: ${error}`);
+      console.log(`INTERNAL ERROR: ${ error }`);
     } else {
       return error;
     }
@@ -195,14 +195,13 @@ export class ApiService {
 
   loadAuthData(token): any {
     const headers = new HttpHeaders();
-    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Authorization', `Bearer ${ token }`);
     return this.http.post(this.authDataUrl(), null, { headers });
   }
 
   addUser(model: AddUser): any {
     return this.http.post(this.addUserUrl(), model, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
 
@@ -211,7 +210,6 @@ export class ApiService {
   loginUser(model: LoginUser): any {
     return this.http.post(this.loginUserUrl(), model, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -219,7 +217,6 @@ export class ApiService {
   userDetail(): any {
     return this.http.get(this.userInfoUrl(), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -227,7 +224,6 @@ export class ApiService {
   userDetailAdmin(id: string): any {
     return this.http.get(this.userInfoUrl2(id), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -239,7 +235,6 @@ export class ApiService {
     };
     return this.http.post(this.requestPasswordResetEmailUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -250,7 +245,6 @@ export class ApiService {
     };
     return this.http.post(this.requestPasswordTokenUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -258,7 +252,6 @@ export class ApiService {
   changeResetPassword(data: PasswordResetModel): any {
     return this.http.post(this.changeResetPasswordUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -266,7 +259,6 @@ export class ApiService {
   changePassword(data: PasswordChangeModel): any {
     return this.http.post(this.changePasswordUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -274,15 +266,13 @@ export class ApiService {
   editUser(data: EditUser) {
     return this.http.post(this.editUserUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
 
   getVerifyToken(token): any {
-    return this.http.get(this.getVerifyTokenUrl(token),  this.headers).pipe(
+    return this.http.get(this.getVerifyTokenUrl(token), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -290,7 +280,6 @@ export class ApiService {
   verifyUser(data: UserVerifyToken) {
     return this.http.post(this.verifyUserUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -302,7 +291,6 @@ export class ApiService {
     };
     return this.http.post(this.blockUserUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -314,7 +302,6 @@ export class ApiService {
     };
     return this.http.post(this.removeUserUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -322,7 +309,6 @@ export class ApiService {
   getUserList(): any {
     return this.http.get(this.getUserListUrl(), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
 
@@ -331,22 +317,19 @@ export class ApiService {
   addCompany(data: CompanyAddModel) {
     return this.http.post(this.addCompanyUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
 
   removeCompany(id: string, remove: boolean) {
     if (remove) {
-    return this.http.delete(this.removeCompanyUrl(id), this.headers).pipe(
-      catchError(error => {
-        console.log(error);
-        return throwError(error);
-      }));
+      return this.http.delete(this.removeCompanyUrl(id), this.headers).pipe(
+        catchError(error => {
+          return throwError(error);
+        }));
     } else {
       return this.http.post(this.unremoveCompanyUrl(id), this.headers).pipe(
         catchError(error => {
-          console.log(error);
           return throwError(error);
         }));
 
@@ -356,7 +339,6 @@ export class ApiService {
   getCompanies(): any {
     return this.http.get(this.getCompaniesUrl(), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -364,7 +346,6 @@ export class ApiService {
   getCompany(id): any {
     return this.http.get(this.getCompanyUrl(id), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -381,13 +362,12 @@ export class ApiService {
     console.log(data);
     return this.http.post(this.editCompanyUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
 
   addUserToCompany(owner: CompanyOwnerAddModel): any {
-    return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+    return this.http.post(this.addUserToCompanyUrl(owner.companyId), owner, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
@@ -395,7 +375,7 @@ export class ApiService {
   }
 
   editUserInCompany(owner: CompanyOwnerAddModel): any {
-    return this.http.post(this.editUserInCompanyUrl(owner.companyId), owner,  this.headers).pipe(
+    return this.http.post(this.editUserInCompanyUrl(owner.companyId), owner, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
@@ -421,20 +401,19 @@ export class ApiService {
   editOffice(data: EditOfficeModel) {
     return this.http.post(this.editOfficeUrl(), data, this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
 
   addCompanyToOffice(company: CompanyOfficeAddModel): any {
-    return this.http.post(this.addOfficeToCompanyUrl(company.officeId), company,  this.headers).pipe(
+    return this.http.post(this.addOfficeToCompanyUrl(company.officeId), company, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
       }));
   }
   editCompanyInOffice(company: CompanyOfficeAddModel): any {
-    return this.http.post(this.editOfficeCompanyUrl(company.officeId), company,  this.headers).pipe(
+    return this.http.post(this.editOfficeCompanyUrl(company.officeId), company, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
@@ -453,7 +432,6 @@ export class ApiService {
   getOffices(): any {
     return this.http.get(this.getOfficesUrl(), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -461,22 +439,19 @@ export class ApiService {
   getOffice(id: number): any {
     return this.http.get(this.getOfficeUrl(id), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
 
   removeOffice(id: string, remove: boolean) {
     if (remove) {
-    return this.http.delete(this.removeOfficeUrl(id), this.headers).pipe(
-      catchError(error => {
-        console.log(error);
-        return throwError(error);
-      }));
+      return this.http.delete(this.removeOfficeUrl(id), this.headers).pipe(
+        catchError(error => {
+          return throwError(error);
+        }));
     } else {
       return this.http.post(this.unremoveOfficeUrl(id), this.headers).pipe(
         catchError(error => {
-          console.log(error);
           return throwError(error);
         }));
 
@@ -487,7 +462,6 @@ export class ApiService {
   getMoneyRecordsForCompany(): any {
     return this.http.get(this.getMoneyRecordsUrl('company'), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -495,7 +469,6 @@ export class ApiService {
   getMoneyRecordsPersonal(): any {
     return this.http.get(this.getMoneyRecordsUrl('personal'), this.headers).pipe(
       catchError(error => {
-        console.log(error);
         return throwError(error);
       }));
   }
@@ -505,7 +478,7 @@ export class ApiService {
   }
 
   addMoneyRecord(moneyRecord: MoneyRecordAddModel): any {
-    return this.http.post(this.addMoneyRecordUrl(), moneyRecord,  this.headers).pipe(
+    return this.http.post(this.addMoneyRecordUrl(), moneyRecord, this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
@@ -513,11 +486,11 @@ export class ApiService {
   }
 
   editMoneyRecord(moneyRecord: MoneyRecordAddModel): any {
-    return this.http.post(this.editMoneyRecordUrl(), moneyRecord,  this.headers);
+    return this.http.post(this.editMoneyRecordUrl(), moneyRecord, this.headers);
   }
 
   removeMoneyRecord(id): any {
-    return this.http.delete(this.removeMoneyRecordUrl(id),  this.headers);
+    return this.http.delete(this.removeMoneyRecordUrl(id), this.headers);
   }
 
   getAdminDashboard(): any {

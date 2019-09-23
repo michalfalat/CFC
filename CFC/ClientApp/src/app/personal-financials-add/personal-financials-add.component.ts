@@ -39,7 +39,6 @@ export class PersonalFinancialsAddComponent implements OnInit, AfterContentInit 
 
   loadCompanyPreview(){
     this.apiService.getCompanyPreview(this.companyId).subscribe(response => {
-      console.log(response.data);
       this.loadingData = false;
       this.companyName = response.data.company.name;
 

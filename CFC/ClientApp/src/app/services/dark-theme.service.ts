@@ -12,7 +12,6 @@ export class DarkThemeService {
 
   constructor(private cookieService: CookieService, private chartThemeService: ThemeService) {
     const cookieVal = cookieService.get('dark_mode');
-    console.log(cookieVal);
     this.darkModeEnabled =  cookieVal !== '' ? JSON.parse(cookieVal) : false;
   }
 

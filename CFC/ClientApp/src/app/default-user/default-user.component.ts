@@ -9,14 +9,13 @@ import { Router } from '@angular/router';
 })
 export class DefaultUserComponent implements OnInit {
 
-    constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router) {
-      console.log("Generating new user...");
-      http.post(baseUrl + 'api/Account/GenerateDefaultUser',  {}).subscribe(result => {
-        console.log(result);
-      }, error => console.error(error));
-    }  
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router) {
+    console.log('Generating new user...');
+    http.post(baseUrl + 'api/Account/GenerateDefaultUser', {}).subscribe(result => {
+    }, error => console.error(error));
+  }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.router.navigate(['/login']);
   }
 

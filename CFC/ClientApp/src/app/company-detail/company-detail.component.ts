@@ -92,7 +92,6 @@ export class CompanyDetailComponent implements OnInit, AfterContentInit {
     if (tab !== null) {
       this.selectedTab = tabOptions[tab];
     }
-    console.log(tab);
     if (this.companyId == null) {
       this.goBack();
     }
