@@ -70,7 +70,8 @@
           <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}" (click)="goToDetail(element.id)">
             <mat-icon class="transparent">info</mat-icon>
           </button>
-          <button mat-icon-button matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}"
+          <button *ngIf="element.role !== 'Administrator'" mat-icon-button
+            matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}"
             (click)="$event.stopPropagation();blockUser(element)">
             <mat-icon class="transparent"> {{ element.blocked === true ? 'settings_backup_restore' : 'block'}}
             </mat-icon>

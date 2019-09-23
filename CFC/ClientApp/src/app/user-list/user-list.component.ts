@@ -20,7 +20,8 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private apiService: ApiService,  private notifyService: NotifyService, private translateService: TranslateService, private router: Router) { }
+  constructor(private apiService: ApiService,
+    private notifyService: NotifyService, private translateService: TranslateService, private router: Router) { }
 
   ngOnInit() {
     this.getUsers();
@@ -31,7 +32,6 @@ export class UserListComponent implements OnInit {
   }
 
   getUsers() {
-    this.userList = [];
     this.loadingData = true;
     this.apiService.getUserList().subscribe(response => {
       this.userList = new MatTableDataSource(response.data);

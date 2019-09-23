@@ -3,6 +3,7 @@ import { UserInfo, UserLoginInfo } from '../models/user-models';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from './api.service';
+import { NotifyService } from './notify.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private role;
   private email;
 
-  constructor() {
+  constructor(private notifyService: NotifyService) {
     this.userSubject = new BehaviorSubject<UserInfo>(null);
     const userToken = JSON.parse(localStorage.getItem('auth_token'));
     if (userToken !== null) {
@@ -75,9 +76,15 @@ export class AuthService {
           user.role = this.role;
           this.userSubject.next(user);
           this.user = this.userSubject.asObservable();
+        } else {
+          this.logoutUser();
         }
         resolve(true);
-      }, error => {resolve(true); });
+      }, error => {
+        this.notifyService.processError(error);
+        this.logoutUser();
+        resolve(true);
+      });
     });
   }
 

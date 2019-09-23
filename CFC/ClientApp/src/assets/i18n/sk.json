@@ -118,6 +118,7 @@
     "office-unblocked": "Pobočka bola odblokovaná",
     "confirm-remove-office": "Naozaj chcete vymazať pobočku z tejto firmy?",
     "confirm-remove-company":"Naozaj chcete vymazať firmu z tejto pobočky?",
+    "confirm-remove-record": "Naozaj chcete vymazať tento záznam?",
     "no-data": "Žiadne údaje nie sú k dispozícii",
     "block": "Zablokovať",
     "offices": "Pobočky",

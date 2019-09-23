@@ -5,7 +5,7 @@ import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +27,7 @@ export class CompanyFinancialsComponent implements OnInit {
   public filterTo = null;
   public filterType = 'all';
   public filterKeyword = null;
-  public displayedColumns: string[] = ['createdAt', 'creator',  'companyName', 'officeName', 'description', 'amount', 'actions'];
+  public displayedColumns: string[] = ['createdAt', 'creator', 'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -71,13 +71,13 @@ export class CompanyFinancialsComponent implements OnInit {
     if (this.filterKeyword !== null) {
       const keyWord = this.filterKeyword.toLowerCase();
       records = records.filter(a => a.description.toLowerCase().includes(keyWord) ||
-                                    a.creatorName.toLowerCase().includes(keyWord) ||
-                                    (a.companyName !== null && a.companyName.toLowerCase().includes(keyWord)) ||
-                                    (a.officeName !== null && a.officeName.toLowerCase().includes(keyWord)) ||
-                                    a.amount.toString().toLowerCase().includes(keyWord));
+        a.creatorName.toLowerCase().includes(keyWord) ||
+        (a.companyName !== null && a.companyName.toLowerCase().includes(keyWord)) ||
+        (a.officeName !== null && a.officeName.toLowerCase().includes(keyWord)) ||
+        a.amount.toString().toLowerCase().includes(keyWord));
     }
     if (this.filterType !== 'all') {
-        records = records.filter(a => a.type === Number(this.filterType));
+      records = records.filter(a => a.type === Number(this.filterType));
     }
     this.filteredCashflow = records;
     this.recordList = new MatTableDataSource(records);
@@ -95,16 +95,15 @@ export class CompanyFinancialsComponent implements OnInit {
 
   removeRecord(id) {
     this.apiService.removeMoneyRecord(id).subscribe(response => {
-    this.getRecords();
+      this.getRecords();
 
-  }, error => {
-    this.loadingData = false;
-    this.notifyService.processError(error);
-  });
-
+    }, error => {
+      this.loadingData = false;
+      this.notifyService.processError(error);
+    });
   }
 
-  openRemoveUserDialog(element): void {
+  openRemoveRecordDialog(element): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: this.translateService.instant('confirm-remove-record'),
       position: { top: '80px' }
@@ -118,6 +117,6 @@ export class CompanyFinancialsComponent implements OnInit {
   }
 
   edit(element) {
-    this.router.navigate([this.authService.getPath(`companyRecords/edit/${element.id}`)]);
+    this.router.navigate([this.authService.getPath(`/companyRecords/edit/${ element.id }`)]);
   }
 }

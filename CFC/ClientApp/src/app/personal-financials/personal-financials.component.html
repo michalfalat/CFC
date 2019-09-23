@@ -1,5 +1,5 @@
 <div class="cardList">
-  <mat-card class="cardListItem" *ngIf="loadingData">
+  <mat-card class="cardListItem" *ngIf="loadingData && recordList == null">
     <mat-progress-bar  mode="indeterminate" color="accent"></mat-progress-bar>
   </mat-card>
   <mat-card class="cardListItem" *ngFor="let company of recordList">
@@ -132,13 +132,15 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
               <td mat-cell *matCellDef="let element">
-                <button mat-icon-button matTooltip="{{ 'edit' | translate }}" (click)="edit(element)">
-                  <mat-icon class="transparent">edit</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
-                  (click)="remove(element)">
-                  <mat-icon class="transparent">delete</mat-icon>
-                </button>
+                <div>
+                  <button mat-icon-button matTooltip="{{ 'edit' | translate }}" (click)="edit(element)">
+                    <mat-icon class="transparent">edit</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+                    (click)="openRemoveRecordDialog(element)">
+                    <mat-icon class="transparent">delete</mat-icon>
+                  </button>
+                </div>
               </td>
             </ng-container>
 

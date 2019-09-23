@@ -22,5 +22,7 @@ namespace CFC.Data.Enums
         public static ResponseDTOErrorLabel DOUBLE_FA { get { return new ResponseDTOErrorLabel("DOUBLE_FA"); } }
         public static ResponseDTOErrorLabel EXISTING_USER { get { return new ResponseDTOErrorLabel("EXISTING_USER"); } }
         public static ResponseDTOErrorLabel NOT_SUCEEDED { get { return new ResponseDTOErrorLabel("NOT_SUCEEDED"); } }
+        public static ResponseDTOErrorLabel EMAIL_NOT_CONFIRMED { get { return new ResponseDTOErrorLabel("EMAIL_NOT_CONFIRMED"); } }
+        
     }
 }

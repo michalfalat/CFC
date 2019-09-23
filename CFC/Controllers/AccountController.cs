@@ -383,12 +383,26 @@ namespace CFC.Controllers
             if (userId != null)
             {
                 var user = await this._applicationUserManager.FindById(userId);
+                if(user == null)
+                {
+                    return Ok(new ResponseDTO(ResponseDTOStatus.OK, ResponseDTOErrorLabel.USER_NOT_FOUND));
+                }
+                if(user.EmailConfirmed == false)
+                {
+
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.EMAIL_NOT_CONFIRMED));
+                }
+                if (user.Blocked == true)
+                {
+
+                    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.BLOCKED));
+                }
                 var email = user.Email;
                 var role = await this._userManager.GetRolesAsync(user);
                 return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email, role })) ;
             }
 
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, ResponseDTOErrorLabel.USER_NOT_FOUND));
         }
 
         [HttpGet("[action]")]

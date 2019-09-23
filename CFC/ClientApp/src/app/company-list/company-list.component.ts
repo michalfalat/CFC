@@ -45,7 +45,6 @@ export class CompanyListComponent implements OnInit {
 
 
   getCompanies() {
-    this.companyList = [];
     this.loadingData = true;
     this.apiService.getCompanies().subscribe(response => {
       this.companyList = new MatTableDataSource(response.data.companies);

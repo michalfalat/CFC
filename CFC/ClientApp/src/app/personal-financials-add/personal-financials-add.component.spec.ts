@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
+import { PersonalFinancialsComponent } from '../personal-financials/personal-financials.component';
 
 describe('PersonalFinancialsAddComponent', () => {
   let component: PersonalFinancialsAddComponent;
@@ -16,12 +17,14 @@ describe('PersonalFinancialsAddComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PersonalFinancialsAddComponent ],
+      declarations: [ PersonalFinancialsAddComponent, PersonalFinancialsComponent ],
       imports: [
         TranslateModule.forRoot(),
         CustomMaterialModule,
         FormsModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes(
+          [{path: 'personalRecords', component: PersonalFinancialsComponent}]
+        ),
         HttpClientModule,
         ChartsModule,
         NoopAnimationsModule,

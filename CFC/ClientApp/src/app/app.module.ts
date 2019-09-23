@@ -45,6 +45,7 @@ import { PercentageDialogComponent } from './percentage-dialog/percentage-dialog
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { AuthService } from './services/auth.service';
 import { ApiService } from './services/api.service';
+import { PersonalFinancialsEditComponent } from './personal-financials-edit/personal-financials-edit.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -80,6 +81,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ChartDataComponent,
     IconSnackBarComponent,
     PercentageDialogComponent,
+    PersonalFinancialsEditComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -180,6 +182,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             component: PersonalFinancialsAddComponent,
             pathMatch: 'full'
           },
+          {
+            path: 'personalRecords/edit/:id',
+            component: PersonalFinancialsEditComponent,
+            pathMatch: 'full'
+          },
 
           // {
           //   path: 'officcompanyRecordses/:id',
@@ -243,6 +250,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       {
         path: 'personalRecords/add/:id',
         component: PersonalFinancialsAddComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'personalRecords/edit/:id',
+        component: PersonalFinancialsEditComponent,
         pathMatch: 'full'
       },
     ]),

@@ -79,6 +79,7 @@ export class CompanyFinancialsAddComponent implements OnInit {
      this.record.destinationType =  response.data.record.officeId !== null ? 'office' : 'company';
      this.record.type =  response.data.record.type === 1 ? 'expense' : 'income';
      this.record.amount =  response.data.record.amount;
+     this.loadingData = false;
 
     }, error => {
       this.loadingData = false;

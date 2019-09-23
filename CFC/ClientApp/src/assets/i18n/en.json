@@ -117,6 +117,7 @@
     "office-blocked": "Office was blocked",
     "office-unblocked": "Office was unblocked",
     "confirm-remove-office": "Are you sure to delete office from this company?",
+    "confirm-remove-record": "Are you sure to delete this record?",
     "no-data": "No data available",
     "block": "Block",
     "offices": "Offices",
