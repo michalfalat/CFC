@@ -108,18 +108,23 @@ namespace CFC.Controllers
         public async Task<IActionResult> GetAllForCompany()
         {
             var records = new List<MoneyRecord>();
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             string type = "company";
-            if (HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR))
+            if (isAdmin)
             {
                 records = await this._moneyRecordManager.GetAll(type);
             }
             else
             {
-                var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 records = await this._moneyRecordManager.GetAllCompanyRecordsForOwner(type, userId);
 
             }
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
+            foreach (var record in recordsModels)
+            {
+                record.Editable = isAdmin || record.CreatorId == userId;
+            }
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = recordsModels }));
         }
@@ -190,8 +195,14 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Get(int id)
         {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
             var record = await this._moneyRecordManager.FindById(id);
             if (record == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+            if (record.CreatorId != userId && isAdmin == false)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
@@ -204,6 +215,8 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Edit([FromBody] MoneyRecordEditModel model)
         {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));
@@ -214,6 +227,12 @@ namespace CFC.Controllers
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
+
+            if (record.CreatorId != userId && isAdmin == false)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+
             record.Amount = model.Amount;
             record.CompanyId = model.CompanyId;
             record.OfficeId = model.OfficeId;
@@ -227,11 +246,18 @@ namespace CFC.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> Remove(int id)
         {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
             var record = await this._moneyRecordManager.FindById(id);
             if (record == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            }
+
+            if (record.CreatorId != userId && isAdmin == false)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
             }
@@ -243,12 +269,12 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
         public async Task<IActionResult> Unremove(int id)
         {
-            var record = await this._moneyRecordManager.FindById(id);
-            if (record == null)
-            {
-                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
-            }
-            this._moneyRecordManager.Unremove(record);
+            //var record = await this._moneyRecordManager.FindById(id);
+            //if (record == null)
+            //{
+            //    return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.NOT_FOUND));
+            //}
+            //this._moneyRecordManager.Unremove(record);
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
     }

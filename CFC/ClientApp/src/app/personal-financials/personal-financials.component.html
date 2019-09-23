@@ -1,4 +1,7 @@
 <div class="cardList">
+  <mat-card class="cardListItem" *ngIf="loadingData">
+    <mat-progress-bar  mode="indeterminate" color="accent"></mat-progress-bar>
+  </mat-card>
   <mat-card class="cardListItem" *ngFor="let company of recordList">
     <div class="flexLayout">
       <span>
@@ -19,18 +22,18 @@
         </span>
       </span>
       <span class="actionButtonsResponsive">
-          <span>
-            <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
-              <mat-icon matListIcon>refresh</mat-icon>
-            </button>
-          </span>
-          <span>
-            <button mat-icon-button [routerLink]="authService.getPath('/personalRecords/add')"
-              matTooltip="{{ 'add-deposit-withdraw' | translate }}">
-              <mat-icon matListIcon>add</mat-icon>
-            </button>
-          </span>
+        <span>
+          <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+            <mat-icon matListIcon>refresh</mat-icon>
+          </button>
         </span>
+        <span>
+          <button mat-icon-button [routerLink]="authService.getPath('/personalRecords/add')"
+            matTooltip="{{ 'add-deposit-withdraw' | translate }}">
+            <mat-icon matListIcon>add</mat-icon>
+          </button>
+        </span>
+      </span>
     </div>
     <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab">
       <mat-tab label="{{ 'overview' | translate}}">
@@ -105,8 +108,12 @@
             </ng-container>
 
             <ng-container matColumnDef="creator">
-              <th mat-header-cell *matHeaderCellDef> {{ 'created-by' | translate }} </th>
-              <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+              <th mat-header-cell *matHeaderCellDef
+                [style.display]="authService.getRole() === 'Administrator' ? 'visible' : 'none'">
+                {{ 'created-by' | translate }} </th>
+              <td mat-cell *matCellDef="let element"
+                [style.display]="authService.getRole() === 'Administrator' ? 'visible' : 'none'">
+                {{element.creatorName }} </td>
             </ng-container>
 
             <ng-container matColumnDef="description">
@@ -125,12 +132,13 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
               <td mat-cell *matCellDef="let element">
-                <!-- <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/' + element.id }}">
-            <mat-icon>info</mat-icon>
-          </button>
-          <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}" (click)="remove(element)">
-            <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
-          </button> -->
+                <button mat-icon-button matTooltip="{{ 'edit' | translate }}" (click)="edit(element)">
+                  <mat-icon class="transparent">edit</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+                  (click)="remove(element)">
+                  <mat-icon class="transparent">delete</mat-icon>
+                </button>
               </td>
             </ng-container>
 

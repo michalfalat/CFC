@@ -15,6 +15,7 @@ export class PersonalFinancialsComponent implements OnInit {
   public loadingData = false;
   public recordList;
   public displayedColumns: string[] = ['createdAt', 'creator', 'description', 'amount', 'actions'];
+  public selectedTab;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -25,6 +26,7 @@ export class PersonalFinancialsComponent implements OnInit {
 
   ngOnInit() {
     this.getRecords();
+    this.setTab();
   }
 
   refresh() {
@@ -43,6 +45,14 @@ export class PersonalFinancialsComponent implements OnInit {
       this.loadingData = false;
       this.notifyService.processError(error);
     });
+  }
+
+  setTab() {
+    if (this.authService.getRole() === 'Administrator') {
+      this.selectedTab = 1;
+    } else {
+      this.selectedTab = 0;
+    }
   }
 
 

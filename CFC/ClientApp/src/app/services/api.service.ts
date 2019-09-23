@@ -148,6 +148,18 @@ export class ApiService {
     return this.baseUrl + 'api/MoneyRecord';
   }
 
+  private editMoneyRecordUrl() {
+    return this.baseUrl + 'api/MoneyRecord/Edit';
+  }
+
+  private removeMoneyRecordUrl(id) {
+    return this.baseUrl + `api/MoneyRecord/${id}`;
+  }
+
+  private getMoneyRecordUrl(id) {
+    return this.baseUrl + `api/MoneyRecord/${id}`;
+  }
+
 
   // DASHBOARDS
   private getAdminDashbooardUrl() {
@@ -488,12 +500,24 @@ export class ApiService {
       }));
   }
 
+  getMoneyRecord(id): any {
+    return this.http.get(this.getMoneyRecordUrl(id), this.headers);
+  }
+
   addMoneyRecord(moneyRecord: MoneyRecordAddModel): any {
     return this.http.post(this.addMoneyRecordUrl(), moneyRecord,  this.headers).pipe(
       catchError(error => {
         error = this.checkInternalError(error);
         return throwError(error);
       }));
+  }
+
+  editMoneyRecord(moneyRecord: MoneyRecordAddModel): any {
+    return this.http.post(this.editMoneyRecordUrl(), moneyRecord,  this.headers);
+  }
+
+  removeMoneyRecord(id): any {
+    return this.http.delete(this.removeMoneyRecordUrl(id),  this.headers);
   }
 
   getAdminDashboard(): any {

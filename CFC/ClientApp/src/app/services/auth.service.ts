@@ -77,7 +77,7 @@ export class AuthService {
           this.user = this.userSubject.asObservable();
         }
         resolve(true);
-      }, error => reject());
+      }, error => {resolve(true); });
     });
   }
 

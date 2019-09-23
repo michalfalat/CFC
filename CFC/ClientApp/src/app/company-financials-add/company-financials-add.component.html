@@ -7,7 +7,7 @@
       </button>
     </span>
     <span>
-      <span class="header"> {{ 'add' | translate }} {{ record.type | translate }} </span>
+      <span class="header"> {{ (editMode === true ? 'edit' : 'add') | translate }} {{ record.type | translate }} </span>
     </span>
     <span class="spacer"></span>
   </div>
@@ -24,6 +24,14 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div *ngIf="editMode">
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="picker" (focus)="picker.open()" [(ngModel)]="record.created" name="createdAt"
+          placeholder="{{ 'date' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
     <mat-form-field class="full-width">
       <mat-label>{{ 'destination-type' | translate }}</mat-label>
       <mat-select [(ngModel)]="record.destinationType" name="destinationType">
@@ -56,15 +64,22 @@
         required minlength="5">
     </mat-form-field>
     <mat-form-field class="full-width">
-      <span matPrefix [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}</span>
-      <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }" placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required
-        type="number">
+      <span matPrefix
+        [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}</span>
+      <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }"
+        placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required type="number">
 
-      <span matSuffix >&nbsp;&euro;</span>
+      <span matSuffix>&nbsp;&euro;</span>
     </mat-form-field>
+    <div *ngIf="editMode">
+      <button mat-raised-button color="primary" class="main-button" (click)="edit()"
+        [disabled]="formRef.invalid || loadingData">{{ 'edit' | translate }}</button>
 
-    <button mat-raised-button color="primary" class="main-button" (click)="add()"
-      [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+    </div>
+    <div *ngIf="editMode === false">
+      <button mat-raised-button color="primary" class="main-button" (click)="add()"
+        [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+    </div>
   </form>
 
 </mat-card>

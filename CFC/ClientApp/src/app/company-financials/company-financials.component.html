@@ -73,7 +73,7 @@
       </mat-form-field>
     </span>
     <span style="padding-top: 15px;">
-      <button mat-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()" >
+      <button mat-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()">
         <mat-icon class="transparent">close</mat-icon>
       </button>
     </span>
@@ -119,12 +119,15 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
         <td mat-cell *matCellDef="let element">
-          <!-- <button mat-icon-button matTooltip="{{ 'company-detail' | translate }}"  routerLink="{{'/admin/companies/' + element.id }}">
-            <mat-icon>info</mat-icon>
-          </button>
-          <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unblock' : 'block') | translate }}" (click)="remove(element)">
-            <mat-icon> {{ element.obsolete === true ? 'settings_backup_restore' : 'block'}}</mat-icon>
-          </button> -->
+          <div *ngIf="element.editable">
+            <button mat-icon-button matTooltip="{{ 'edit' | translate }}" (click)="edit(element)">
+              <mat-icon class="transparent">edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+              (click)="openRemoveUserDialog(element)">
+              <mat-icon class="transparent">delete</mat-icon>
+            </button>
+          </div>
         </td>
       </ng-container>
 

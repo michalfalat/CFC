@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,10 +11,11 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './personal-financials-add.component.html',
   styleUrls: ['./personal-financials-add.component.scss']
 })
-export class PersonalFinancialsAddComponent implements OnInit {
+export class PersonalFinancialsAddComponent implements OnInit, AfterContentInit {
 
   public record: MoneyRecordAddModel;
   public companyId = null;
+  public companyName;
   public loadingData = false;
 
   constructor(private apiService: ApiService,
@@ -23,13 +24,30 @@ export class PersonalFinancialsAddComponent implements OnInit {
     private router: Router,
     public authService: AuthService,
     private route: ActivatedRoute) {
-      this.record = new MoneyRecordAddModel();
-      this.record.type = 'deposit';
-      this.companyId = this.route.snapshot.params.id;
 
  }
 
   ngOnInit() {
+  }
+  ngAfterContentInit() {
+    this.record = new MoneyRecordAddModel();
+    this.record.type = 'deposit';
+    this.companyId = this.route.snapshot.params.id;
+    this.loadCompanyPreview();
+
+  }
+
+  loadCompanyPreview(){
+    this.apiService.getCompanyPreview(this.companyId).subscribe(response => {
+      console.log(response.data);
+      this.loadingData = false;
+      this.companyName = response.data.company.name;
+
+    }, error => {
+      this.loadingData = false;
+      this.notifyService.processError(error);
+      this.goBack();
+    });
   }
 
   goBack() {

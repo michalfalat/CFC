@@ -6,6 +6,9 @@ import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../services/auth.service';
 import {MatPaginator} from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-company-financials',
@@ -29,8 +32,8 @@ export class CompanyFinancialsComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private apiService: ApiService, public authService: AuthService,
-    private notifyService: NotifyService, private translateService: TranslateService) { }
+  constructor(private apiService: ApiService, public authService: AuthService, private router: Router,
+    private notifyService: NotifyService, private translateService: TranslateService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.getRecords();
@@ -41,7 +44,7 @@ export class CompanyFinancialsComponent implements OnInit {
   }
 
   getRecords() {
-    this.recordList = [];
+    // this.recordList = [];
     this.loadingData = true;
     this.apiService.getMoneyRecordsForCompany().subscribe(response => {
       this.recordList = new MatTableDataSource(response.data.records);
@@ -90,20 +93,31 @@ export class CompanyFinancialsComponent implements OnInit {
     this.filter();
   }
 
-  // remove(element) {
-  //   const id = element.id;
-  //   const block  = element.obsolete ? false : true;
-  //   this.loadingData = true;
-  //   this.apiService.removeOffice(id, block).subscribe(response => {
-  //     if (block) {
-  //       this.notifyService.info(this.translateService.instant('office-blocked'));
-  //     } else {
-  //       this.notifyService.info(this.translateService.instant('company-unblocked'));
-  //     }
-  //    this.getRecords();
-  //   }, error => {
-  //     this.loadingData = false;
-  //     this.notifyService.error(this.translateService.instant(error.error.errorLabel));
-  //   });
-  // }
+  removeRecord(id) {
+    this.apiService.removeMoneyRecord(id).subscribe(response => {
+    this.getRecords();
+
+  }, error => {
+    this.loadingData = false;
+    this.notifyService.processError(error);
+  });
+
+  }
+
+  openRemoveUserDialog(element): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: this.translateService.instant('confirm-remove-record'),
+      position: { top: '80px' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.removeRecord(element.id);
+      }
+    });
+  }
+
+  edit(element) {
+    this.router.navigate([this.authService.getPath(`companyRecords/edit/${element.id}`)]);
+  }
 }

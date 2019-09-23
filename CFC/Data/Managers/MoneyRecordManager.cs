@@ -112,10 +112,11 @@ namespace CFC.Data.Managers
 
         public void Remove(MoneyRecord entity)
         {
-            entity.Obsolete = true;
-            this.Edit(entity);
+            this._repository.MoneyRecordRepository.Delete(entity);
+            this._repository.MoneyRecordRepository.Save();
         }
 
+        [Obsolete]
         public void Unremove(MoneyRecord entity)
         {
             entity.Obsolete = false;

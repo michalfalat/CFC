@@ -166,6 +166,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
             pathMatch: 'full'
           },
           {
+            path: 'companyRecords/edit/:id',
+            component: CompanyFinancialsAddComponent,
+            pathMatch: 'full'
+          },
+          {
             path: 'personalRecords',
             component: PersonalFinancialsComponent,
             pathMatch: 'full'
@@ -222,6 +227,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       },
       {
         path: 'companyRecords/add',
+        component: CompanyFinancialsAddComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'companyRecords/edit/:id',
         component: CompanyFinancialsAddComponent,
         pathMatch: 'full'
       },
