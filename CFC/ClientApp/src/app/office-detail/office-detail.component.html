@@ -58,6 +58,7 @@
       </div>
     </mat-tab>
     <mat-tab label="{{ 'companies' | translate}}">
+      <br>
       <div *ngIf="officeCompanies !== undefined && officeCompanies.data.length > 0">
         <table mat-table [dataSource]="officeCompanies" matSort class="basic-table">
           <ng-container matColumnDef="companyName">
@@ -99,6 +100,7 @@
       <div *ngIf="officeCompanies === undefined || officeCompanies.data.length == 0" class="centered-info-secondary">
         <p>{{ 'no-data' | translate }}</p>
       </div>
+      <br>
       <div>
         <div>
           <button mat-raised-button (click)="openOfficeCompanyPercentageDialog(undefined)" color="primary"

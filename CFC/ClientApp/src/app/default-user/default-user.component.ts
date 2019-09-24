@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-default-user',
@@ -9,14 +10,15 @@ import { Router } from '@angular/router';
 })
 export class DefaultUserComponent implements OnInit {
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router: Router) {
-    console.log('Generating new user...');
-    http.post(baseUrl + 'api/Account/GenerateDefaultUser', {}).subscribe(result => {
-    }, error => console.error(error));
+  constructor(private apiService: ApiService, private router: Router) {
   }
 
   ngOnInit() {
-    this.router.navigate(['/login']);
+    console.log('Generating new user...');
+    this.apiService.generateDefaultUser().subscribe(result => {
+      console.log(result);
+      this.router.navigate(['/login']);
+    }, error => console.error(error));
   }
 
 }

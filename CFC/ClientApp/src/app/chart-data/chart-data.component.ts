@@ -103,7 +103,7 @@ export class ChartDataComponent implements OnInit {
             datasets.filter(d => d.stack === '1').map(dataset => {
               sum += Number(dataset.data[ctx.dataIndex]);
             });
-            return `${ sum } €`;
+            return `${ sum.toFixed(2) } €`;
           }
           return '';
 
@@ -138,16 +138,17 @@ export class ChartDataComponent implements OnInit {
   }
 
   manageData() {
+    this.data = this.data.sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt)) ? 1 : -1);
     let groupedData = null;
     switch (this.groupedBy) {
       case 'day':
         groupedData = _.groupBy(this.data, function (item) {
-          return item.createdAt.substring(0, 10);
+          return new Date(item.createdAt.substring(0, 10)).toLocaleDateString();
         });
         break;
       case 'month':
         groupedData = _.groupBy(this.data, function (item) {
-          return item.createdAt.substring(0, 7);
+          return `${new Date(item.createdAt.substring(0, 7)).getMonth()} ${new Date(item.createdAt.substring(0, 7)).getFullYear()}`;
         });
         break;
       case 'year':

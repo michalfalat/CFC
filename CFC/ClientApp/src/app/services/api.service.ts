@@ -18,6 +18,10 @@ export class ApiService {
     return this.baseUrl + 'api/Account/AuthData';
   }
 
+  private generateDefaultUserUrl() {
+    return this.baseUrl + 'api/Account/GenerateDefaultUser';
+  }
+
   private addUserUrl() {
     return this.baseUrl + 'api/Account/AddUser';
   }
@@ -199,6 +203,10 @@ export class ApiService {
     return this.http.post(this.authDataUrl(), null, { headers });
   }
 
+  generateDefaultUser(): any {
+    return this.http.post(this.generateDefaultUserUrl(), {}, this.headers);
+  }
+
   addUser(model: AddUser): any {
     return this.http.post(this.addUserUrl(), model, this.headers).pipe(
       catchError(error => {
@@ -359,7 +367,6 @@ export class ApiService {
   }
 
   editCompany(data: EditCompanyModel) {
-    console.log(data);
     return this.http.post(this.editCompanyUrl(), data, this.headers).pipe(
       catchError(error => {
         return throwError(error);

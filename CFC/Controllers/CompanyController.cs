@@ -216,7 +216,6 @@ namespace CFC.Controllers
         [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
         public async Task<IActionResult> AddUserToCompany(int id, [FromBody]CompanyAddUserModel model)
         {
-            //TODO check percentage overflow 
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.MODEL_STATE_ERROR));

@@ -24,6 +24,7 @@ export class UserPasswordReset {
 
 export class UserVerifyToken {
     email: string;
+    name: string;
     token: string;
     password: string;
     password2: string;

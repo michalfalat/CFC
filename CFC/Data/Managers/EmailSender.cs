@@ -28,7 +28,6 @@ namespace CFC.Data.Managers
 
         public int SendEmail(string to, string subject, string body)
         {
-            //TODO
             Console.WriteLine("EMAIL SENDER");
             Console.WriteLine($"To: {to}");
             Console.WriteLine($"Subject: {subject}");

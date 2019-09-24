@@ -24,6 +24,7 @@ export class UserVerifyComponent implements OnInit {
     this.formData.token  = this.route.snapshot.params.token;
     this.apiService.getVerifyToken(this.formData.token).subscribe((response) => {
       this.formData.email = response.data.email;
+      this.formData.name = response.data.name;
       this.loadingData = false;
 
     }, error => {

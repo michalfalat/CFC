@@ -502,7 +502,7 @@ namespace CFC.Controllers
                 return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
             }
 
-            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email }));
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { email = token.Email, name = $"{existingUser.Name} {existingUser.Surname}" }));
         }
 
         private async Task<bool> IsAdmin()
@@ -565,7 +565,6 @@ namespace CFC.Controllers
                 var roleExist = await this._roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    //create the roles and seed them to the database: Question 1
                     roleResult = await this._roleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
