@@ -7,7 +7,7 @@ CFC is system, is used for control company financial state easily. Viewing  cash
   - Deposits/Withdraws
   - Table or chart preview
 
-![alt text](https://raw.githubusercontent.com/michalfalat/CFC/develop/CFC/images/img01.png)
+![alt text](https://raw.githubusercontent.com/michalfalat/CFC/develop/images/img01.png)
 
 
 # New Features
@@ -15,9 +15,11 @@ You can also:
   - Create your company deposits and withdrawals  with simple clicks and control your financial flow  showed in charts
   - Every user can view his proportion in the company. User can also withdraw his money from company without any special steps
   - Export statistics
+  - Enable dark mode
+  - Mobile optimisation
 
 
-![alt text](https://raw.githubusercontent.com/michalfalat/CFC/develop/CFC/images/img02.png)
+![alt text](https://raw.githubusercontent.com/michalfalat/CFC/develop/images/img02.png)
 
 ### Tech
 
