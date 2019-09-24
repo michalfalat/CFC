@@ -1,26 +1,45 @@
-dist: trusty
-sudo: true
-
-language: node_js
-node_js:
-  - '10'
-
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
-
-cache:
-  directories:
-    - ./node_modules
-before_install:
-  cd CFC/ClientApp
-
-install:
-  - npm install
-
-script:
-  - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
-  - npm run build
+ matrix:
+  include:
+    - dist: trusty
+      sudo: true
+      
+      language: node_js
+      node_js:
+        - '10'
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+      cache:
+        directories:
+          - ./node_modules
+      before_install:
+        cd CFC/ClientApp
+      install:
+        - npm install
+      script:
+        - npm run test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox
+        - npm run build
+    - dist: xenial
+      addons:
+        snaps:
+        - name: dotnet-sdk
+          classic: true
+          channel: latest/beta
+      sudo: required
+      language: csharp
+      mono: none
+      script:
+        - sudo snap alias dotnet-sdk.dotnet dotnet
+        - dotnet --version
+    - language: csharp
+      mono: none
+      script:
+          - dotnet --version
+          - dotnet restore
+          - dotnet build
+global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+    - DOTNET_CLI_TELEMETRY_OPTOUT=1

@@ -138,7 +138,9 @@ export class ChartDataComponent implements OnInit {
   }
 
   manageData() {
-    this.data = this.data.sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt)) ? 1 : -1);
+    if (this.data !== undefined) {
+      this.data = this.data.sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt)) ? 1 : -1);
+    }
     let groupedData = null;
     switch (this.groupedBy) {
       case 'day':
@@ -148,7 +150,7 @@ export class ChartDataComponent implements OnInit {
         break;
       case 'month':
         groupedData = _.groupBy(this.data, function (item) {
-          return `${new Date(item.createdAt.substring(0, 7)).getMonth()} ${new Date(item.createdAt.substring(0, 7)).getFullYear()}`;
+          return `${ new Date(item.createdAt.substring(0, 7)).getMonth() } ${ new Date(item.createdAt.substring(0, 7)).getFullYear() }`;
         });
         break;
       case 'year':
