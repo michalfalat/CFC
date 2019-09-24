@@ -34,13 +34,8 @@
       script:
         - sudo snap alias dotnet-sdk.dotnet dotnet
         - dotnet --version
-    - language: csharp
-      mono: none
-      script:
-          - sudo snap alias dotnet-sdk.dotnet dotnet
-          - dotnet --version
-          - dotnet restore
-          - dotnet build
+        - dotnet restore
+        - dotnet build
 global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
     - DOTNET_CLI_TELEMETRY_OPTOUT=1
