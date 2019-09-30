@@ -274,6 +274,9 @@ export class OfficeDetailComponent implements OnInit {
 
   toogleEditMode() {
     this.editMode = !this.editMode;
+    if (this.editMode === false) {
+      this.loadOffice();
+    }
   }
 
 }

@@ -430,4 +430,7 @@ mat-icon[matPrefix] {
 .card-panel img {
   max-height: 100px;
 }
+.hide-on-small-device {
+ display: none;
+}
 }

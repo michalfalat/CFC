@@ -392,5 +392,8 @@ export class CompanyDetailComponent implements OnInit, AfterContentInit {
 
   toogleEditMode() {
     this.editMode = !this.editMode;
+    if (this.editMode === false) {
+      this.loadCompany();
+    }
   }
 }

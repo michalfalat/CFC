@@ -83,6 +83,9 @@ export class UserDetailComponent implements OnInit {
 
   toogleEditMode() {
     this.editMode =  !this.editMode;
+    if (this.editMode === false) {
+      this.getUser();
+    }
   }
 
 }

@@ -148,6 +148,9 @@ export class ApiService {
     return this.baseUrl + `api/MoneyRecord/all/${ type }`;
   }
 
+  private getMoneyRecordsLabelsUrl() {
+    return this.baseUrl + `api/MoneyRecord/all/company/recordLabels`;
+  }
   private addMoneyRecordUrl() {
     return this.baseUrl + 'api/MoneyRecord';
   }
@@ -482,6 +485,10 @@ export class ApiService {
       catchError(error => {
         return throwError(error);
       }));
+  }
+
+  getMoneyRecordLabels(): any {
+    return this.http.get(this.getMoneyRecordsLabelsUrl(), this.headers);
   }
 
   getMoneyRecord(id): any {

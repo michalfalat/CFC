@@ -129,6 +129,29 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { records = recordsModels }));
         }
 
+        [HttpGet("all/company/recordLabels")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR_AND_OWNER)]
+        public async Task<IActionResult> GetRecordLabels()
+        {
+            var records = new List<MoneyRecord>();
+            var isAdmin = HttpContext.User.IsInRole(Constants.Roles.ADMININISTRATOR);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string type = "company";
+            if (isAdmin)
+            {
+                records = await this._moneyRecordManager.GetAll(type);
+            }
+            else
+            {
+                records = await this._moneyRecordManager.GetAllCompanyRecordsForOwner(type, userId);
+
+            }
+            var recordLabels = records.Select(r => r.Description).ToList();
+           
+
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { labels = recordLabels }));
+        }
+
 
 
         [HttpGet("all/personal")]

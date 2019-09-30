@@ -16,6 +16,8 @@ export class CompanyFinancialsAddComponent implements OnInit {
   public record: MoneyRecordAddModel;
   public companies: any[];
   public offices: any[];
+
+  public labels: string[];
   public loadingData = false;
 
   public editMode = false;
@@ -28,15 +30,16 @@ export class CompanyFinancialsAddComponent implements OnInit {
     private router: Router,
     public authService: AuthService,
     private route: ActivatedRoute) {
-      this.record = new MoneyRecordAddModel();
-      this.record.type = 'income';
+    this.record = new MoneyRecordAddModel();
+    this.record.type = 'income';
 
- }
+  }
 
   ngOnInit() {
     this.recordId = this.route.snapshot.params.id;
     this.loadCompanies();
     this.loadOffices();
+    this.loadLabels();
   }
 
   goBack() {
@@ -72,14 +75,24 @@ export class CompanyFinancialsAddComponent implements OnInit {
   loadRecordForEdit() {
     this.loadingData = true;
     this.apiService.getMoneyRecord(this.recordId).subscribe(response => {
-     this.record.companyId =  response.data.record.companyId;
-     this.record.officeId =  response.data.record.officeId;
-     this.record.description =  response.data.record.description;
-     this.record.created =  response.data.record.createdAt;
-     this.record.destinationType =  response.data.record.officeId !== null ? 'office' : 'company';
-     this.record.type =  response.data.record.type === 1 ? 'expense' : 'income';
-     this.record.amount =  response.data.record.amount;
-     this.loadingData = false;
+      this.record.companyId = response.data.record.companyId;
+      this.record.officeId = response.data.record.officeId;
+      this.record.description = response.data.record.description;
+      this.record.created = response.data.record.createdAt;
+      this.record.destinationType = response.data.record.officeId !== null ? 'office' : 'company';
+      this.record.type = response.data.record.type === 1 ? 'expense' : 'income';
+      this.record.amount = response.data.record.amount;
+      this.loadingData = false;
+
+    }, error => {
+      this.loadingData = false;
+      this.notifyService.processError(error);
+    });
+  }
+
+  loadLabels() {
+    this.apiService.getMoneyRecordLabels().subscribe(response => {
+      this.labels = response.data.labels;
 
     }, error => {
       this.loadingData = false;

@@ -9,17 +9,28 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-company-financials',
   templateUrl: './company-financials.component.html',
-  styleUrls: ['./company-financials.component.scss']
+  styleUrls: ['./company-financials.component.scss'],
+   animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('collapsed <=> expanded', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class CompanyFinancialsComponent implements OnInit {
   public loadingData = false;
   public recordList;
   public filteredCashflow;
   public allRecords;
+
+  public expandedElement: any;
 
   // filters
 
@@ -35,6 +46,8 @@ export class CompanyFinancialsComponent implements OnInit {
   constructor(private apiService: ApiService, public authService: AuthService, private router: Router,
     private notifyService: NotifyService, private translateService: TranslateService, public dialog: MatDialog) { }
 
+
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   ngOnInit() {
     this.getRecords();
   }
@@ -114,6 +127,15 @@ export class CompanyFinancialsComponent implements OnInit {
         this.removeRecord(element.id);
       }
     });
+  }
+
+  rowClicked(element){
+    if (window.innerWidth < 1000) {
+      this.expandedElement = this.expandedElement === element ? null : element;
+    } else {
+      this.expandedElement = null;
+      this.edit(element);
+    }
   }
 
   edit(element) {

@@ -43,6 +43,7 @@ import { PaginatorIntlService } from './custom-translations';
 import { IconSnackBarComponent } from './snackbar-container';
 import { PercentageDialogComponent } from './percentage-dialog/percentage-dialog.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { AuthService } from './services/auth.service';
 import { ApiService } from './services/api.service';
 import { PersonalFinancialsEditComponent } from './personal-financials-edit/personal-financials-edit.component';
@@ -81,10 +82,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ChartDataComponent,
     IconSnackBarComponent,
     PercentageDialogComponent,
-    PersonalFinancialsEditComponent,
+    PersonalFinancialsEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    MatMomentDateModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
@@ -283,6 +285,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     },
     { provide: MAT_DATE_LOCALE, useValue: 'sk'},
     { provide: APP_INITIALIZER, useFactory: authData, deps: [AuthService, ApiService], multi: true },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     CookieService,
     AuthGuard
   ],

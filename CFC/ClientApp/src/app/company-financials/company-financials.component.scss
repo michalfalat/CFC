@@ -1,0 +1,22 @@
+.detail-row {
+  height: 0;
+  border: none;
+}
+
+.detail-row .mat-cell {
+  border: none;
+}
+
+.detail-row:hover {
+  background-color: initial;
+  cursor: initial;
+}
+
+.expandable-row-table {
+    width: 100%;
+    opacity: 0.8;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

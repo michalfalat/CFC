@@ -80,32 +80,32 @@
   </div>
   <br>
   <div class="table-container">
-    <table mat-table [dataSource]="recordList" matSort class="basic-table wide-table">
+    <table mat-table [dataSource]="recordList" matSort class="basic-table " multiTemplateDataRows>
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="creator">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+        <th  class="hide-on-small-device" mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+        <td  class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
       </ng-container>
 
       <ng-container matColumnDef="companyName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+        <th class="hide-on-small-device" mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.companyName}} </td>
       </ng-container>
 
       <ng-container matColumnDef="officeName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'office-name' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+        <th class="hide-on-small-device" mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'office-name' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.officeName}} </td>
       </ng-container>
 
 
 
       <ng-container matColumnDef="description">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        <th class="hide-on-small-device" mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.description}} </td>
       </ng-container>
 
       <ng-container matColumnDef="amount">
@@ -131,9 +131,39 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'blocked-row': row.obsolete == true}">
-      </tr>
+      <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+            <div class="example-element-detail"
+                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+              <div class="">
+                <table class="expandable-row-table">
+                  <tr>
+                    <td> {{ 'created-by' | translate }}:</td>
+                    <td><strong>{{element.creatorName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'company-name' | translate }}:</td>
+                    <td><strong>{{element.companyName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'office-name' | translate }}:</td>
+                    <td><strong>{{element.officeName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'description' | translate }}:</td>
+                    <td><strong>{{element.description}}</strong></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="rowClicked(element)">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
     </table>
     <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
     <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0"
@@ -143,4 +173,5 @@
     </div>
   </div>
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
 </mat-card>

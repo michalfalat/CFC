@@ -70,9 +70,9 @@ export class ChartDataComponent implements OnInit {
         // barPercentage: 1.0,
         maxBarThickness: 200,
       }]
-        // gridLines: {
-        //   display: false
-        // },
+      // gridLines: {
+      //   display: false
+      // },
       // }], yAxes: [{
       //   stacked: true,
       // }]
@@ -151,7 +151,7 @@ export class ChartDataComponent implements OnInit {
         break;
       case 'month':
         groupedData = _.groupBy(this.data, function (item) {
-          return `${ new Date(item.createdAt.substring(0, 7)).toLocaleString('default', { month: 'long' })} ${ new Date(item.createdAt.substring(0, 7)).getFullYear() }`;
+          return `${ new Date(item.createdAt.substring(0, 7)).toLocaleString('default', { month: 'long' }) } ${ new Date(item.createdAt.substring(0, 7)).getFullYear() }`;
         });
         break;
       case 'year':
@@ -180,10 +180,10 @@ export class ChartDataComponent implements OnInit {
     });
     this.barChartLabels = Object.keys(groupedData);
     this.barChartData = [
-      { data: expensesArray, label: this.expenseLabel, backgroundColor: '#ce4949', hoverBackgroundColor: '#ce4949bb', stack: '1' },
-      { data: withdrawsArray, label: this.withdrawLabel, backgroundColor: '#c18443', hoverBackgroundColor: '#c18443bb', stack: '1' },
-      { data: incomesArray, label: this.incomeLabel, backgroundColor: '#69b148', hoverBackgroundColor: '#69b148bb', stack: '2' },
-      { data: depositsArray, label: this.depositLabel, backgroundColor: '#96b148', hoverBackgroundColor: '#96b148bb', stack: '2' }
+      { data: expensesArray, label: this.expenseLabel, backgroundColor: '#ce4949', hoverBackgroundColor: '#ce4949bb', stack: '1', borderColor: 'red', hoverBorderColor: 'red' },
+      { data: withdrawsArray, label: this.withdrawLabel, backgroundColor: '#c18443', hoverBackgroundColor: '#c18443bb', stack: '1', borderColor: 'orange', hoverBorderColor: 'orange' },
+      { data: incomesArray, label: this.incomeLabel, backgroundColor: '#69b148', hoverBackgroundColor: '#69b148bb', stack: '2', borderColor: 'seagreen', hoverBorderColor: 'seagreen' },
+      { data: depositsArray, label: this.depositLabel, backgroundColor: '#96b148', hoverBackgroundColor: '#96b148bb', stack: '2', borderColor: 'yellowgreen', hoverBorderColor: 'yellowgreen' }
     ];
   }
 
