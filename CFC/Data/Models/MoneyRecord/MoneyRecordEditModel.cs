@@ -22,7 +22,7 @@ namespace CFC.Data.Models
         public DateTime Created { get; set; }
 
         [Required]
-        [MinLength(5)]
+        [MinLength(3)]
         public string Description { get; set; }
 
     }

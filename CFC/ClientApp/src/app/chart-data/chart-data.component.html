@@ -23,8 +23,9 @@
         </span>
       </div>
     <div>
-      <div style="display: block">
-        <canvas baseChart
+        <div class="chart-container" style="position: relative; height:40vh">
+            <canvas baseChart
+        style="height: 100vh !important"
           [datasets]="barChartData"
           [labels]="barChartLabels"
           [options]="barChartOptions"
@@ -32,6 +33,17 @@
           [legend]="barChartLegend"
           [chartType]="barChartType">
         </canvas>
-      </div>
+        </div>
+      <!-- <div style="display: block; height:20rem !important">
+        <canvas baseChart
+        style="height: 20rem !important"
+          [datasets]="barChartData"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [chartType]="barChartType">
+        </canvas>
+      </div> -->
     </div>
   </div>

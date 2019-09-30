@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CFC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190809131644_companyOffice")]
-    partial class companyOffice
+    [Migration("20190926130639_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -30,6 +30,8 @@ namespace CFC.Migrations
                     b.Property<int>("CompanyId");
 
                     b.Property<decimal>("Percentage");
+
+                    b.Property<int>("Role");
 
                     b.Property<string>("UserId");
 
@@ -84,11 +86,48 @@ namespace CFC.Migrations
                     b.ToTable("CompanyOffices");
                 });
 
+            modelBuilder.Entity("CFC.Data.Entities.MoneyRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount");
+
+                    b.Property<int?>("CompanyId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("CreatorId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("EditedAt");
+
+                    b.Property<bool>("Obsolete");
+
+                    b.Property<int?>("OfficeId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("OfficeId");
+
+                    b.ToTable("MoneyRecords");
+                });
+
             modelBuilder.Entity("CFC.Data.Entities.Office", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatorId");
 
                     b.Property<string>("Description");
 
@@ -101,6 +140,8 @@ namespace CFC.Migrations
                     b.Property<int>("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Offices");
                 });
@@ -347,6 +388,28 @@ namespace CFC.Migrations
                         .WithMany("Companies")
                         .HasForeignKey("OfficeId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CFC.Data.Entities.MoneyRecord", b =>
+                {
+                    b.HasOne("CFC.Data.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("CFC.Data.Entities.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("CFC.Data.Entities.Office", "Office")
+                        .WithMany()
+                        .HasForeignKey("OfficeId");
+                });
+
+            modelBuilder.Entity("CFC.Data.Entities.Office", b =>
+                {
+                    b.HasOne("CFC.Data.Entities.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

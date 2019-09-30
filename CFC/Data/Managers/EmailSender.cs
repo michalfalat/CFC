@@ -28,34 +28,43 @@ namespace CFC.Data.Managers
 
         public int SendEmail(string to, string subject, string body)
         {
-            Console.WriteLine("EMAIL SENDER");
-            Console.WriteLine($"To: {to}");
-            Console.WriteLine($"Subject: {subject}");
-            Console.WriteLine($"Body: {body}");
+            try
+            {
+                Console.WriteLine("EMAIL SENDER");
+                Console.WriteLine($"To: {to}");
+                Console.WriteLine($"Subject: {subject}");
+                Console.WriteLine($"Body: {body}");
 
-            string fromPassword = _configuration.GetValue<string>("EmailClient:Password");
-            string fromEmail = _configuration.GetValue<string>("EmailClient:Address");
-            var fromAddress = new MailAddress(fromEmail, "CFC administrator");
-            var toAddress = new MailAddress(to, "User");
+                string fromPassword = _configuration.GetValue<string>("EmailClient:Password");
+                string fromEmail = _configuration.GetValue<string>("EmailClient:Address");
+                var fromAddress = new MailAddress(fromEmail, "CFC administrator");
+                var toAddress = new MailAddress(to, "User");
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            };
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            {
-                message.IsBodyHtml = true;
-                smtp.Send(message);
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    message.IsBodyHtml = true;
+                    smtp.Send(message);
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw e;
+            }
+            
 
             return 1;
         }
@@ -65,7 +74,8 @@ namespace CFC.Data.Managers
             var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
             template = template.Replace("{headerText}", "Reset hesla")
                                 .Replace("{mainText}", "Vaše heslo si môžete zmeniť na nasledujúcom odkaze:")
-                                .Replace("{buttonLink}", $"https://localhost:44388/reset-password/{token.Link}")
+                                //.Replace("{buttonLink}", $"https://localhost:44388/reset-password/{token.Link}")
+                                .Replace("{buttonLink}", $"http://5.189.173.85/reset-password/{token.Link}")
                                 .Replace("{buttonText}", "Zmeniť heslo");
             this.SendEmail(to, "CFC - Reset hesla", template);
         }
@@ -75,7 +85,8 @@ namespace CFC.Data.Managers
             var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
             template = template.Replace("{headerText}", "Overenie emailovej adresy pre CFC")
                                 .Replace("{mainText}", "Táto emailová adresa bola zaregistrovaná v systéme CFC. Pre potvrdenie emailu prosím kliknite na nasledujúci odkaz:")
-                                .Replace("{buttonLink}", $"https://localhost:44388/verify/{token.Token}")
+                                //.Replace("{buttonLink}", $"https://localhost:44388/verify/{token.Token}")
+                                .Replace("{buttonLink}", $"http://5.189.173.85/verify/{token.Token}")
                                 .Replace("{buttonText}", "Overenie emailu");
             this.SendEmail(to, "CFC - Overenie emailovej adresy", template);
         }

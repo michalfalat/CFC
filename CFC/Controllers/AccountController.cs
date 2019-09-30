@@ -53,6 +53,22 @@ namespace CFC.Controllers
             this._mapper = mapper;
         }
 
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> TestEmail()
+        {
+            try
+            {
+                var result = this._emailSender.SendEmail("falat.mich@gmail.com", "TEst", $"Test email - {DateTime.Now.ToString()}");
+                return Ok(new { data = "Email sent!!! - " + result.ToString() });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { data = "Error - " + ex.ToString(), exception = ex });
+                throw;
+            }
+        }
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<IActionResult> GenerateDefaultUser()

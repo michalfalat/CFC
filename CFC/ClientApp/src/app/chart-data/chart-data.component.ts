@@ -3,7 +3,6 @@ import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
 import { _ } from 'underscore';
-import { groupBy } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { DarkThemeService } from '../services/dark-theme.service';
 
@@ -46,6 +45,7 @@ export class ChartDataComponent implements OnInit {
           for (let i = 0; i < data.datasets.length; i++) {
             total += Number(data.datasets[i].data[tooltipItem.index]);
           }
+          // tslint:disable-next-line:triple-equals
           if (tooltipItem.datasetIndex != data.datasets.length - 1) {
             return `${ group } : ${ valor }€`;
           } else {
@@ -62,19 +62,20 @@ export class ChartDataComponent implements OnInit {
       onClick: (e) => e.stopPropagation()
     },
     responsive: true,
+    maintainAspectRatio: false,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
       xAxes: [{
-        stacked: true,
-        categoryPercentage: 0.5,
-        barPercentage: 1.0,
-        maxBarThickness: 100,
-        gridLines: {
-          display: false
-        },
-      }], yAxes: [{
-        stacked: true,
+        // categoryPercentage: 1.0,
+        // barPercentage: 1.0,
+        maxBarThickness: 200,
       }]
+        // gridLines: {
+        //   display: false
+        // },
+      // }], yAxes: [{
+      //   stacked: true,
+      // }]
     },
     plugins: {
       datalabels: {
@@ -150,7 +151,7 @@ export class ChartDataComponent implements OnInit {
         break;
       case 'month':
         groupedData = _.groupBy(this.data, function (item) {
-          return `${ new Date(item.createdAt.substring(0, 7)).getMonth() } ${ new Date(item.createdAt.substring(0, 7)).getFullYear() }`;
+          return `${ new Date(item.createdAt.substring(0, 7)).toLocaleString('default', { month: 'long' })} ${ new Date(item.createdAt.substring(0, 7)).getFullYear() }`;
         });
         break;
       case 'year':

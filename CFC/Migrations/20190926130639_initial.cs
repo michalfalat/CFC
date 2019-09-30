@@ -43,7 +43,9 @@ namespace CFC.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true)
+                    Surname = table.Column<string>(nullable: true),
+                    Blocked = table.Column<bool>(nullable: true),
+                    Obsolete = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +58,11 @@ namespace CFC.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    IdentificationNumber = table.Column<string>(nullable: true),
+                    RegistrationDate = table.Column<DateTimeOffset>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Obsolete = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,17 +70,35 @@ namespace CFC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Offices",
+                name: "PasswordResetTokens",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Token = table.Column<string>(nullable: true),
+                    Link = table.Column<Guid>(nullable: false),
+                    ValidTo = table.Column<DateTimeOffset>(nullable: false),
+                    IsUsed = table.Column<bool>(nullable: false),
+                    UserEmail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Offices", x => x.Id);
+                    table.PrimaryKey("PK_PasswordResetTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VerifyUserTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Email = table.Column<string>(nullable: true),
+                    Obsolete = table.Column<bool>(nullable: false),
+                    Token = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VerifyUserTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,26 +208,51 @@ namespace CFC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicatiionUserCompanies",
+                name: "Offices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    CreatorId = table.Column<string>(nullable: true),
+                    Obsolete = table.Column<bool>(nullable: false),
+                    RegistrationDate = table.Column<DateTimeOffset>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Offices_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserCompany",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: true),
-                    Precentage = table.Column<decimal>(nullable: false)
+                    CompanyId = table.Column<int>(nullable: false),
+                    Percentage = table.Column<decimal>(nullable: false),
+                    Role = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicatiionUserCompanies", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUserCompany", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApplicatiionUserCompanies_Companies_CompanyId",
+                        name: "FK_ApplicationUserCompany_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicatiionUserCompanies_AspNetUsers_UserId",
+                        name: "FK_ApplicationUserCompany_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -237,14 +286,53 @@ namespace CFC.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MoneyRecords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedAt = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<string>(nullable: true),
+                    CompanyId = table.Column<int>(nullable: true),
+                    OfficeId = table.Column<int>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Obsolete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoneyRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MoneyRecords_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MoneyRecords_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MoneyRecords_Offices_OfficeId",
+                        column: x => x.OfficeId,
+                        principalTable: "Offices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicatiionUserCompanies_CompanyId",
-                table: "ApplicatiionUserCompanies",
+                name: "IX_ApplicationUserCompany_CompanyId",
+                table: "ApplicationUserCompany",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicatiionUserCompanies_UserId",
-                table: "ApplicatiionUserCompanies",
+                name: "IX_ApplicationUserCompany_UserId",
+                table: "ApplicationUserCompany",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -295,12 +383,32 @@ namespace CFC.Migrations
                 name: "IX_CompanyOffices_OfficeId",
                 table: "CompanyOffices",
                 column: "OfficeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MoneyRecords_CompanyId",
+                table: "MoneyRecords",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MoneyRecords_CreatorId",
+                table: "MoneyRecords",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MoneyRecords_OfficeId",
+                table: "MoneyRecords",
+                column: "OfficeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offices_CreatorId",
+                table: "Offices",
+                column: "CreatorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicatiionUserCompanies");
+                name: "ApplicationUserCompany");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -321,16 +429,25 @@ namespace CFC.Migrations
                 name: "CompanyOffices");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "MoneyRecords");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "PasswordResetTokens");
+
+            migrationBuilder.DropTable(
+                name: "VerifyUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "Offices");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

@@ -28,7 +28,7 @@
           </button>
         </span>
         <span>
-          <button mat-icon-button [routerLink]="authService.getPath('/personalRecords/add')"
+          <button mat-icon-button [routerLink]="authService.getPath('/personalRecords/add/' + company.companyId)"
             matTooltip="{{ 'add-deposit-withdraw' | translate }}">
             <mat-icon matListIcon>add</mat-icon>
           </button>

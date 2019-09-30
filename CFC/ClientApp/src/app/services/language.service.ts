@@ -16,7 +16,7 @@ export class LanguageService {
     const browserLang = this.translateService.getBrowserLang();
     const selectedLang = cookieLang !== '' ? cookieLang : browserLang;
 
-    this.translateService.use(browserLang.match(/en|sk/) ? selectedLang : 'en');
+    this.translateService.use(browserLang.match(/en|sk/) ? selectedLang : 'sk');
   }
 
   changeLanguage(lang) {

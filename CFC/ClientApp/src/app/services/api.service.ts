@@ -197,6 +197,10 @@ export class ApiService {
     }
   }
 
+  sendTestMail(): any {
+    return this.http.get(this.baseUrl + `api/account/testemail`, this.headers);
+  }
+
   loadAuthData(token): any {
     const headers = new HttpHeaders();
     headers.append('Authorization', `Bearer ${ token }`);
