@@ -5,6 +5,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MoneyRecordAddModel } from '../models/money-record-models';
 import { AuthService } from '../services/auth.service';
+import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-company-financials-add',
@@ -18,6 +21,8 @@ export class CompanyFinancialsAddComponent implements OnInit {
   public offices: any[];
 
   public labels: string[];
+  public descriptionControl = new FormControl();
+  public filteredLabels: Observable<string[]>;
   public loadingData = false;
 
   public editMode = false;
@@ -93,6 +98,7 @@ export class CompanyFinancialsAddComponent implements OnInit {
   loadLabels() {
     this.apiService.getMoneyRecordLabels().subscribe(response => {
       this.labels = response.data.labels;
+      this.initAutocomplete();
 
     }, error => {
       this.loadingData = false;
@@ -126,6 +132,20 @@ export class CompanyFinancialsAddComponent implements OnInit {
       this.loadingData = false;
       this.notifyService.processError(error);
     });
+  }
+
+  initAutocomplete() {
+    this.filteredLabels = this.descriptionControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.labels.filter(option => option.toLowerCase().includes(filterValue));
   }
 
 }

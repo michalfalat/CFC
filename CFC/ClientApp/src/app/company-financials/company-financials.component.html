@@ -81,6 +81,13 @@
   <br>
   <div class="table-container">
     <table mat-table [dataSource]="recordList" matSort class="basic-table " multiTemplateDataRows>
+      <ng-container matColumnDef="icon">
+            <th class="show-on-small-device" mat-header-cell *matHeaderCellDef> &nbsp;</th>
+            <td class="show-on-small-device expanded-icon" mat-cell *matCellDef="let element">
+              <mat-icon class="transparent expanded-icon">keyboard_arrow_down</mat-icon>
+              <mat-icon class="transparent expand-icon">keyboard_arrow_right</mat-icon>
+             </td>
+      </ng-container>
       <ng-container matColumnDef="createdAt">
         <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
@@ -133,7 +140,7 @@
 
       <ng-container matColumnDef="expandedDetail">
           <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-            <div class="example-element-detail"
+            <div class="element-detail"
                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
               <div class="">
                 <table class="expandable-row-table">
@@ -160,7 +167,7 @@
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-            [class.example-expanded-row]="expandedElement === element"
+            [class.expanded-row]="expandedElement === element"
             (click)="rowClicked(element)">
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>

@@ -60,11 +60,11 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="{{'description' | translate }}" name="description" [(ngModel)]="record.description" [matAutocomplete]="autocompleteCOntainer"
-        required minlength="3">
+      <input [formControl]="descriptionControl" matInput placeholder="{{'description' | translate }}" name="description" [(ngModel)]="record.description" [matAutocomplete]="autocompleteCOntainer"
+        required minlength="3" >
     </mat-form-field>
     <mat-autocomplete #autocompleteCOntainer="matAutocomplete">
-      <mat-option *ngFor="let label of labels" [value]="label">{{label}}</mat-option>
+      <mat-option *ngFor="let label of filteredLabels | async" [value]="label">{{label}}</mat-option>
     </mat-autocomplete>
     <mat-form-field class="full-width">
       <span matPrefix

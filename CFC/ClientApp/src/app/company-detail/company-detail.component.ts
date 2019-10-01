@@ -356,7 +356,7 @@ export class CompanyDetailComponent implements OnInit, AfterContentInit {
       const companyOffice = this.company.offices.find(a => a.officeId === element.officeId);
       if (companyOffice !== undefined) {
         const percentage = companyOffice.percentage;
-        return element.amount / 100 * percentage;
+        return Math.round(element.amount / 100 * percentage * 1e4) / 1e4;
 
       }
     }

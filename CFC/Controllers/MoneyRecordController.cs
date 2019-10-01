@@ -146,7 +146,7 @@ namespace CFC.Controllers
                 records = await this._moneyRecordManager.GetAllCompanyRecordsForOwner(type, userId);
 
             }
-            var recordLabels = records.Select(r => r.Description).ToList();
+            var recordLabels = records.Select(r => r.Description).Distinct().ToList();
            
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { labels = recordLabels }));

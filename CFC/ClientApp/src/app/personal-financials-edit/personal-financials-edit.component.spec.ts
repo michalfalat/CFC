@@ -10,6 +10,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 import { PersonalFinancialsComponent } from '../personal-financials/personal-financials.component';
 import { PersonalFinancialsEditComponent } from './personal-financials-edit.component';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 describe('PersonalFinancialsEditComponent', () => {
   let component: PersonalFinancialsEditComponent;
@@ -28,6 +29,7 @@ describe('PersonalFinancialsEditComponent', () => {
         HttpClientModule,
         ChartsModule,
         NoopAnimationsModule,
+        MatMomentDateModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] },

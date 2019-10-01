@@ -359,6 +359,25 @@ mat-icon[matPrefix] {
 .date-filter-picker {
   max-width: 110px;
 }
+.show-on-small-device {
+  display: none;
+}
+
+tr.expanded-row td .expanded-icon {
+  display: block;
+}
+
+tr.expanded-row td .expand-icon {
+  display: none;
+}
+
+tr td .expanded-icon {
+  display: none;
+}
+
+tr td .expand-icon {
+  display: block;
+}
 
 @media (max-width: 599px) {
 .mainSection {
@@ -432,5 +451,12 @@ mat-icon[matPrefix] {
 }
 .hide-on-small-device {
  display: none;
+}
+.show-on-small-device {
+  display: block;
+}
+
+td.show-on-small-device, th.show-on-small-device  {
+  display: table-cell;
 }
 }

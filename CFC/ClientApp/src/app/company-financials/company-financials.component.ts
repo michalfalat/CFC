@@ -17,10 +17,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   styleUrls: ['./company-financials.component.scss'],
    animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({height: '0px', minHeight: '0', })),
+      state('expanded', style({height: '100px', minHeight: '100px', })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-      transition('collapsed <=> expanded', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
@@ -38,7 +37,7 @@ export class CompanyFinancialsComponent implements OnInit {
   public filterTo = null;
   public filterType = 'all';
   public filterKeyword = null;
-  public displayedColumns: string[] = ['createdAt', 'creator', 'companyName', 'officeName', 'description', 'amount', 'actions'];
+  public displayedColumns: string[] = ['icon', 'createdAt', 'creator', 'companyName', 'officeName', 'description', 'amount', 'actions'];
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;

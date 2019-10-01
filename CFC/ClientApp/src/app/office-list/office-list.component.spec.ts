@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 describe('OfficeListComponent', () => {
   let component: OfficeListComponent;
@@ -25,6 +26,7 @@ describe('OfficeListComponent', () => {
         HttpClientModule,
         ChartsModule,
         NoopAnimationsModule,
+        MatMomentDateModule,
       ],
       providers: [
         { provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href, deps: [] },
