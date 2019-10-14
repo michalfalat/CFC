@@ -170,6 +170,7 @@
     "group-by-day": "Podľa dní",
     "group-by-month": "Podľa mesiacov",
     "group-by-year": "Podľa rokov",
+    "group-by-all": "Nezoskupovať",
     "company-status-info": "Status firmy môže mať nasledujúce hodnoty:\nAktívna - firma funguje bez akýchkoľvek obmedzení.\nZrušená - nieje možné vykonávať osobné vklady a výbery.\nBlokovaná - nieje možné vykonávať osobné vklady a výbery, ani firemnné príjmy a výdaje.",
     "view": "Zobrazenie",
     "table-view": "Tabuľka",

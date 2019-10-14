@@ -10,6 +10,14 @@
       <span class="header"> {{ 'office' | translate }} <strong>{{ office?.name }}</strong> </span>
     </span>
     <span class="spacer"></span>
+    <span>
+        <span class="money-state-container">
+          <span> {{ 'actual-money-state' | translate }}: </span>
+          <span
+            [ngClass]="{'red-text': office?.actualCash < 0 , 'green-text': office?.actualCash > 0  }"><strong>{{ office?.actualCash > 0 ? '+' : '' }}{{office?.actualCash}}
+              &euro;</strong></span>
+        </span>
+      </span>
   </div>
   <div *ngIf="percentageNotFilledWarning" class="warning-container">
     <mat-icon class="transparent">info</mat-icon>

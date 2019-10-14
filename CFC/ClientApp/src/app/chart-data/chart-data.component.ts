@@ -16,7 +16,7 @@ export class ChartDataComponent implements OnInit {
   @Input() public type;
   @Input() public companyOffices = [];
 
-  public groupedBy = 'day';
+  public groupedBy = 'month';
 
   private depositLabel = 'Deposits';
   private withdrawLabel = 'Withdraws';
@@ -28,16 +28,6 @@ export class ChartDataComponent implements OnInit {
     tooltips: {
       mode: 'label',
       callbacks: {
-        // title: function(tooltipItems, data) {
-        //     return 'hhh';//_this.chart.data.labels[tooltipItems[0].index];
-        // },
-        // footer: function(tooltipItems, data) {
-        //     let total = 0;
-        //     for (let i = 0; i < tooltipItems.length; i++) {
-        //         total += parseInt(tooltipItems[i].yLabel + '', 10);
-        //     }
-        //     return 'Total: ' + total;
-        // }
         label: function (tooltipItem, data) {
           const group = data.datasets[tooltipItem.datasetIndex].label;
           const valor = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
@@ -142,8 +132,12 @@ export class ChartDataComponent implements OnInit {
     if (this.data !== undefined) {
       this.data = this.data.sort((a, b) => (new Date(a.createdAt) > new Date(b.createdAt)) ? 1 : -1);
     }
+    const allLabel = this.translateService.instant('all');
     let groupedData = null;
     switch (this.groupedBy) {
+      case 'all':
+        groupedData = { [allLabel] : this.data };
+        break;
       case 'day':
         groupedData = _.groupBy(this.data, function (item) {
           return new Date(item.createdAt.substring(0, 10)).toLocaleDateString();

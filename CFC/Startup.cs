@@ -7,10 +7,12 @@ using CFC.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.SpaServices.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO.Compression;
 using System.Text;
 
 namespace CFC
@@ -36,7 +39,15 @@ namespace CFC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure Compression level
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
 
+            // Add Response compression services
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.EnableForHttps = true;
+            });
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -138,23 +149,16 @@ namespace CFC
                 context.Database.Migrate();
             }
             app.UseHttpsRedirection();
+            app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions()
             {
-                OnPrepareResponse = (context) =>
-                {
-                    context.Context.Response.Headers["Cache-Control"] = "no-cache, no-store";
-                    context.Context.Response.Headers["Pragma"] = "no-cache";
-                    context.Context.Response.Headers["Expires"] = "-1";
-                }
+               
             });
+
+            app.UseResponseCompression();
             app.UseSpaStaticFiles(new StaticFileOptions()
             {
-                OnPrepareResponse = (context) =>
-                {
-                    context.Context.Response.Headers["Cache-Control"] = "no-cache, no-store";
-                    context.Context.Response.Headers["Pragma"] = "no-cache";
-                    context.Context.Response.Headers["Expires"] = "-1";
-                }
+                
             });
             app.UseAuthentication();
            // app.UseIdentityServer();

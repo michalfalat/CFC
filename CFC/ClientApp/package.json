@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --aot --prod",
+    "build": "ng build --aot --prod  && gzip-all \"dist/*.*\"",
     "build:ssr": "ng run CFC:server:dev",
     "test": "ng test",
     "lint": "ng lint",
@@ -34,6 +34,9 @@
     "chart.js": "^2.8.0",
     "chartjs-plugin-datalabels": "^0.7.0",
     "core-js": "^3.2.1",
+    "gulp": "^4.0.2",
+    "gulp-gzip": "^1.4.2",
+    "gzip-all": "^1.0.0",
     "hammerjs": "^2.0.8",
     "jquery": "3.4.1",
     "ng2-charts": "^2.3.0",
