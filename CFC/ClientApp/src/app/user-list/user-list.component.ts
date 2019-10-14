@@ -48,6 +48,15 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['/admin/users/edit/' + id ]);
   }
 
+  resendEmail(id) {
+    this.apiService.resendConfirmationEmail(id).subscribe(response => {
+      this.notifyService.info(this.translateService.instant('email-resent'));
+    }, error => {
+      this.loadingData = false;
+      this.notifyService.error(this.translateService.instant('error-sending-email'));
+    });
+  }
+
   blockUser(element) {
     const id = element.id;
     const block  = element.blocked ? false : true;

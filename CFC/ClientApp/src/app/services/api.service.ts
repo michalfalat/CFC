@@ -73,6 +73,10 @@ export class ApiService {
     return this.baseUrl + 'api/Account/VerifyUser';
   }
 
+  private resendConfirmationEmailUrl(id) {
+    return this.baseUrl + `api/Account/ResendEmail/${id}`;
+  }
+
   private getVerifyTokenUrl(token) {
     return this.baseUrl + `api/Account/GetVerifyToken/${ token }`;
   }
@@ -294,6 +298,13 @@ export class ApiService {
 
   verifyUser(data: UserVerifyToken) {
     return this.http.post(this.verifyUserUrl(), data, this.headers).pipe(
+      catchError(error => {
+        return throwError(error);
+      }));
+  }
+
+  resendConfirmationEmail(id: string) {
+    return this.http.post(this.resendConfirmationEmailUrl(id), {}, this.headers).pipe(
       catchError(error => {
         return throwError(error);
       }));

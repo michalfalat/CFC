@@ -76,6 +76,8 @@ namespace CFC
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton(Configuration);
 
+            services.AddHttpContextAccessor();
+
             //services.AddIdentityServer().AddDeveloperSigningCredential()
             //   // this adds the operational data from DB (codes, tokens, consents)
             //   .AddOperationalStore(options =>

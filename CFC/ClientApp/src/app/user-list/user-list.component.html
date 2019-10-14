@@ -70,6 +70,9 @@
           <button mat-icon-button matTooltip="{{ 'user-detail' | translate }}" (click)="goToDetail(element.id)">
             <mat-icon class="transparent">info</mat-icon>
           </button>
+          <button *ngIf="element.emailConfirmed === false" mat-icon-button matTooltip="{{ 'email-send-confirmation' | translate }}" (click)="$event.stopPropagation();resendEmail(element.id)">
+              <mat-icon class="transparent">cached</mat-icon>
+            </button>
           <button *ngIf="element.role !== 'Administrator'" mat-icon-button
             matTooltip="{{ (element.blocked ? 'unblock-user' : 'block-user') | translate }}"
             (click)="$event.stopPropagation();blockUser(element)">

@@ -122,6 +122,11 @@ namespace CFC.Data.Managers
             return this._repository.VerifyTokenRepository.FindByCondition(u => u.Token == id).FirstOrDefaultAsync();
         }
 
+        public Task<VerifyUserToken> GetVerifyTokenByUserEmail(string email)
+        {
+            return this._repository.VerifyTokenRepository.FindByCondition(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task MarkVerifyUserTokenAsUsed(int id)
         {
             var token = await this._repository.VerifyTokenRepository.FindByCondition(t => t.Id == id).FirstOrDefaultAsync();

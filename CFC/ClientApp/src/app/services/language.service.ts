@@ -9,19 +9,21 @@ import { DateAdapter } from '@angular/material/core';
 export class LanguageService {
 
   constructor(private translateService: TranslateService, private cookieService: CookieService, private dateAdapter: DateAdapter<any>) {
-
     this.translateService.addLangs(['en', 'sk']);
     this.translateService.setDefaultLang('sk');
     const cookieLang = this.cookieService.get('language');
-    const browserLang = this.translateService.getBrowserLang();
+    const browserLang = 'sk'; // this.translateService.getBrowserLang();
     const selectedLang = cookieLang !== '' ? cookieLang : browserLang;
 
     this.translateService.use(browserLang.match(/en|sk/) ? selectedLang : 'sk');
   }
 
   changeLanguage(lang) {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear() + 10;
+    currentDate.setFullYear(year);
     this.translateService.use(lang);
-    this.cookieService.set('language', lang);
+    this.cookieService.set('language', lang, currentDate, '/');
     this.dateAdapter.setLocale(this.getLanguage());
   }
 

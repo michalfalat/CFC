@@ -477,6 +477,29 @@ namespace CFC.Controllers
             return Ok(new ResponseDTO(ResponseDTOStatus.OK));
         }
 
+        [HttpPost("[action]/{id}")]
+        [Authorize(Roles = Constants.Roles.ADMININISTRATOR)]
+        public async Task<IActionResult> ResendEmail(string id)
+        {
+            var user = this._userManager.Users.SingleOrDefault(r => r.Id == id);
+            if (user == null)
+            {
+                return BadRequest(new ResponseDTO(ResponseDTOStatus.ERROR, ResponseDTOErrorLabel.USER_NOT_FOUND));
+            }
+            if (user.EmailConfirmed == false)
+            {
+                var token = await this._applicationUserManager.GetVerifyTokenByUserEmail(user.Email);
+                await this._applicationUserManager.MarkVerifyUserTokenAsUsed(token.Id);
+                var newToken = new VerifyUserToken();
+                newToken.Email = user.Email;
+                newToken.Obsolete = false;
+                newToken.Token = Guid.NewGuid().ToString();
+                this._applicationUserManager.CreateVerifyUserToken(newToken);
+                this._emailSender.SendVerifyToken(user.Email, newToken);
+            }           
+            return Ok(new ResponseDTO(ResponseDTOStatus.OK));
+        }
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<IActionResult> VerifyUser([FromBody]VerifyUserModel model)

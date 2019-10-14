@@ -8,6 +8,7 @@ using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using CFC.Data.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace CFC.Data.Managers
 {
@@ -15,10 +16,12 @@ namespace CFC.Data.Managers
     {
         private IHostingEnvironment _hostingEnvironment;
         private IConfiguration _configuration;
-        public EmailSender(IConfiguration configuration, IHostingEnvironment environment)
+        IHttpContextAccessor _httpContextAccessor;
+        public EmailSender(IConfiguration configuration, IHostingEnvironment environment, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _hostingEnvironment = environment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string GetEmailTemplate(string path)
@@ -61,6 +64,7 @@ namespace CFC.Data.Managers
             }
             catch (Exception e)
             {
+
                 Console.WriteLine(e.Message);
                 throw e;
             }
@@ -71,22 +75,22 @@ namespace CFC.Data.Managers
 
         public void SendPasswordResetToken(string to, PasswordResetToken token)
         {
+            var url = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
             var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
             template = template.Replace("{headerText}", "Reset hesla")
                                 .Replace("{mainText}", "Vaše heslo si môžete zmeniť na nasledujúcom odkaze:")
-                                //.Replace("{buttonLink}", $"https://localhost:44388/reset-password/{token.Link}")
-                                .Replace("{buttonLink}", $"http://5.189.173.85/reset-password/{token.Link}")
+                                .Replace("{buttonLink}", $"{url}/reset-password/{token.Link}")
                                 .Replace("{buttonText}", "Zmeniť heslo");
             this.SendEmail(to, "CFC - Reset hesla", template);
         }
 
         public void SendVerifyToken(string to, VerifyUserToken token)
         {
+            var url = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
             var template = this.GetEmailTemplate("Assets\\EmailTemplates\\template1.html");
             template = template.Replace("{headerText}", "Overenie emailovej adresy pre CFC")
                                 .Replace("{mainText}", "Táto emailová adresa bola zaregistrovaná v systéme CFC. Pre potvrdenie emailu prosím kliknite na nasledujúci odkaz:")
-                                //.Replace("{buttonLink}", $"https://localhost:44388/verify/{token.Token}")
-                                .Replace("{buttonLink}", $"http://5.189.173.85/verify/{token.Token}")
+                                .Replace("{buttonLink}", $"{url}/verify/{token.Token}")
                                 .Replace("{buttonText}", "Overenie emailu");
             this.SendEmail(to, "CFC - Overenie emailovej adresy", template);
         }

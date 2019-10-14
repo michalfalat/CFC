@@ -20,6 +20,9 @@ namespace CFC.Data.Managers
 
         Task<VerifyUserToken> GetVerifyToken(string id);
 
+
+        Task<VerifyUserToken> GetVerifyTokenByUserEmail(string email);
+
         Task MarkPasswordResetTokenAsUsed(int id);
 
 
