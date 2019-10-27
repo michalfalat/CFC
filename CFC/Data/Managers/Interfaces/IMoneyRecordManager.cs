@@ -27,5 +27,7 @@ namespace CFC.Data.Managers
         Task<List<MoneyRecord>> GetDepositsForOwner(string userId);
         Task<List<MoneyRecord>> GetAllPersonalForOwner(string userId);
 
+        List<KeyValuePair<DateTimeOffset, decimal>> GetHistoryForCompany(int companyId, List<MoneyRecord> records, int months);
+
     }
 }

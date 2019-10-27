@@ -144,6 +144,7 @@ namespace CFC.Controllers
             var recordsModels = this._mapper.Map<List<MoneyRecordViewModel>>(records);
             companyModel.Cashflow = recordsModels;
             companyModel.ActualCash = this._moneyRecordManager.SumRecordsForCompany(company.Id, records);
+            companyModel.History = this._moneyRecordManager.GetHistoryForCompany(company.Id, records, 24);
             companyModel.CurrentRole = isAdmin ? CompanyOwnerRole.EXECUTIVE : currentUserOwner.Role;
 
             return Ok(new ResponseDTO(ResponseDTOStatus.OK, data: new { company = companyModel }));

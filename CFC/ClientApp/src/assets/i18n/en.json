@@ -198,7 +198,8 @@
     "from": "From",
     "to": "To",
     "keyword": "Keyword",
-    "current-month-status": "Status for month"
+    "current-month-status": "Status for month",
+    "history-info": "Cash flow of every month from the past (24 months). Records do not include personal deposits and withdraws"
 
 
 

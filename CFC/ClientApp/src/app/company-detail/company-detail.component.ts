@@ -396,4 +396,8 @@ export class CompanyDetailComponent implements OnInit, AfterContentInit {
       this.loadCompany();
     }
   }
+
+  formatDate(month) {
+    return `${ new Date(month).toLocaleString('default', { month: 'long' }) } ${ new Date(month).getFullYear()}`;
+  }
 }

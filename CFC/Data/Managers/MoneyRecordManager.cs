@@ -266,6 +266,24 @@ namespace CFC.Data.Managers
             }
             return true;
         }
+        public List<KeyValuePair<DateTimeOffset, decimal>> GetHistoryForCompany(int companyId, List<MoneyRecord> records, int months)
+        {
+            var list = new List<KeyValuePair<DateTimeOffset, decimal>>();
+            var currentDate = DateTimeOffset.Now;
+            for (int i = 0; i < months; i++)
+            {
+                var currentYear = currentDate.Year;
+                var currentMonth = currentDate.Month;
+                var recordsInMonthSum = records.Where(r => r.CreatedAt.Year == currentYear && r.CreatedAt.Month == currentMonth)
+                        .Sum(r => r.Type == MoneyRecordType.INCOME ? r.Amount : (r.Type == MoneyRecordType.EXPENSE ? r.Amount * (-1) : 0));
+                var pair = new KeyValuePair<DateTimeOffset, decimal>(currentDate, recordsInMonthSum);
+                list.Add(pair);
+                currentDate = currentDate.AddMonths(-1);
 
-    }
+            }
+            list.OrderByDescending(a => a.Key);
+            return list;
+
+        }
+    }    
 }

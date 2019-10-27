@@ -26,5 +26,7 @@ namespace CFC.Data.Models
 
         public CompanyOwnerRole CurrentRole { get; set; }
 
+        public ICollection<KeyValuePair<DateTimeOffset, decimal>> History { get; set; }
+
     }
 }

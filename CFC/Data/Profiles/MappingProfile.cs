@@ -25,7 +25,8 @@ namespace CFC.Data.Profiles
 
 
             CreateMap<CompanyAddUserModel, ApplicationUserCompany>();
-            CreateMap<Company, CompanyDetailViewModel>();
+            CreateMap<Company, CompanyDetailViewModel>()
+                .ForMember(d => d.History, s => s.Ignore());
             CreateMap<ApplicationUserCompany, CompanyUserViewModel>()
                 .ForMember(d => d.UserName, s => s.MapFrom(source => source.User.Name))
                 .ForMember(d => d.UserSurname, s => s.MapFrom(source => source.User.Surname));

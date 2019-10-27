@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { NotifyService } from '../services/notify.service';
 import { TranslateService } from '@ngx-translate/core';
-import moment = require('moment');
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +14,6 @@ export class DashboardComponent implements OnInit {
   public loadingData = true;
   public data;
   constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) {
-    const options = {  year: 'numeric', month: 'long' };
     this.currentMonth = `${ new Date().toLocaleString('default', { month: 'long' }) } ${ new Date().getFullYear()}`;
   }
 
