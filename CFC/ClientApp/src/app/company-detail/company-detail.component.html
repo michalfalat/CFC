@@ -199,12 +199,12 @@
               <mat-option value="all">
                 {{ 'all' | translate }}
               </mat-option>
-              <mat-option value="company">
+              <!-- <mat-option value="company">
                 {{ 'company-records-filter' | translate }}
               </mat-option>
               <mat-option value="personal">
                 {{ 'personal-records-filter' | translate }}
-              </mat-option>
+              </mat-option> -->
               <mat-option *ngFor="let type of moneyRecordTypes" [value]="moneyRecordType[type]">
                 {{type | translate }}
               </mat-option>
@@ -300,6 +300,21 @@
           <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
         </div>
       </div>
+    </mat-tab>
+    <mat-tab  label="{{ 'history' | translate }}">
+      <br>
+      <p> {{ 'history-info' | translate }}</p>
+      <br>
+      <table style="width: 400px;line-height: 2em;">
+          <tr>
+              <th>{{ 'month' | translate }}</th>
+              <th>{{ 'actual-money-state' | translate }}</th>
+            </tr>
+            <tr *ngFor="let month of company?.history" style="border-top: 1px solid  #8c8c8c57;">
+              <td>{{ formatDate(month.key) }}</td>
+              <td><strong> <span [ngClass]="{'red-text': month.value < 0 , 'green-text': month.value > 0  }"> {{month.value }}&euro; </span></strong></td>
+            </tr>
+      </table>
     </mat-tab>
   </mat-tab-group>
 </mat-card>

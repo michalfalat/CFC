@@ -198,5 +198,8 @@
     "WITHDRAW": "Výber",
     "from": "Od",
     "to": "Do",
-    "keyword": "Kľúčové slovo"
+    "keyword": "Kľúčové slovo",
+    "current-month-status": "Stav firiem za mesiac",
+    "history-info": "Zisky za  jednotlivé  mesiace  (posledných 24 mesiacov). V záznamoch nie sú započítané osobné vklady ani výbery.",
+    "month": "Mesiac"
 }

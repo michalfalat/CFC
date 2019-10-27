@@ -10,9 +10,12 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DashboardComponent implements OnInit {
 
+  public currentMonth: any;
   public loadingData = true;
   public data;
-  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) { }
+  constructor(private apiService: ApiService, private notifyService: NotifyService, private translateService: TranslateService) {
+    this.currentMonth = `${ new Date().toLocaleString('default', { month: 'long' }) } ${ new Date().getFullYear()}`;
+  }
 
   ngOnInit() {
     this.loadData();

@@ -107,12 +107,16 @@ namespace CFC.Controllers
             var companiesModel = this._mapper.Map<List<CompanyViewModel>>(companies);
             var officesModel = this._mapper.Map<List<OfficeViewModel>>(offices);
             var totalAvailable = 0m;
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
             foreach (var company in companies)
             {
                 var userCompany = company.Owners.Where(o => o.UserId == userId).FirstOrDefault();
                 var percentage = userCompany != null ? userCompany.Percentage : 0m;
                 var records = await this._moneyRecordManager.GetAllForCompany(company.Id);
                 totalAvailable += this._moneyRecordManager.SumRecordsForCompanyAndUser(company.Id, percentage, records);
+                companiesModel.FirstOrDefault(a => a.Id == company.Id).CurrentMonthCash = records.Where(r => r.CreatedAt.Year == currentYear && r.CreatedAt.Month == currentMonth)
+                    .Sum(r => r.Type == MoneyRecordType.INCOME ?  r.Amount : (r.Type == MoneyRecordType.EXPENSE ? r.Amount * (-1): 0 ));
             }
 
             var model = new OwnerDashboardViewModel()
