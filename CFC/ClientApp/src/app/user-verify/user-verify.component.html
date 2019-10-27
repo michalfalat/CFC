@@ -1,0 +1,44 @@
+<mat-card class="form-container  bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout" *ngIf="loadingData === false">
+    <span>
+      <h3>{{ 'welcome-to-system' | translate }}, <strong>{{ formData.name }}</strong></h3>
+    </span>
+    <span class="spacer"></span>
+  </div>
+  <br>
+  <div *ngIf="loadingData === false">
+    <p>{{ 'create-password-text1' | translate }}</p>
+    <p>{{ 'create-password-text2' | translate }}</p>
+    <br>
+    <form class="form" #formRef="ngForm">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="{{ 'new-password' | translate }}" name="password" #passwordRef="ngModel" #p1
+          type="password" [(ngModel)]="formData.password" required minlength="8"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+        <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button
+          matTooltip="{{ (p1.type === 'password' ? 'show-password' : 'hide-password') | translate }}"
+          (click)="p1.type === 'password' ? p1.type ='text' : p1.type='password'">
+          <mat-icon>{{ p1.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordRef.invalid">{{ 'password-requirements' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <input matInput placeholder="{{ 'new-password-repeat' | translate }}" name="password2" #password2Ref="ngModel"
+          #p2 type="password" [(ngModel)]="formData.password2" required minlength="8"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,20}$">
+        <button type="button" tabindex="-1" mat-button matSuffix mat-icon-button
+          matTooltip="{{ (p2.type === 'password' ? 'show-password' : 'hide-password') | translate }}"
+          (click)="p2.type === 'password' ? p2.type ='text' : p2.type='password'">
+          <mat-icon>{{ p2.type === 'text'? 'lock' : 'lock_open'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="password2Ref.invalid">{{ 'password-requirements' | translate }}</mat-error>
+      </mat-form-field>
+      <p *ngIf="errorPasswordMatch && formData.password !== formData.password2" class="error-label centered">
+        {{ 'error-password-match' | translate }}</p>
+
+      <button mat-raised-button class="main-button" color="primary" (click)="verify()"
+        [disabled]="formRef.invalid || loadingData">{{ 'verify-email' | translate }}</button>
+    </form>
+  </div>
+</mat-card>

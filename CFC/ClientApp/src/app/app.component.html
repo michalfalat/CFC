@@ -1,0 +1,141 @@
+<body [ngClass]="{'dark-theme': darkThemeService.darkModeEnabled }">
+  <mat-sidenav-container class="sidenav-sidebar" autosize fullscreen>
+    <mat-sidenav #sidenav [mode]="windowWidth() < 800 ? 'over' : 'side'" [(opened)]="openedSidebar" [fixedInViewport]="true" >
+      <div class="side-wallpaper"></div>
+      <mat-action-list (click)="closeSidenav()">
+        <button mat-list-item routerLink="/" color="">
+          <img src="~/../../assets/logo.png" alt="" class="sidebarLogo">
+          &nbsp;Financial Control System
+        </button>
+        <br>
+        <div *ngIf="authService.isEnabledFor('Administrator')">
+          <!-- ADMIN ROUTES -->
+          <button mat-list-item routerLink="/admin/dashboard" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">bar_chart</mat-icon>
+            <span> {{ 'dashboard' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/admin/users" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">supervised_user_circle</mat-icon>
+            <span> {{ 'users' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/admin/companies" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">dashboard</mat-icon>
+            <span> {{ 'companies' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/admin/offices" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">place</mat-icon>
+            <span> {{ 'offices' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/admin/companyRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">compare_arrows</mat-icon>
+            <span> {{ 'expenses-incomes' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/admin/personalRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">attach_money</mat-icon>
+            <span> {{ 'personal-records' | translate }}</span>
+          </button>
+
+        </div>
+        <div *ngIf="authService.isEnabledFor('Owner')">
+          <!-- OWNER ROUTES -->
+          <button mat-list-item routerLink="/dashboard" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">bar_chart</mat-icon>
+            <span> {{ 'dashboard' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/companies" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">dashboard</mat-icon>
+            <span> {{ 'companies' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/offices" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">place</mat-icon>
+            <span> {{ 'offices' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/companyRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">compare_arrows</mat-icon>
+            <span> {{ 'expenses-incomes' | translate }}</span>
+          </button>
+          <button mat-list-item routerLink="/personalRecords" [routerLinkActive]="['activeLink']">
+            <mat-icon matListIcon class="transparent">attach_money</mat-icon>
+            <span> {{ 'personal-records' | translate }}</span>
+          </button>
+
+        </div>
+        <button mat-list-item routerLink="/about" [routerLinkActive]="['activeLink']">
+          <mat-icon matListIcon class="transparent">info</mat-icon>
+          <span> {{'about' | translate }}</span>
+        </button>
+      </mat-action-list>
+
+
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="mainSection">
+        <mat-toolbar color="primary">
+          <button mat-button (click)="toogleSidebar()" color=""
+            matTooltip="{{ (openedSidebar ? 'hide-sidebar' : 'show-sidebar') | translate }}">
+            <mat-icon class="">menu</mat-icon>
+          </button>
+          <span class="spacer"></span>
+          <button mat-button [matMenuTriggerFor]="langSelector" matTooltip="{{ 'language' | translate }}">
+            <mat-icon class="">language</mat-icon> {{ selectedLanguage | uppercase }}
+
+          </button>
+          <mat-menu #langSelector="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+            <button mat-menu-item (click)="changeLanguage('sk')">
+              SK
+            </button>
+            <!-- <button mat-menu-item (click)="changeLanguage('cz')">
+              CZ
+            </button> -->
+            <button mat-menu-item (click)="changeLanguage('en')">
+              EN
+            </button>
+          </mat-menu>
+          <button *ngIf="!authService.isLoggedIn()" mat-button routerLink="/login" color="">
+            <mat-icon class="">account_circle</mat-icon>
+            <span> {{'login' | translate}}</span>
+          </button>
+
+          <button *ngIf="authService.isLoggedIn()" mat-button [matMenuTriggerFor]="userDropdown">
+            <mat-icon class="">account_circle</mat-icon> {{  userData.email }}
+
+          </button>
+          <mat-menu #userDropdown="matMenu" x-position="after" y-position="below" [overlapTrigger]="false">
+            <button mat-menu-item (click)="navigate('/user')">
+              {{'profile' | translate}}
+            </button>
+            <button mat-menu-item (click)="logout()">
+              {{'logout' | translate}}
+            </button>
+          </mat-menu>
+
+
+        </mat-toolbar>
+        <div class="container ">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+
+      <footer>
+        <div>
+          <mat-toolbar class="footer">
+            <div class="secondary-data">
+                &copy; Michal Falát {{ getYear()}}
+            </div>
+            <div class="secondary-data" style="margin-left: 15px;">
+               &nbsp;v1.0.3
+          </div>
+            <span class="spacer"></span>
+
+            <mat-slide-toggle class="" color="accent" [checked]="darkThemeService.darkModeEnabled === true"
+              (click)="changeDarkTheme($event)">
+              {{'dark-theme' | translate}}
+            </mat-slide-toggle>
+
+
+          </mat-toolbar>
+        </div>
+      </footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</body>

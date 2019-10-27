@@ -1,0 +1,88 @@
+<mat-card class="form-container  bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ (editMode === true ? 'edit' : 'add') | translate }} {{ record.type | translate }} </span>
+    </span>
+    <span class="spacer"></span>
+  </div>
+  <br>
+  <form class="form" #formRef="ngForm">
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'type' | translate }}</mat-label>
+      <mat-select [(ngModel)]="record.type" name="recordType" required>
+        <mat-option value="expense">
+          {{ 'expense' | translate }}
+        </mat-option>
+        <mat-option value="income">
+          {{ 'income' | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="editMode">
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="picker" (focus)="picker.open()" [(ngModel)]="record.created" name="createdAt"
+          placeholder="{{ 'date' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="full-width">
+      <mat-label>{{ 'destination-type' | translate }}</mat-label>
+      <mat-select [(ngModel)]="record.destinationType" name="destinationType">
+        <mat-option value="company">
+          {{ 'company' | translate }}
+        </mat-option>
+        <mat-option value="office">
+          {{ 'office' | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="record.destinationType ==='company'">
+      <mat-label>{{ 'company' | translate }}</mat-label>
+      <mat-select [(ngModel)]="record.companyId" name="companyId" required>
+        <mat-option *ngFor="let company of companies" [value]="company.id">
+          {{company.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="record.destinationType ==='office'">
+      <mat-label>{{ 'office' | translate }}</mat-label>
+      <mat-select [(ngModel)]="record.officeId" name="officeId">
+        <mat-option *ngFor="let office of offices" [value]="office.id">
+          {{office.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input [formControl]="descriptionControl" matInput placeholder="{{'description' | translate }}" name="description" [(ngModel)]="record.description" [matAutocomplete]="autocompleteCOntainer"
+        required minlength="3" >
+    </mat-form-field>
+    <mat-autocomplete #autocompleteCOntainer="matAutocomplete">
+      <mat-option *ngFor="let label of filteredLabels | async" [value]="label">{{label}}</mat-option>
+    </mat-autocomplete>
+    <mat-form-field class="full-width">
+      <span matPrefix
+        [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }">{{ record.type === 'income' ? '+' : '-' }}</span>
+      <input matInput [ngClass]="{'red-text': record.type === 'expense' , 'green-text': record.type === 'income'  }"
+        placeholder="{{'amount-sum' | translate }}" name="amount" [(ngModel)]="record.amount" required type="number">
+
+      <span matSuffix>&nbsp;&euro;</span>
+    </mat-form-field>
+    <div *ngIf="editMode">
+      <button mat-raised-button color="primary" class="main-button" (click)="edit()"
+        [disabled]="formRef.invalid || loadingData">{{ 'edit' | translate }}</button>
+
+    </div>
+    <div *ngIf="editMode === false">
+      <button mat-raised-button color="primary" class="main-button" (click)="add()"
+        [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+    </div>
+  </form>
+
+</mat-card>

@@ -1,0 +1,40 @@
+<mat-card class="form-container  bigger-width">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ 'add-new-user' | translate }} </span>
+    </span>
+    <span class="spacer"></span>
+
+  </div>
+  <form class="form" #formRef="ngForm">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'name' | translate}}" value="" name="name" [(ngModel)]="user.name" required>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'surname' | translate}}" value="" name="surname" [(ngModel)]="user.surname"
+        required>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'email' | translate}}" value="" name="email" #emailRef="ngModel"
+        [(ngModel)]="user.email" required minlength="8"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+      <mat-error *ngIf="emailRef.invalid">{{ 'enter-valid-email' | translate }}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{'phone' | translate}}" value="" name="phone" [(ngModel)]="user.phone">
+    </mat-form-field>
+    <p *ngIf="existingUserError" class="error-label">{{'existing-user-error' | translate}}</p>
+
+
+
+    <button mat-raised-button color="primary" class="main-button" (click)="addUser()"
+      [disabled]="formRef.invalid || loadingData">{{ 'add' | translate }}</button>
+  </form>
+
+</mat-card>

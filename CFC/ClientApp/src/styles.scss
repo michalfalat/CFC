@@ -1,0 +1,462 @@
+/* You can add global styles to this file, and also import other style files */
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./styles/material-theme.scss";
+
+*:focus {outline:none !important}
+
+.spacer {
+    /* This fills the remaining space, by using flexbox.
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+  }
+
+  .form {
+    min-width: 150px;
+    // max-width: 500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .login-form-container {
+    max-width: 400px;
+    margin: 50px auto;
+  }
+
+  .form-container {
+    max-width: 600px;
+    margin: 50px auto;
+  }
+
+  .form-container.bigger-width {
+    max-width: 700px;
+    margin: 50px auto;
+
+  }
+
+  .form-container.big-width {
+    max-width: 1000px;
+    margin: 50px auto;
+
+  }
+
+  .form-container.full-width {
+    max-width: 1900px;
+    width: 100%;
+    margin: 50px auto;
+
+  }
+
+  .main-button {
+      width: 100%;
+  }
+  html {
+      height: 100%;
+  }
+
+  body {
+    background-color: #f1f1f1;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  mat-icon.transparent {
+    opacity: 0.75;
+  }
+  mat-icon.transparent2 {
+    opacity: 0.5;
+  }
+
+  @-webkit-keyframes autofill {
+    to {
+        // color: white;
+        background: transparent;
+
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill !important;
+    -webkit-animation-fill-mode: both !important;
+}
+  .flexLayout {
+    display: flex;
+  }
+
+  .mainSection {
+    display: flex;
+    flex-direction: column;
+    // height: 100%;
+    min-height: calc(100% - 64px);
+    background-color: #efefef;
+  }
+
+  .footer {
+    background-color: white;
+    bottom: 0px;
+    position: static;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1rem;
+    max-height: 64px;
+    height: 64px;
+  }
+
+
+  .notification-info {
+    background-color: #2a9e51;
+    color: rgba(255, 255, 255, 0.836)
+  }
+
+  .notification-info  .mat-simple-snackbar-action  {
+    color: white
+  }
+
+  .notification-warning {
+    background-color: #e99516;
+    color: white;
+  }
+
+  .notification-warning  .mat-simple-snackbar-action  {
+    color: white
+  }
+
+  .notification-error {
+    background-color: #dd4646;
+    color: white;
+  }
+
+  .notification-error  .mat-simple-snackbar-action  {
+    color: white
+  }
+
+  .warning-container {
+    height: 50px;
+    background-color: #eac47299;
+    border: 1px solid #bd9f38;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+  }
+
+  .warning-container mat-icon {
+    margin-right: 5px;
+  }
+
+
+  .error-label {
+    color:rgb(214, 68, 68);
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  a {
+    color: #bba220;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    color: #927e17;
+    text-decoration: underline;
+  }
+
+  .mat-tab-header-pagination.mat-tab-header-pagination-disabled {
+    display: none !important;
+}
+
+.showOnHover {
+  visibility: hidden !important;
+ }
+.enableHover:hover .showOnHover {
+  visibility: visible !important;
+}
+
+
+.sidebarLogo {
+  max-width: 50px;
+  filter: opacity(0.75);
+}
+
+.activeLink {
+background-color: #90909029;
+}
+
+.card-panel {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center; /* Vertical center alignment */
+  justify-content: center; /* Horizontal center alignment */
+}
+
+.card-panel .left {
+  width: 50%;
+  float: left;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+
+.card-panel .right {
+  width: 50%;
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.card-panel img {
+  max-height: 200px;
+  opacity: 0.75;
+}
+.table-container {
+  overflow-x: auto;
+}
+.basic-table {
+  width: 100%;
+}
+
+.wide-table {
+  min-width: 750px;
+}
+
+tr.mat-row:hover {
+ background-color: #80808029;
+ transition: 0.15s all linear;
+ cursor: pointer;
+}
+
+.header {
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: .5rem;
+}
+.actionButtons {
+  align-self: center;
+}
+.actionButtonsResponsive {
+  display: none;
+}
+
+.actionButtons span {
+  margin-right: 10px;
+}
+
+.actionButtons span:last-child {
+  margin-right: 0px;
+}
+
+.blocked-row {
+  background-color: #9e474754 !important;
+}
+
+.warning-row {
+  background-color: #a1803936 !important;
+}
+.autocenter {
+  margin: auto;
+}
+
+.centered-info-secondary {
+  text-align: center;
+  font-style: italic;
+  color: #828282e8;
+}
+
+.red-text {
+  color: #ce4949 !important;
+}
+
+
+.green-text {
+  color: rgb(105, 177, 72) !important;
+}
+
+.withdraw-text {
+  color: #c18443 !important;
+}
+
+.deposit-text {
+  color: #96b148 !important;
+
+}
+
+.secondary-data {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.sumTable {
+  width: 100%;
+  margin: auto;
+}
+
+.sumTable .sumCell {
+  text-align: right;
+}
+
+.sumTable .sumRow {
+  font-size: 1.2em;
+  font-weight: bold;
+  border-top: 2px solid grey;
+  line-height: 2rem;
+}
+
+.sumTable .sumRow2 {
+  font-size: 1.2em;
+  font-weight: bold;
+  border-top: 1px solid grey;
+  line-height: 2rem;
+}
+
+.mat-tooltip {
+  white-space: pre-line;
+}
+
+.money-state-container {
+  margin: auto;
+  font-size: 1.5em;
+  padding-left: 15px;
+}
+
+mat-icon[matPrefix] {
+  font-size: 1em !important;
+  margin-right: 5px;
+}
+
+.mat-form-field-disabled mat-icon[matPrefix]{
+  color: rgba(0, 0, 0, 0.48);
+}
+
+.side-wallpaper {
+  position:absolute;
+  background-image: url(/assets/abstract.jpg);
+  background-size: cover;
+  background-position-x: 450px;
+  height: 100%;
+  width: 100%;
+  transition: 0.2s -webkit-filter linear;
+  z-index: -1;
+}
+
+.filter-inputs span {
+  margin-right: 10px;
+}
+
+.filter-inputs span:last-of-type {
+  margin-right: 0px;
+}
+
+.date-filter-picker {
+  max-width: 110px;
+}
+.show-on-small-device {
+  display: none;
+}
+
+tr.expanded-row td .expanded-icon {
+  display: block;
+}
+
+tr.expanded-row td .expand-icon {
+  display: none;
+}
+
+tr td .expanded-icon {
+  display: none;
+}
+
+tr td .expand-icon {
+  display: block;
+}
+
+@media (max-width: 599px) {
+.mainSection {
+    min-height: calc(100% - 56px);
+}
+}
+
+
+@media screen and (max-width: 1000px) {
+  .actionButtons {
+    display: none;
+  }
+
+  .actionButtonsResponsive {
+    display: block;
+  }
+
+  .card-panel .left {
+    width: 100%
+  }
+
+  .card-panel .right {
+    width: 100%;
+  }
+
+  .filter-inputs  {
+    display: inline-block;
+  }
+
+  .filter-inputs .date-filter-picker {
+    max-width: calc(50% - 5px);
+  }
+
+  .filter-inputs .mat-form-field {
+    width: 100%;
+}
+
+.filter-inputs span {
+  margin-right: 0px;
+}
+
+.filter-inputs .last-input {
+  width: calc(100% - 24px);
+}
+
+.filter-inputs span:first-of-type {
+  margin-right: 10px !important;
+}
+.filter-inputs button {
+  margin-right: 0px !important;
+  min-width: 24px;
+  width: 24px;
+  width: 24px;
+  padding: 0px;
+}
+
+.filter-inputs button span {
+  margin-right: 0px;
+}
+
+.flexLayout.headerContainer {
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-panel {
+  height: 240px;
+}
+.card-panel img {
+  max-height: 100px;
+}
+.hide-on-small-device {
+ display: none;
+}
+.show-on-small-device {
+  display: block;
+}
+
+td.show-on-small-device, th.show-on-small-device  {
+  display: table-cell;
+}
+}

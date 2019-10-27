@@ -1,0 +1,35 @@
+<div>
+  <div class="flexLayout">
+    <span>
+
+    </span>
+
+    <span class="spacer"></span>
+    <span>
+      <mat-form-field>
+        <mat-label>{{'group-by' | translate }}</mat-label>
+        <mat-select [(ngModel)]="groupedBy" (selectionChange)="manageData()">
+          <mat-option value="all">
+            {{'group-by-all' | translate }}
+          </mat-option>
+          <mat-option value="year">
+            {{'group-by-year' | translate }}
+          </mat-option>
+          <mat-option value="month">
+            {{'group-by-month' | translate }}
+          </mat-option>
+          <mat-option value="day">
+            {{'group-by-day' | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+  </div>
+  <div>
+    <div class="chart-container">
+      <canvas baseChart style="height: 100vh !important" [datasets]="barChartData" [labels]="barChartLabels"
+        [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+      </canvas>
+    </div>
+  </div>
+</div>

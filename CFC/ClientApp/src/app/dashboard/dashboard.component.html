@@ -1,0 +1,42 @@
+<mat-card class="form-container">
+  <div class="flexLayout">
+    <span>
+      <h3>{{ 'dashboard' | translate }}</h3>
+    </span>
+    <span class="spacer"></span>
+    <span class="actionButtons">
+      <span>
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
+      </span>
+    </span>
+    <span class="actionButtonsResponsive">
+      <span>
+        <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+          <mat-icon matListIcon>refresh</mat-icon>
+        </button>
+      </span>
+    </span>
+  </div>
+  <br>
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div *ngIf="!loadingData">
+    <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong> </p>
+    <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong> </p>
+    <p> {{ 'deposits' | translate }}:<strong class="green-text"> {{ data.totalDeposit }}&euro;</strong> </p>
+    <p> {{ 'withdraws' | translate }}:<strong class="red-text"> {{ data.totalWithdraw }}&euro;</strong> </p>
+    <br>
+    <br>
+    <strong>{{ 'current-month-status' | translate }} {{ currentMonth }}:</strong>
+    <mat-list>
+      <mat-list-item *ngFor="let company of data.companies">
+        <p matLine>
+          <span>{{company.name }}:</span> <strong> <span [ngClass]="{'red-text': company?.currentMonthCash < 0 , 'green-text': company?.currentMonthCash > 0  }"> {{company.currentMonthCash  }}&euro; </span></strong>
+        </p>
+      </mat-list-item>
+    </mat-list>
+
+  </div>
+</mat-card>

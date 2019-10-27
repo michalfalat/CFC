@@ -1,0 +1,40 @@
+<mat-card class="form-container full-width enableHover">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout">
+    <span>
+      <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </span>
+    <span>
+      <span class="header"> {{ 'user-detail' | translate }} {{ userDetail.email }} </span>
+    </span>
+    <span class="spacer"></span>
+    <span>
+      <button mat-button (click)="toogleEditMode()" class="showOnHover"
+        matTooltip="{{ (editMode ? 'cancel' : 'edit') | translate }}">
+        <mat-icon class="">{{ editMode ? 'close' : 'edit' }}</mat-icon>
+      </button>
+    </span>
+  </div>
+  <br>
+  <form class="form enableHover" #userDataForm="ngForm">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Email" name="email" [(ngModel)]="userDetail.email" disabled>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{ 'name' | translate }}" name="name" [(ngModel)]="userDetail.name"
+        [disabled]="editMode === false" required minlength="3">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{ 'surname' | translate }}" name="surname" [(ngModel)]="userDetail.surname"
+        [disabled]="editMode === false" required minlength="3">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="{{ 'phone' | translate}}" name="phone" [(ngModel)]="userDetail.phone"
+        [disabled]="editMode === false">
+    </mat-form-field>
+    <button mat-raised-button [disabled]="editMode === false || userDataForm.valid === false" color="primary"
+      class="main-button" (click)="editUser()" type="submit">{{ 'save-changes' | translate }}</button>
+  </form>
+</mat-card>

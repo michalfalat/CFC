@@ -1,0 +1,184 @@
+<mat-card class="form-container full-width">
+  <div class="flexLayout">
+    <span>
+      <h3>{{ 'expenses-incomes' | translate }}</h3>
+    </span>
+    <span class="spacer"></span>
+    <span class="actionButtons">
+      <span>
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
+      </span>
+      <span>
+        <button mat-raised-button routerLink="{{ authService.getPath('/companyRecords/add') }}" color="primary">
+          <mat-icon matListIcon>add</mat-icon>
+          <span> {{ 'add-expense-income' | translate }}</span>
+        </button>
+      </span>
+    </span>
+    <span class="actionButtonsResponsive">
+      <span>
+        <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+          <mat-icon matListIcon>refresh</mat-icon>
+        </button>
+      </span>
+      <span>
+        <button mat-mini-fab [routerLink]="authService.getPath('/companyRecords/add')" color="primary"
+          matTooltip="{{ 'add-expense-income' | translate }}">
+          <mat-icon matListIcon>add</mat-icon>
+        </button>
+      </span>
+    </span>
+  </div>
+  <br>
+  <div class="flexLayout filter-inputs">
+    <span>
+      <mat-form-field class="date-filter-picker">
+        <input matInput [matDatepicker]="pickerFrom" (focus)="pickerFrom.open()" [(ngModel)]="filterFrom"
+          (dateChange)="filter()" placeholder="{{ 'from' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="date-filter-picker">
+        <input matInput [matDatepicker]="pickerTo" (focus)="pickerTo.open()" placeholder="{{ 'to' | translate}}"
+          (dateChange)="filter()" [(ngModel)]="filterTo">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="">
+        <mat-select name="filterType" placeholder="{{ 'type' | translate }}" [(ngModel)]="filterType"
+          (selectionChange)="filter()">
+          <mat-option value="all">
+            {{ 'all' | translate }}
+          </mat-option>
+          <mat-option value="1">
+            {{ 'EXPENSE' | translate }}
+          </mat-option>
+          <mat-option value="2">
+            {{ 'INCOME' | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+    <span>
+      <mat-form-field class="last-input">
+        <input matInput placeholder="{{ 'keyword' | translate }}" name="keyword-filter" [(ngModel)]="filterKeyword"
+          (keyup)="filter()">
+      </mat-form-field>
+    </span>
+    <span style="padding-top: 15px;">
+      <button mat-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()">
+        <mat-icon class="transparent">close</mat-icon>
+      </button>
+    </span>
+  </div>
+  <br>
+  <div class="table-container">
+    <table mat-table [dataSource]="recordList" matSort class="basic-table " multiTemplateDataRows>
+      <ng-container matColumnDef="icon">
+            <th class="show-on-small-device" mat-header-cell *matHeaderCellDef> &nbsp;</th>
+            <td class="show-on-small-device expanded-icon" mat-cell *matCellDef="let element">
+              <mat-icon class="transparent expanded-icon">keyboard_arrow_down</mat-icon>
+              <mat-icon class="transparent expand-icon">keyboard_arrow_right</mat-icon>
+             </td>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="creator">
+        <th  class="hide-on-small-device" mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+        <td  class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="companyName">
+        <th class="hide-on-small-device" mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'company-name' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="officeName">
+        <th class="hide-on-small-device" mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'office-name' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="description">
+        <th class="hide-on-small-device" mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+        <td class="hide-on-small-device" mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">
+          {{element.type === 2 ? '+' : '-' }}{{element.amount}} &euro;</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="element.editable">
+            <button mat-icon-button matTooltip="{{ 'edit' | translate }}" (click)="edit(element)">
+              <mat-icon class="transparent">edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+              (click)="openRemoveRecordDialog(element)">
+              <mat-icon class="transparent">delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+            <div class="element-detail"
+                 [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+              <div class="">
+                <table class="expandable-row-table">
+                  <tr>
+                    <td> {{ 'created-by' | translate }}:</td>
+                    <td><strong>{{element.creatorName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'company-name' | translate }}:</td>
+                    <td><strong>{{element.companyName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'office-name' | translate }}:</td>
+                    <td><strong>{{element.officeName}}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>{{ 'description' | translate }}:</td>
+                    <td><strong>{{element.description}}</strong></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+            [class.expanded-row]="expandedElement === element"
+            (click)="rowClicked(element)">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+    </table>
+    <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+    <div *ngIf="recordList === undefined || recordList.data == undefined || recordList.data.length == 0"
+      class="centered-info-secondary">
+      <br>
+      <p>{{ 'no-data' | translate }}</p>
+    </div>
+  </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+
+</mat-card>

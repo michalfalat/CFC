@@ -1,0 +1,30 @@
+<mat-card class="form-container">
+  <div class="flexLayout">
+    <span>
+      <h3>{{ 'admin-dashboard' | translate }}</h3>
+    </span>
+    <span class="spacer"></span>
+    <span class="actionButtons">
+      <span>
+        <button mat-raised-button (click)="refresh()" color="primary">
+          <mat-icon matListIcon>refresh</mat-icon>
+          <span> {{ 'refresh' | translate }}</span>
+        </button>
+      </span>
+    </span>
+    <span class="actionButtonsResponsive">
+      <span>
+        <button mat-icon-button (click)="refresh()" matTooltip="{{ 'refresh' | translate }}">
+          <mat-icon matListIcon>refresh</mat-icon>
+        </button>
+      </span>
+    </span>
+  </div>
+  <br>
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div *ngIf="!loadingData">
+    <p> {{ 'users-count' | translate }}:<strong> {{ data.users.length }}</strong> </p>
+    <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong> </p>
+    <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong> </p>
+  </div>
+</mat-card>

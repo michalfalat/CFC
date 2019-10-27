@@ -1,0 +1,320 @@
+<mat-card class="form-container full-width enableHover">
+  <mat-progress-bar *ngIf="loadingData" mode="indeterminate" color="accent"></mat-progress-bar>
+  <div class="flexLayout headerContainer">
+    <span>
+      <span>
+        <button mat-button matTooltip="{{ 'back' | translate }}" (click)="goBack()" class="header">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </span>
+      <span class="header"> {{ 'company' | translate }} <strong>{{ company?.name }}</strong> </span>
+    </span>
+    <span class="spacer"></span>
+    <span>
+      <span class="money-state-container">
+        <span> {{ 'actual-money-state' | translate }}: </span>
+        <span
+          [ngClass]="{'red-text': company?.actualCash < 0 , 'green-text': company?.actualCash > 0  }"><strong>{{ company?.actualCash > 0 ? '+' : '' }}{{company?.actualCash}}
+            &euro;</strong></span>
+      </span>
+    </span>
+  </div>
+  <div *ngIf="percentageNotFilledWarning" class="warning-container">
+    <mat-icon class="transparent">info</mat-icon>
+    {{ 'percentage-owner-not-filled-warning' | translate }}&nbsp;<strong>{{ maxNewOwnerPercentage }}% </strong>
+  </div>
+  <mat-tab-group mat-align-tabs="center" dynamicHeight [selectedIndex]="selectedTab"
+    (selectedIndexChange)="setDataSource($event)">
+    <mat-tab label="{{ 'info' | translate}}">
+      <div class="flexLayout">
+        <br>
+        <span class="spacer"></span>
+        <span *ngIf="company?.currentRole === 1">
+          <button mat-button (click)="toogleEditMode()" class="showOnHover"
+            matTooltip="{{ (editMode ? 'cancel' : 'edit') | translate }}">
+            <mat-icon class="">{{ editMode ? 'close' : 'edit' }}</mat-icon>
+          </button>
+        </span>
+      </div>
+      <div *ngIf="company !== undefined">
+        <form class="form" #formRef="ngForm">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="{{ 'name2' | translate }}" name="name" [(ngModel)]="company.name"
+              [disabled]="editMode === false" required minlength="3">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput placeholder="{{ 'identification-number' | translate }}" name="identificationNumber"
+              [(ngModel)]="company.identificationNumber" [disabled]="editMode === false">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput [matDatepicker]="picker1" placeholder="{{ 'registration-date' | translate}}"
+              name="registrationDate" [(ngModel)]="company.registrationDate" [disabled]="editMode === false">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label> {{ 'status' | translate }}
+            </mat-label>
+            <mat-select [(ngModel)]="company.status" name="status" required placeholder="{{ 'status' | translate }}"
+              [disabled]="editMode === false">
+              <mat-option *ngFor="let status of companyStatuses" [value]="companyStatus[status]">
+                {{ status | translate }}
+              </mat-option>
+            </mat-select>
+            <span matSuffix matTooltip="{{ 'company-status-info' | translate }}">&nbsp;<mat-icon class="transparent2">
+                help</mat-icon></span>
+          </mat-form-field>
+          <div *ngIf="company?.currentRole === 1">
+            <button mat-raised-button [disabled]="editMode === false || formRef.valid === false" color="primary"
+              class="main-button" (click)="editCompany()" type="submit">{{ 'save-changes' | translate }}</button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="{{ 'branches' | translate}}">
+      <br>
+      <div *ngIf="companyOffices !== undefined && companyOffices.data.length > 0">
+        <table mat-table [dataSource]="companyOffices" matSort class="basic-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name2' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'percentage' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.percentage }} % </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="company?.currentRole === 1">
+                <button mat-icon-button matTooltip="{{ (element.obsolete ? 'unremove' : 'remove') | translate }}"
+                  (click)="openRemoveOfficeDialog(element)">
+                  <mat-icon class="transparent">delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsOffices"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsOffices;"
+            [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+        </table>
+
+      </div>
+      <div *ngIf="companyOffices === undefined || companyOffices.data.length == 0" class="centered-info-secondary">
+        <p>{{ 'no-data' | translate }}</p>
+      </div>
+      <div *ngIf="company?.currentRole === 1">
+        <br>
+        <button mat-raised-button (click)="addOffice()" color="primary" class="full-width">
+          <mat-icon matListIcon>add</mat-icon>
+          <span> {{ 'add-office' | translate }}</span>
+        </button>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="{{ 'owners' | translate }}">
+      <br>
+      <div *ngIf="companyOwners !== undefined && companyOwners.data.length > 0">
+        <table mat-table [dataSource]="companyOwners" matSort class="basic-table">
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'name' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="userSurname">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'surname' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.userSurname}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'role' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{companyUserRole[element.role] | translate }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'company-share-percentage' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.percentage  }} % </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> {{ 'actions' | translate }} </th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="company?.currentRole === 1">
+                <button mat-icon-button matTooltip="{{ 'edit' | translate }}"
+                  (click)="openOwnerPercentageDialog(element)">
+                  <mat-icon class="transparent">edit</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="{{ 'remove' | translate }}"
+                  (click)="openRemoveUserDialog(element.userId)">
+                  <mat-icon class="transparent">delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsOwners"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsOwners;"
+            [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+        </table>
+      </div>
+      <div *ngIf="companyOwners === undefined || companyOwners.data.length == 0" class="centered-info-secondary">
+        <p>{{ 'no-data' | translate }}</p>
+        <br>
+      </div>
+      <div>
+        <div *ngIf="company?.currentRole === 1">
+          <button mat-raised-button (click)="addUser()" color="primary" class="full-width"
+            [disabled]="maxNewOwnerPercentage <= 0">
+            <mat-icon matListIcon>add</mat-icon>
+            <span> {{ 'add-owner' | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="{{ 'cash-flow' | translate }}">
+      <br>
+      <div class="flexLayout filter-inputs">
+
+        <span>
+          <mat-form-field class="date-filter-picker">
+            <input matInput [matDatepicker]="pickerFrom" (focus)="pickerFrom.open()" [(ngModel)]="filterFrom"
+              (dateChange)="filter()" placeholder="{{ 'from' | translate}}">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field class="date-filter-picker">
+            <input matInput [matDatepicker]="pickerTo" (focus)="pickerTo.open()" placeholder="{{ 'to' | translate}}"
+              (dateChange)="filter()" [(ngModel)]="filterTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field class="">
+            <mat-select name="filterType" placeholder="{{ 'type' | translate }}" [(ngModel)]="filterType"
+              (selectionChange)="filter()">
+              <mat-option value="all">
+                {{ 'all' | translate }}
+              </mat-option>
+              <!-- <mat-option value="company">
+                {{ 'company-records-filter' | translate }}
+              </mat-option>
+              <mat-option value="personal">
+                {{ 'personal-records-filter' | translate }}
+              </mat-option> -->
+              <mat-option *ngFor="let type of moneyRecordTypes" [value]="moneyRecordType[type]">
+                {{type | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
+        <span>
+          <mat-form-field class="last-input">
+            <input matInput placeholder="{{ 'keyword' | translate }}" name="keyword-filter" [(ngModel)]="filterKeyword"
+              (keyup)="filter()">
+          </mat-form-field>
+        </span>
+        <span style="padding-top: 15px;">
+          <button mat-icon-button matTooltip="{{ 'clear-filters' | translate }}" (click)="clearFilters()"
+            class="header">
+            <mat-icon class="transparent">close</mat-icon>
+          </button>
+        </span>
+
+        <span class="spacer"></span>
+        <span>
+          <mat-form-field>
+            <mat-label>{{ 'view' | translate }}</mat-label>
+            <mat-select [(ngModel)]="cashflowView" name="cashflowView">
+              <mat-option value="table">
+                {{'table-view' | translate }}
+              </mat-option>
+              <mat-option value="chart">
+                {{'chart-view' | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
+      </div>
+
+      <div *ngIf="cashflow !== undefined ">
+        <div *ngIf="cashflowView === 'chart' && recreatedChart">
+          <app-chart-data [data]="filteredCashflow.reverse()" [type]="'company'" [companyOffices]="company.offices">
+          </app-chart-data>
+        </div>
+        <div *ngIf="cashflowView === 'table'">
+          <div class="table-container">
+            <table mat-table [dataSource]="cashflow" #sortColMoney="matSort" matSort class="basic-table wide-table">
+              <ng-container matColumnDef="createdAt">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'date' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd.MM.yyyy' }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="creator">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'created-by' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.creatorName }} </td>
+              </ng-container>
+              <ng-container matColumnDef="officeName">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'office' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.officeName }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="description">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> {{ 'description' | translate }} </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef> {{ 'amount-sum' | translate }} </th>
+                <td mat-cell *matCellDef="let element">
+                  <div *ngIf="element.type === 1 || element.type === 2">
+                    <span
+                      [ngClass]="{'red-text': element.type === 1 , 'green-text': element.type === 2  }">{{element.type === 2 ? '+' : '-' }}
+                      {{ calcAmount(element) }} &euro;</span>
+                    &nbsp;
+                    <span style="font-size: 0.8em">{{ calcAmountSecondaryData(element) }}</span>
+                  </div>
+                  <div *ngIf="element.type === 3 || element.type === 4">
+                    <span
+                      [ngClass]="{'withdraw-text': element.type === 3 , 'deposit-text': element.type === 4  }">{{element.type === 4 ? '+' : '-' }}
+                      {{ element.amount }} &euro;</span>
+                    &nbsp;
+                    <span style="font-size: 0.8em">(
+                      {{ (element.type === 3 ? 'withdrawed-by' : 'deposited-by') | translate }}
+                      <strong>{{ element.creatorName }}</strong> )</span>
+                  </div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsCashFlow"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsCashFlow;"
+                [ngClass]="{'blocked-row': row.obsolete == true}"></tr>
+            </table>
+          </div>
+          <div *ngIf="cashflow === undefined || cashflow.data.length == 0" class="centered-info-secondary">
+            <br>
+            <p>{{ 'no-data' | translate }}</p>
+          </div>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab  label="{{ 'history' | translate }}">
+      <br>
+      <p> {{ 'history-info' | translate }}</p>
+      <br>
+      <table style="width: 400px;line-height: 2em;">
+          <tr>
+              <th>{{ 'month' | translate }}</th>
+              <th>{{ 'actual-money-state' | translate }}</th>
+            </tr>
+            <tr *ngFor="let month of company?.history" style="border-top: 1px solid  #8c8c8c57;">
+              <td>{{ formatDate(month.key) }}</td>
+              <td><strong> <span [ngClass]="{'red-text': month.value < 0 , 'green-text': month.value > 0  }"> {{month.value }}&euro; </span></strong></td>
+            </tr>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

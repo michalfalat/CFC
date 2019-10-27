@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>{{ data.headerText | translate }}</h1>
+<div mat-dialog-content>
+  <form class="form " #newOwnerformRef="ngForm">
+    <mat-form-field class="full-width">
+      <mat-label>{{ data.inputText | translate }}</mat-label>
+      <mat-select [(ngModel)]="newParticipant.selectedInput" name="selectedInput" required [disabled]="data.isEdit">
+        <mat-option *ngFor="let input of data.possibleData" [value]="input.id">
+          {{ input.text }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width" *ngIf="data.typeText !== null">
+      <mat-label>{{ data.typeText | translate }}</mat-label>
+      <mat-select [(ngModel)]="newParticipant.selectedType" name="selectedType" required>
+
+        <mat-option *ngFor="let type of data.possibleTypes" [value]="type.id">
+          {{ type.text | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>{{ data.percentageText | translate }}</mat-label>
+      <input matInput name="percentage" [(ngModel)]="newParticipant.percentage" type="number" required
+        [max]="data.maxPercentage">
+      <span matSuffix>%</span>
+    </mat-form-field>
+  </form>
+  <br>
+</div>
+<div>
+  <div class="flexLayout">
+    <span style="margin: auto;color: #8c8c8c;">{{ 'max-percentage' | translate }}: <strong (click)="newParticipant.percentage = data.maxPercentage"
+        style="color:black; cursor:pointer;">{{ data.maxPercentage }}%</strong> </span>
+    <span class="spacer"></span>
+    <span>
+      <button mat-button (click)="onNoClick()">{{'cancel' | translate }}</button>
+    </span>
+    <span>
+      <button mat-button [disabled]=" newOwnerformRef.valid === false || newParticipant.percentage > data.maxPercentage"
+        (click)="saveData()" cdkFocusInitial>{{ (data.isEdit ? 'save' : 'add') | translate }}</button>
+    </span>
+  </div>
+</div>
