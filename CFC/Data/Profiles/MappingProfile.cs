@@ -20,7 +20,8 @@ namespace CFC.Data.Profiles
             CreateMap<Company, CompanyPreviewModel>();
             CreateMap<Company, CompanyViewModel>()
                 .ForMember(d => d.BranchesCount, s => s.MapFrom(source => source.Offices.Count))
-                .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count));
+                .ForMember(d => d.OwnersCount, s => s.MapFrom(source => source.Owners.Count))
+                .ForMember(d => d.ActualCash, s => s.Ignore());
 
 
             CreateMap<CompanyAddUserModel, ApplicationUserCompany>();

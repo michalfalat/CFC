@@ -20,6 +20,7 @@ namespace CFC.Data.Models
         public int OwnersCount { get; set; }
         public decimal? ActualCash { get; set; }
         public CompanyOwnerRole CurrentRole { get; set; }
+        public decimal? CurrentMonthCash { get; set; }
 
     }
 }

@@ -198,5 +198,6 @@
     "WITHDRAW": "Výber",
     "from": "Od",
     "to": "Do",
-    "keyword": "Kľúčové slovo"
+    "keyword": "Kľúčové slovo",
+    "current-month-status": "Stav firiem za mesiac"
 }

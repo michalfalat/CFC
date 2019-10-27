@@ -25,10 +25,18 @@
   <div *ngIf="!loadingData">
     <p> {{ 'companies-count' | translate }}:<strong> {{ data.companies.length }}</strong> </p>
     <p> {{ 'offices-count' | translate }}:<strong> {{ data.offices.length }}</strong> </p>
-    <!-- <p> {{ 'available-cash' | translate }}:<strong
-        [ngClass]="{'red-text': data.totalAvailable < 0 , 'green-text': data.totalAvailable > 0  }">
-        {{ data.totalAvailable }}&euro;</strong> </p> -->
     <p> {{ 'deposits' | translate }}:<strong class="green-text"> {{ data.totalDeposit }}&euro;</strong> </p>
     <p> {{ 'withdraws' | translate }}:<strong class="red-text"> {{ data.totalWithdraw }}&euro;</strong> </p>
+    <br>
+    <br>
+    <strong>{{ 'current-month-status' | translate }} {{ currentMonth }}:</strong>
+    <mat-list>
+      <mat-list-item *ngFor="let company of data.companies">
+        <p matLine>
+          <span>{{company.name }}:</span> <strong> <span [ngClass]="{'red-text': company?.currentMonthCash < 0 , 'green-text': company?.currentMonthCash > 0  }"> {{company.currentMonthCash  }}&euro; </span></strong>
+        </p>
+      </mat-list-item>
+    </mat-list>
+
   </div>
 </mat-card>

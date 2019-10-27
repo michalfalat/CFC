@@ -197,7 +197,8 @@
     "WITHDRAW": "Withdraw",
     "from": "From",
     "to": "To",
-    "keyword": "Keyword"
+    "keyword": "Keyword",
+    "current-month-status": "Status for month"
 
 
 
