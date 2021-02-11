@@ -12,10 +12,9 @@ import { startWith, map } from 'rxjs/operators';
 @Component({
   selector: 'app-company-financials-add',
   templateUrl: './company-financials-add.component.html',
-  styleUrls: ['./company-financials-add.component.scss']
+  styleUrls: ['./company-financials-add.component.scss'],
 })
 export class CompanyFinancialsAddComponent implements OnInit {
-
   public record: MoneyRecordAddModel;
   public companies: any[];
   public offices: any[];
@@ -29,15 +28,16 @@ export class CompanyFinancialsAddComponent implements OnInit {
 
   private recordId = null;
 
-  constructor(private apiService: ApiService,
+  constructor(
+    private apiService: ApiService,
     private notifyService: NotifyService,
     private translateService: TranslateService,
     private router: Router,
     public authService: AuthService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+  ) {
     this.record = new MoneyRecordAddModel();
     this.record.type = 'income';
-
   }
 
   ngOnInit() {
@@ -52,100 +52,119 @@ export class CompanyFinancialsAddComponent implements OnInit {
   }
   add() {
     this.loadingData = true;
-    this.apiService.addMoneyRecord(this.record).subscribe(response => {
-      this.loadingData = false;
-      this.notifyService.info(this.translateService.instant('data-saved'));
-      this.goBack();
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    this.apiService.addMoneyRecord(this.record).subscribe(
+      (response) => {
+        this.loadingData = false;
+        this.notifyService.info(this.translateService.instant('data-saved'));
+        this.goBack();
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
+      }
+    );
   }
 
   edit() {
     this.loadingData = true;
     this.record.recordId = this.recordId;
-    this.apiService.editMoneyRecord(this.record).subscribe(response => {
-      this.loadingData = false;
-      this.notifyService.info(this.translateService.instant('data-saved'));
-      this.goBack();
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    if (this.record.destinationType === 'company') {
+      this.record.officeId = null;
+    } else {
+      this.record.companyId = null;
+    }
+    this.apiService.editMoneyRecord(this.record).subscribe(
+      (response) => {
+        this.loadingData = false;
+        this.notifyService.info(this.translateService.instant('data-saved'));
+        this.goBack();
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
+      }
+    );
   }
 
   loadRecordForEdit() {
     this.loadingData = true;
-    this.apiService.getMoneyRecord(this.recordId).subscribe(response => {
-      this.record.companyId = response.data.record.companyId;
-      this.record.officeId = response.data.record.officeId;
-      this.record.description = response.data.record.description;
-      this.record.created = response.data.record.createdAt;
-      this.record.destinationType = response.data.record.officeId !== null ? 'office' : 'company';
-      this.record.type = response.data.record.type === 1 ? 'expense' : 'income';
-      this.record.amount = response.data.record.amount;
-      this.loadingData = false;
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    this.apiService.getMoneyRecord(this.recordId).subscribe(
+      (response) => {
+        this.record.companyId = response.data.record.companyId;
+        this.record.officeId = response.data.record.officeId;
+        this.record.description = response.data.record.description;
+        this.record.created = response.data.record.createdAt;
+        this.record.destinationType =
+          response.data.record.officeId !== null ? 'office' : 'company';
+        this.record.type =
+          response.data.record.type === 1 ? 'expense' : 'income';
+        this.record.amount = response.data.record.amount;
+        this.loadingData = false;
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
+      }
+    );
   }
 
   loadLabels() {
-    this.apiService.getMoneyRecordLabels().subscribe(response => {
-      this.labels = response.data.labels;
-      this.initAutocomplete();
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    this.apiService.getMoneyRecordLabels().subscribe(
+      (response) => {
+        this.labels = response.data.labels;
+        this.initAutocomplete();
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
+      }
+    );
   }
 
   loadCompanies() {
     this.loadingData = true;
-    this.apiService.getCompanies().subscribe(response => {
-      this.companies = response.data.companies;
-      this.loadingData = false;
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    this.apiService.getCompanies().subscribe(
+      (response) => {
+        this.companies = response.data.companies;
+        this.loadingData = false;
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
+      }
+    );
   }
 
   loadOffices() {
     this.loadingData = true;
-    this.apiService.getOffices().subscribe(response => {
-      this.offices = response.data.offices;
-      this.loadingData = false;
-      if (this.recordId !== undefined && this.recordId !== null) {
-        this.editMode = true;
-        this.loadRecordForEdit();
+    this.apiService.getOffices().subscribe(
+      (response) => {
+        this.offices = response.data.offices;
+        this.loadingData = false;
+        if (this.recordId !== undefined && this.recordId !== null) {
+          this.editMode = true;
+          this.loadRecordForEdit();
+        }
+      },
+      (error) => {
+        this.loadingData = false;
+        this.notifyService.processError(error);
       }
-
-    }, error => {
-      this.loadingData = false;
-      this.notifyService.processError(error);
-    });
+    );
   }
 
   initAutocomplete() {
-    this.filteredLabels = this.descriptionControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+    this.filteredLabels = this.descriptionControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value))
+    );
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.labels.filter(option => option.toLowerCase().includes(filterValue));
+    return this.labels.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
   }
-
 }
